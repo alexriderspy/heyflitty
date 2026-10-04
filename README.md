@@ -25,8 +25,8 @@
 </p>
 
 <p align="center">
-  <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4"><img src="docs/flitty-launch.gif" width="860" alt="Flitty on Windows: the user circles a port on a laptop photo and asks what it is; Flitty labels it HDMI port, then walks them through making the monitor their main display in Settings" /></a>
-  <br /><sub>Ask about anything on screen, then let it walk you through. <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4">Watch the full video with sound ▶</a></sub>
+  <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4"><img src="docs/flitty-launch.gif" width="860" alt="Flitty in Windows Settings: asked how to make the monitor the main display, it captions the answer and its cursor flies to display 2, then to the Make this my main display checkbox" /></a>
+  <br /><sub>Hold a hotkey, ask, and it points to the exact spot. <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4">Watch the 40-second launch film with sound ▶</a></sub>
 </p>
 
 ---
