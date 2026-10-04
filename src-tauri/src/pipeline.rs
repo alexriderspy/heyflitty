@@ -138,6 +138,8 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
             eprintln!("[flitty] couldn't read UI elements: {error}");
             Vec::new()
         });
+    // Where the mouse is, so "what's this?" can mean the thing under the pointer.
+    let mouse = app.cursor_position().ok();
     let captures = tauri::async_runtime::spawn_blocking(capture::capture_all)
         .await
         .map_err(|error| error.to_string())??;
@@ -149,7 +151,14 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
         .iter()
         .enumerate()
         .map(|(position, (capture, screen))| {
-            let focus = if screen.index == cursor_screen.index { " (cursor screen)" } else { "" };
+            let focus = match mouse.filter(|_| screen.index == cursor_screen.index) {
+                Some(point) => {
+                    let x = (point.x - screen.x as f64) / screen.width as f64 * capture.image_width as f64;
+                    let y = (point.y - screen.y as f64) / screen.height as f64 * capture.image_height as f64;
+                    format!(" (cursor screen, mouse pointer at {},{})", x.round(), y.round())
+                }
+                None => String::new(),
+            };
             (*capture, format!("screen {} of {}{focus}, image is {}x{} pixels", position + 1, matched.len(), capture.image_width, capture.image_height))
         })
         .collect::<Vec<_>>();
