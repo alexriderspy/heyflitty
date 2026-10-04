@@ -5,3 +5,6 @@ src-tauri/gen/
 .DS_Store
 scripts/mock-ai/last-request.json
 installers/
+marketing-video/snapshots/
+marketing-video/renders/
+marketing-video/node_modules/

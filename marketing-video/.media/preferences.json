@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "preferences": {
+    "flow": {
+      "value": "companion",
+      "confirmed_in": [
+        "marketing-video"
+      ],
+      "updated_at": "2026-10-04T17:11:45.091Z"
+    },
+    "storyboard": {
+      "value": "yes",
+      "confirmed_in": [
+        "marketing-video"
+      ],
+      "updated_at": "2026-10-04T17:11:45.130Z"
+    },
+    "aspect": {
+      "value": "1920x1080",
+      "confirmed_in": [
+        "marketing-video"
+      ],
+      "updated_at": "2026-10-04T17:11:45.161Z"
+    },
+    "language": {
+      "value": "en",
+      "confirmed_in": [
+        "marketing-video"
+      ],
+      "updated_at": "2026-10-04T17:11:45.191Z"
+    }
+  },
+  "sightings": {}
+}

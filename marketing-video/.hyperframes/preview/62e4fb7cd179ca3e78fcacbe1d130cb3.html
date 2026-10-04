@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><script data-hf-gsap-fallback>
+(function(){
+  var cdnBase="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/";
+  var loaded={};
+  function loadFallback(file){
+    if(loaded[file])return loaded[file];
+    return loaded[file]=new Promise(function(ok,fail){
+      var s=document.createElement("script");
+      s.src=cdnBase+file;s.onload=ok;s.onerror=fail;
+      document.head.appendChild(s);
+    });
+  }
+  document.addEventListener("error",function(e){
+    var t=e.target;
+    if(!t||t.tagName!=="SCRIPT"||!t.src)return;
+    var m=t.src.match(/gsap[^/]*\/dist\/(.+\.js)/);
+    if(m)loadFallback(m[1]);
+  },true);
+})();
+</script>
+<meta name="hyperframes-studio-preview">
+<base href="/api/projects/marketing-video/preview/"><style data-hyperframes-text-rendering="true">html,body,*{text-rendering:geometricPrecision}</style><script data-hf-after-fonts-fallback="">document.addEventListener("DOMContentLoaded", function () {
+  if (window.__hfAfterFontsClaimed) return;
+  var T = "text/hf-after-fonts";
+  var all = [].slice.call(document.querySelectorAll('script[type="text/hf-after-fonts"], script[type="text/hf-after-fonts+module"]'));
+  if (!all.length) return;
+  console.warn("[hyperframes] the runtime has no web-font gate; composition scripts run without waiting for fonts");
+  var late = function (el) { return el.type !== T || (el.hasAttribute("src") && el.hasAttribute("defer")); };
+  var queue = all.filter(function (el) { return !late(el); }).concat(all.filter(late));
+  (function next() {
+    var el = queue.shift();
+    if (!el) return;
+    var s = document.createElement("script");
+    for (var i = 0; i < el.attributes.length; i++) s.setAttribute(el.attributes[i].name, el.attributes[i].value);
+    if (el.type === T) s.removeAttribute("type"); else s.type = "module";
+    s.async = el.hasAttribute("async");
+    s.text = el.text;
+    var waits = s.type !== "module" && s.hasAttribute("src") && !s.async && !s.noModule;
+    if (waits) { s.addEventListener("load", next); s.addEventListener("error", next); }
+    el.replaceWith(s);
+    if (!waits) next();
+  })();
+});</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Instrument Serif"; src: url(assets/fonts/InstrumentSerif-normal.woff2) format("woff2"); font-style: normal; font-weight: 400; }
+      @font-face { font-family: "Instrument Serif"; src: url(assets/fonts/InstrumentSerif-italic.woff2) format("woff2"); font-style: italic; font-weight: 400; }
+      @font-face { font-family: "Geist"; src: url(assets/fonts/Geist-normal.woff2) format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #141210; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: Geist, sans-serif; color: #141210; }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .stage { position: absolute; inset: 0; }
+      .dark { background: radial-gradient(120% 90% at 50% 0%, #1d2240 0%, #141210 72%); color: #f3efe7; }
+      .light { background: #f8f4ec; }
+      .serif { font-family: "Instrument Serif", serif; font-weight: 400; }
+      .it { font-style: italic; }
+      .mk { position: relative; display: inline-block; isolation: isolate; }
+      .mk .swipe { position: absolute; left: -0.06em; right: -0.06em; top: 0.38em; bottom: 0.06em; background: #ffe066; z-index: -1; transform-origin: left center; }
+      .mk .txt { position: relative; }
+      .star { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #f3efe7; }
+
+      /* comet */
+      .fc { position: absolute; inset: 0; pointer-events: none; filter: blur(1.5px); }
+      .fc-core, .fc-halo { filter: none; }
+      .fc-dot { position: absolute; left: 0; top: 0; border-radius: 50%; background: radial-gradient(circle, rgba(225,236,255,0.9) 0%, rgba(120,170,255,0.55) 38%, rgba(56,132,255,0) 70%); will-change: transform, opacity; }
+      .fc-halo { position: absolute; left: 0; top: 0; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(120,170,255,0.55) 0%, rgba(56,132,255,0.22) 35%, rgba(56,132,255,0) 70%); }
+      .fc-core { position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 18px 6px rgba(156,194,255,0.95), 0 0 46px 18px rgba(56,132,255,0.55); }
+
+      /* app window mocks */
+      .win { position: absolute; background: #fffdf9; border: 2px solid #e4ddd0; border-radius: 18px; box-shadow: 0 30px 80px rgba(20,18,16,0.14); overflow: hidden; }
+      .win .bar { height: 52px; background: #f1ece2; display: flex; align-items: center; gap: 10px; padding: 0 22px; font-size: 22px; color: #6f6a62; }
+      .win .bar i { width: 14px; height: 14px; border-radius: 50%; background: #d5ccbb; }
+      .win .bar span { margin-left: 14px; }
+      .tabs { display: flex; gap: 34px; padding: 18px 30px 10px; font-size: 22px; color: #3d3933; border-bottom: 2px solid #ece5d8; }
+      .tabs b { font-weight: 600; color: #141210; border-bottom: 3px solid #141210; padding-bottom: 6px; }
+      .ribbon { display: grid; grid-template-columns: repeat(16, 1fr); gap: 14px; padding: 22px 30px; }
+      .ribbon div { height: 70px; border-radius: 10px; background: #efe8db; border: 2px solid #e2d9c8; display: grid; place-items: end center; padding-bottom: 8px; }
+      .ribbon div::after { content: ""; width: 60%; height: 6px; border-radius: 3px; background: #d8cfbf; }
+      .sidebar { position: absolute; left: 0; top: 52px; bottom: 0; width: 340px; border-right: 2px solid #ece5d8; }
+      .sidebar .it-row { position: absolute; left: 26px; right: 22px; height: 46px; display: flex; align-items: center; gap: 14px; font-size: 23px; white-space: nowrap; color: #3d3933; padding: 0 12px; border-radius: 10px; }
+      .sidebar .it-row i { width: 22px; height: 22px; border-radius: 6px; background: #ddd4c4; }
+      .pane-line { position: absolute; height: 22px; border-radius: 11px; background: #ece5d8; }
+      .ptr { position: absolute; left: 0; top: 0; width: 34px; height: 42px; background: #3884ff; clip-path: polygon(50% 0, 100% 100%, 50% 77%, 0 100%); filter: drop-shadow(0 0 10px rgba(56,132,255,0.9)); }
+      .chip { position: absolute; background: #3884ff; color: #fff; font: 600 24px Geist, sans-serif; padding: 7px 16px; border-radius: 12px; white-space: nowrap; }
+      .caption { position: absolute; width: 520px; background: rgba(20,18,16,0.94); color: #fff; border-radius: 22px; padding: 22px 28px; font-size: 32px; line-height: 1.35; box-shadow: 0 24px 60px rgba(0,0,0,0.28); }
+      .caption .heard { display: block; font-size: 21px; color: rgba(255,255,255,0.62); margin-bottom: 6px; }
+      .key { position: absolute; display: grid; place-items: center; background: #fffdf9; border: 3px solid #d8cfbf; border-radius: 30px; font: 600 64px Geist, sans-serif; color: #141210; box-shadow: 0 18px 0 #d8cfbf, 0 34px 60px rgba(20,18,16,0.16); }
+      .bars { position: absolute; left: 560px; top: 640px; width: 800px; height: 140px; display: flex; align-items: center; justify-content: space-between; }
+      .bars i { width: 12px; height: 20px; border-radius: 6px; background: #141210; }
+      .headline { position: absolute; left: 0; right: 0; text-align: center; font-family: "Instrument Serif", serif; font-weight: 400; color: #141210; line-height: 1; }
+      .ripple { position: absolute; left: 0; top: 0; width: 90px; height: 90px; border-radius: 50%; border: 4px solid #3884ff; }
+      .flash { position: absolute; inset: 0; background: radial-gradient(circle at 44% 40%, #fffaf0 0%, #f8f4ec 40%, rgba(248,244,236,0) 75%); opacity: 0; }
+      .strip { position: absolute; left: 0; top: 0; width: 4200px; height: 1080px; }
+      .code-line { position: absolute; height: 16px; border-radius: 8px; }
+      .runbtn, .sortbtn, .exportbtn { position: absolute; font: 600 24px Geist, sans-serif; padding: 12px 22px; border-radius: 12px; }
+      .frame-real { position: absolute; left: 200px; top: 182px; width: 1520px; height: 697px; border-radius: 26px; background: #000; border: 10px solid #23232a; box-shadow: 0 40px 120px rgba(0,0,0,0.5); }
+      .tag { position: absolute; left: 210px; top: 910px; font-size: 26px; color: #c7c2b9; display: flex; align-items: center; gap: 12px; }
+      .tag::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: #ff5c5c; box-shadow: 0 0 0 6px rgba(255,92,92,0.18); }
+      .card-line { position: absolute; left: 0; right: 0; top: 440px; text-align: center; font-family: "Instrument Serif", serif; font-size: 150px; color: #f3efe7; opacity: 0; }
+    </style>
+    <script>
+      // Flitty's comet cursor: a white-hot core, blue halo and a tapered tail sampled
+      // from its own path. State is a pure function of time, so any frame can be seeked.
+      window.FlittyComet = (function () {
+        const TAIL = 96, LAG = 0.005;
+        const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+        const bez = (p, u) => {
+          const v = 1 - u;
+          return [v * v * v * p[0][0] + 3 * v * v * u * p[1][0] + 3 * v * u * u * p[2][0] + u * u * u * p[3][0],
+                  v * v * v * p[0][1] + 3 * v * v * u * p[1][1] + 3 * v * u * u * p[2][1] + u * u * u * p[3][1]];
+        };
+        // flights: [{ t0, t1, path: [[x,y] x4] }] in time order; between flights it rests at the last end.
+        function at(flights, t) {
+          if (t <= flights[0].t0) return bez(flights[0].path, 0);
+          for (let i = 0; i < flights.length; i++) {
+            const f = flights[i];
+            if (t <= f.t1) return t < f.t0 ? bez(flights[i - 1].path, 1) : bez(f.path, ease((t - f.t0) / (f.t1 - f.t0)));
+          }
+          return bez(flights[flights.length - 1].path, 1);
+        }
+        function create(parent, scale) {
+          const s = scale || 1;
+          const wrap = document.createElement("div");
+          wrap.className = "fc";
+          const dots = [];
+          for (let i = 0; i < TAIL; i++) {
+            const d = document.createElement("div");
+            d.className = "fc-dot";
+            const size = (64 - (i / TAIL) * 56) * s;
+            d.style.width = d.style.height = size + "px";
+            d.style.marginLeft = d.style.marginTop = -size / 2 + "px";
+            wrap.appendChild(d);
+            dots.push(d);
+          }
+          const halo = document.createElement("div");
+          halo.className = "fc-halo";
+          halo.style.marginLeft = halo.style.marginTop = -110 + "px";
+          const core = document.createElement("div");
+          core.className = "fc-core";
+          core.style.marginLeft = core.style.marginTop = -15 + "px";
+          wrap.appendChild(halo);
+          wrap.appendChild(core);
+          parent.appendChild(wrap);
+          return {
+            el: wrap,
+            draw(flights, t, glow) {
+              const g = glow === undefined ? 1 : glow;
+              const [x, y] = at(flights, t);
+              core.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
+              halo.style.transform = `translate(${x}px, ${y}px) scale(${s * (0.7 + 0.3 * g)})`;
+              core.style.opacity = halo.style.opacity = g;
+              for (let i = 0; i < TAIL; i++) {
+                const [tx, ty] = at(flights, t - (i + 1) * LAG);
+                const moved = Math.hypot(tx - x, ty - y);
+                dots[i].style.transform = `translate(${tx}px, ${ty}px)`;
+                // The tail only shows while the comet is travelling.
+                dots[i].style.opacity = Math.min(1, moved / 60) * Math.pow(1 - i / TAIL, 1.4) * 0.38 * g;
+              }
+            },
+          };
+        }
+        return { create, at, ease };
+      })();
+    </script>
+  <script data-hyperframes-preview-runtime="1" src="/api/runtime.js"></script>
+<meta name="hyperframes-project-signature" content="75b1a090eda4f2c7208cd4a5">
+</head>
+  <body>
+    <div data-hf-id="hf-qtzs" id="root" data-composition-id="main" data-start="0" data-duration="33.2" data-width="1920" data-height="1080">
+
+      <!-- 1 · The firefly -->
+      <section data-hf-id="hf-a99r" id="s1" class="clip scene dark" data-start="0" data-duration="3.6" data-track-index="0">
+        <div data-hf-id="hf-1uog" id="s1-stars" class="stage"></div>
+        <img data-hf-id="hf-e7lu" id="s1-logo" src="assets/logo-white.svg" alt="" style="position:absolute;left:600px;top:398px;width:250px;height:250px;opacity:0">
+        <div data-hf-id="hf-zxgt" id="s1-word" class="serif" style="position:absolute;left:890px;top:360px;font-size:300px;line-height:1;color:#f3efe7;clip-path:inset(0 100% 0 0)">flitty</div>
+        <div data-hf-id="hf-rdgv" id="s1-comet" class="stage"></div>
+        <div data-hf-id="hf-rppt" id="s1-flash" class="flash"></div>
+      </section>
+
+      <!-- 2 · Lost in the ribbon -->
+      <section data-hf-id="hf-vemy" id="s2" class="clip scene light" data-start="3.4" data-duration="3.6" data-track-index="1">
+        <div data-hf-id="hf-kvvd" id="s2-in" class="stage">
+          <div data-hf-id="hf-tf0s" id="s2-win" class="win" style="left:190px;top:110px;width:1540px;height:440px">
+            <div data-hf-id="hf-ufsv" class="bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-tr97">Book1 - Excel</span></div>
+            <div data-hf-id="hf-5rmk" class="tabs"><span data-hf-id="hf-ycg7">File</span><b data-hf-id="hf-6n4e">Home</b><span data-hf-id="hf-z2t8">Insert</span><span data-hf-id="hf-vc9b">Draw</span><span data-hf-id="hf-21a8">Page Layout</span><span data-hf-id="hf-hxz2">Formulas</span><span data-hf-id="hf-lrch">Data</span><span data-hf-id="hf-l8rh">Review</span><span data-hf-id="hf-yjbw">View</span><span data-hf-id="hf-ah46">Help</span></div>
+            <div data-hf-id="hf-ifmy" class="ribbon" id="s2-ribbon"></div>
+          </div>
+          <div data-hf-id="hf-0qh7" id="s2-cursor" style="position:absolute;left:0;top:0;width:30px;height:38px;background:#8a847b;clip-path:polygon(0 0, 100% 72%, 52% 72%, 30% 100%);"></div>
+          <div data-hf-id="hf-c55b" id="s2-head" class="headline" style="top:690px;font-size:190px">Can't find the <span data-hf-id="hf-0p7s" class="mk it"><span data-hf-id="hf-0ddh" id="s2-swipe" class="swipe"></span><span data-hf-id="hf-pf3s" class="txt">button?</span></span></div>
+        </div>
+      </section>
+
+      <!-- 3 · Hold and ask -->
+      <section data-hf-id="hf-nybr" id="s3" class="clip scene light" data-start="6.8" data-duration="3.6" data-track-index="2">
+        <div data-hf-id="hf-u0hi" id="s3-in" class="stage">
+          <div data-hf-id="hf-4eo4" id="s3-k1" class="key" style="left:300px;top:200px;width:330px;height:240px">Ctrl</div>
+          <div data-hf-id="hf-fq7o" id="s3-k2" class="key" style="left:680px;top:200px;width:330px;height:240px">Alt</div>
+          <div data-hf-id="hf-f76q" id="s3-k3" class="key" style="left:1060px;top:200px;width:560px;height:240px">Space</div>
+          <div data-hf-id="hf-v9i9" id="s3-bars" class="bars"></div>
+          <div data-hf-id="hf-wjwv" id="s3-head" class="headline" style="top:820px;font-size:170px">Hold. <span data-hf-id="hf-jqn4" class="mk it"><span data-hf-id="hf-14nc" id="s3-swipe" class="swipe"></span><span data-hf-id="hf-bed2" class="txt">Ask out loud.</span></span></div>
+        </div>
+      </section>
+
+      <!-- 4 · It answers, with captions -->
+      <section data-hf-id="hf-w0xb" id="s4" class="clip scene light" data-start="10.2" data-duration="4.2" data-track-index="3">
+        <div data-hf-id="hf-357n" id="s4-in" class="stage">
+          <div data-hf-id="hf-m852" class="win settings" style="left:110px;top:120px;width:1120px;height:840px">
+            <div data-hf-id="hf-c51b" class="bar"><i data-hf-id="hf-ylp6"></i><i data-hf-id="hf-0l8b"></i><i data-hf-id="hf-0zjc"></i><span data-hf-id="hf-6erw">Settings</span></div>
+            <div data-hf-id="hf-upiz" class="sidebar s4-side"></div>
+            <div data-hf-id="hf-ls1x" class="pane-line" style="left:400px;top:120px;width:320px;height:40px"></div>
+            <div data-hf-id="hf-nlaz" class="pane-line" style="left:400px;top:200px;width:640px"></div>
+            <div data-hf-id="hf-abux" class="pane-line" style="left:400px;top:250px;width:560px"></div>
+            <div data-hf-id="hf-drf9" class="pane-line" style="left:400px;top:330px;width:660px;height:120px;border-radius:18px"></div>
+            <div data-hf-id="hf-ysiv" class="pane-line" style="left:400px;top:480px;width:660px;height:120px;border-radius:18px"></div>
+          </div>
+          <div data-hf-id="hf-eix4" id="s4-ptr" class="ptr" style="transform:translate(1330px,450px) rotate(-35deg)"></div>
+          <div data-hf-id="hf-cc9i" id="s4-cap" class="caption" style="left:1290px;top:520px"><span data-hf-id="hf-jf8c" id="s4-heard" class="heard">you: how do I turn on dark mode?</span><span data-hf-id="hf-6bz0" id="s4-ans"></span></div>
+          <div data-hf-id="hf-nbn4" id="s4-head" class="serif" style="position:absolute;left:1290px;top:230px;width:560px;font-size:84px;line-height:1.02">It answers. <span data-hf-id="hf-ks31" class="it">Out loud, with captions.</span></div>
+        </div>
+      </section>
+
+      <!-- 5 · The flight -->
+      <section data-hf-id="hf-pn3x" id="s5" class="clip scene light" data-start="14.2" data-duration="4.6" data-track-index="4">
+        <div data-hf-id="hf-bjuw" id="s5-in" class="stage">
+          <div data-hf-id="hf-4umy" class="win settings" style="left:110px;top:120px;width:1120px;height:840px">
+            <div data-hf-id="hf-bqqa" class="bar"><i data-hf-id="hf-zsm9"></i><i data-hf-id="hf-06xa"></i><i data-hf-id="hf-26gf"></i><span data-hf-id="hf-sbqc">Settings</span></div>
+            <div data-hf-id="hf-g1cc" class="sidebar s5-side"></div>
+            <div data-hf-id="hf-1yu1" class="pane-line" style="left:400px;top:120px;width:320px;height:40px"></div>
+            <div data-hf-id="hf-42xn" class="pane-line" style="left:400px;top:200px;width:640px"></div>
+            <div data-hf-id="hf-j2pp" class="pane-line" style="left:400px;top:250px;width:560px"></div>
+            <div data-hf-id="hf-d6bt" class="pane-line" style="left:400px;top:330px;width:660px;height:120px;border-radius:18px"></div>
+            <div data-hf-id="hf-0mfb" class="pane-line" style="left:400px;top:480px;width:660px;height:120px;border-radius:18px"></div>
+          </div>
+          <div data-hf-id="hf-2re6" id="s5-ripple" class="ripple" style="opacity:0"></div>
+          <div data-hf-id="hf-houz" id="s5-comet" class="stage"></div>
+          <div data-hf-id="hf-90ko" id="s5-chip" class="chip" style="left:500px;top:498px;opacity:0">Personalization</div>
+          <div data-hf-id="hf-zmnk" id="s5-head" class="serif" style="position:absolute;left:1290px;top:330px;width:560px;font-size:110px;line-height:1.02">It flies to the <span data-hf-id="hf-ijq1" class="mk it"><span data-hf-id="hf-3xx2" id="s5-swipe" class="swipe"></span><span data-hf-id="hf-zudy" class="txt">exact</span></span> button.</div>
+        </div>
+      </section>
+
+      <!-- 6 · Any app, even full screen -->
+      <section data-hf-id="hf-qw13" id="s6" class="clip scene light" data-start="18.6" data-duration="4.2" data-track-index="5">
+        <div data-hf-id="hf-6vcq" id="s6-strip" class="strip">
+          <div data-hf-id="hf-vodg" class="win" style="left:510px;top:150px;width:900px;height:580px">
+            <div data-hf-id="hf-bcf9" class="bar"><i data-hf-id="hf-2krg"></i><i data-hf-id="hf-oz7w"></i><i data-hf-id="hf-okwv"></i><span data-hf-id="hf-y8a9">Budget.xlsx</span></div>
+            <div data-hf-id="hf-y6sm" id="s6-grid" style="position:absolute;left:30px;top:90px;right:30px;bottom:30px"></div>
+            <div data-hf-id="hf-40sq" class="sortbtn" style="left:640px;top:96px;background:#141210;color:#f8f4ec">Sort A–Z</div>
+          </div>
+          <div data-hf-id="hf-10v3" class="win" style="left:1610px;top:150px;width:900px;height:580px;background:#1c1c20;border-color:#2c2c32">
+            <div data-hf-id="hf-81rc" class="bar" style="background:#26262c;color:#9a9aa3"><i data-hf-id="hf-o6lu"></i><i data-hf-id="hf-jqbp"></i><i data-hf-id="hf-qkg0"></i><span data-hf-id="hf-vnmd">app.py</span></div>
+            <div data-hf-id="hf-j91t" id="s6-code" style="position:absolute;left:40px;top:90px;right:40px;bottom:30px"></div>
+            <div data-hf-id="hf-mvij" class="runbtn" style="left:720px;top:70px;background:#3fb27f;color:#0d1f17">Run ▶</div>
+          </div>
+          <div data-hf-id="hf-huaa" class="win" style="left:2710px;top:150px;width:900px;height:580px">
+            <div data-hf-id="hf-e4kg" class="bar"><i data-hf-id="hf-q64z"></i><i data-hf-id="hf-prty"></i><i data-hf-id="hf-pdix"></i><span data-hf-id="hf-d4ry">Vacation edit</span></div>
+            <div data-hf-id="hf-i7yq" id="s6-tracks" style="position:absolute;left:30px;top:300px;right:30px;bottom:30px"></div>
+            <div data-hf-id="hf-ata6" style="position:absolute;left:30px;top:80px;width:560px;height:200px;border-radius:12px;background:linear-gradient(135deg,#f5c48c,#e98a6b 55%,#7b4e7e)"></div>
+            <div data-hf-id="hf-u8ov" class="exportbtn" style="left:690px;top:96px;background:#141210;color:#f8f4ec">Export</div>
+          </div>
+          <div data-hf-id="hf-vdtk" id="s6-comet" class="stage" style="width:4200px"></div>
+          <div data-hf-id="hf-d74j" id="s6-c1" class="chip" style="left:1000px;top:300px;opacity:0">Sort A–Z</div>
+          <div data-hf-id="hf-q0ja" id="s6-c2" class="chip" style="left:2230px;top:280px;opacity:0">Run</div>
+          <div data-hf-id="hf-zzjl" id="s6-c3" class="chip" style="left:3280px;top:300px;opacity:0">Export</div>
+        </div>
+        <div data-hf-id="hf-i31t" id="s6-head" class="headline" style="top:830px;font-size:150px;opacity:0">Any app. <span data-hf-id="hf-iy12" class="mk it"><span data-hf-id="hf-ppfl" id="s6-swipe" class="swipe"></span><span data-hf-id="hf-59n2" class="txt">Even full screen.</span></span></div>
+      </section>
+
+      <!-- 7 · Real, on Windows -->
+      <section data-hf-id="hf-la29" id="s7" class="clip scene dark" data-start="22.6" data-duration="3.2" data-track-index="6">
+        <div data-hf-id="hf-mywi" id="s7-in" class="stage">
+          <div data-hf-id="hf-ard8" class="frame-real"></div>
+          <div data-hf-id="hf-fzp3" class="tag">Real recording · Windows 11</div>
+        </div>
+      </section>
+      <video data-hf-id="hf-25s1" id="s7-video" class="clip" src="assets/real-demo.mp4" muted playsinline data-start="22.6" data-duration="3.2" data-media-start="4.6" data-track-index="7" style="position:absolute;left:210px;top:192px;width:1500px;height:677px;object-fit:contain;background:#000;border-radius:16px" data-end="25.8" data-has-audio="false"></video>
+
+      <!-- 8 · Yours -->
+      <section data-hf-id="hf-m40l" id="s8" class="clip scene dark" data-start="25.6" data-duration="3.2" data-track-index="8">
+        <div data-hf-id="hf-bkxb" id="s8-a" class="card-line">Your own <span data-hf-id="hf-ymlz" class="it">OpenAI key.</span></div>
+        <div data-hf-id="hf-h9q7" id="s8-b" class="card-line">No account. <span data-hf-id="hf-0cue" class="it">No server.</span></div>
+        <div data-hf-id="hf-wge5" id="s8-c" class="card-line">Free and <span data-hf-id="hf-w423" class="it">open source.</span></div>
+      </section>
+
+      <!-- 9 · Exactly where -->
+      <section data-hf-id="hf-2ft3" id="s9" class="clip scene dark" data-start="28.6" data-duration="4.6" data-track-index="9">
+        <div data-hf-id="hf-7fhk" id="s9-stars" class="stage"></div>
+        <div data-hf-id="hf-k9c4" id="s9-in" class="stage">
+          <img loading="lazy" data-hf-preview-lazy data-hf-id="hf-aw0r" id="s9-logo" src="assets/logo-white.svg" alt="" style="position:absolute;left:885px;top:150px;width:150px;height:150px">
+          <div data-hf-id="hf-wa2e" id="s9-l1" class="headline" style="top:360px;font-size:150px;color:#f3efe7">Ask out loud.</div>
+          <div data-hf-id="hf-vvnd" id="s9-l2" class="headline" style="top:540px;font-size:150px;color:#f3efe7">Flitty shows you <span data-hf-id="hf-hr3z" class="mk it"><span data-hf-id="hf-9hce" id="s9-swipe" class="swipe" style="top:0.14em;bottom:0.02em"></span><span data-hf-id="hf-uqwi" id="s9-mt" class="txt">exactly where.</span><span data-hf-id="hf-rcee" id="s9-ink" class="txt" style="position:absolute;left:0;top:0;color:#141210;clip-path:inset(0 100% 0 0)">exactly where.</span></span></div>
+          <div data-hf-id="hf-48d1" id="s9-url" style="position:absolute;left:0;right:0;top:860px;text-align:center;font-size:34px;color:#d9d3c8">Free for Windows · alexriderspy.github.io/heyflitty</div>
+        </div>
+        <div data-hf-id="hf-j26f" id="s9-comet" class="stage"></div>
+      </section>
+
+    </div>
+
+    
+  <script type="text/hf-after-fonts">let seed = 7;
+const rand = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+function stars(id, count) {
+  const host = document.getElementById(id);
+  const list = [];
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    s.style.left = rand() * 1920 + "px";
+    s.style.top = rand() * 760 + "px";
+    s.style.opacity = 0.2 + rand() * 0.6;
+    host.appendChild(s);
+    list.push(s);
+  }
+  return list;
+}
+const s1Stars = stars("s1-stars", 70);
+const s9Stars = stars("s9-stars", 70);
+const ribbon = document.getElementById("s2-ribbon");
+for (let i = 0; i < 48; i++) ribbon.appendChild(document.createElement("div"));
+const sideItems = ["Home", "System", "Bluetooth & devices", "Network & internet", "Personalization", "Apps", "Accounts", "Time & language", "Gaming", "Accessibility"];
+document.querySelectorAll(".s4-side, .s5-side").forEach((side) => {
+  sideItems.forEach((name, i) => {
+    const row = document.createElement("div");
+    row.className = "it-row";
+    row.style.top = 30 + i * 64 + "px";
+    row.innerHTML = `<i></i>${name}`;
+    if (name === "Personalization" && side.classList.contains("s5-side")) row.id = "s5-target";
+    side.appendChild(row);
+  });
+});
+const bars = document.getElementById("s3-bars");
+for (let i = 0; i < 34; i++) bars.appendChild(document.createElement("i"));
+const grid = document.getElementById("s6-grid");
+for (let r = 0; r < 9; r++) for (let c = 0; c < 6; c++) {
+  const cell = document.createElement("div");
+  Object.assign(cell.style, { position: "absolute", left: c * 140 + "px", top: 60 + r * 46 + "px", width: "130px", height: "36px", background: r === 0 ? "#e7dfd0" : "#f3eee4", borderRadius: "6px" });
+  grid.appendChild(cell);
+}
+const code = document.getElementById("s6-code");
+const codeColors = ["#7aa2f7", "#c0caf5", "#9ece6a", "#bb9af7", "#c0caf5", "#e0af68"];
+for (let i = 0; i < 12; i++) {
+  const line = document.createElement("div");
+  line.className = "code-line";
+  Object.assign(line.style, { left: i % 3 * 40 + "px", top: 40 + i * 36 + "px", width: 200 + i * 97 % 420 + "px", background: codeColors[i % 6], opacity: 0.75 });
+  code.appendChild(line);
+}
+const tracks = document.getElementById("s6-tracks");
+["#e9c46a", "#8ecae6", "#f4a261"].forEach((color, i) => {
+  for (let j = 0; j < 4; j++) {
+    const clip = document.createElement("div");
+    Object.assign(clip.style, { position: "absolute", left: j * 210 + i * 30 + "px", top: i * 70 + "px", width: "180px", height: "54px", borderRadius: "10px", background: color, opacity: 0.85 });
+    tracks.appendChild(clip);
+  }
+});
+const tl = gsap.timeline({ paused: true });
+const clock = (start, duration, draw) => {
+  const state = { t: 0 };
+  tl.fromTo(state, { t: 0 }, { t: duration, duration, ease: "none", immediateRender: start === 0, onUpdate: () => draw(state.t) }, start);
+};
+const c1 = FlittyComet.create(document.getElementById("s1-comet"), 1.15);
+const f1 = [{ t0: 0.15, t1: 1.55, path: [[-120, 1e3], [420, 300], [760, 170], [835, 420]] }];
+clock(0, 3.6, (t) => {
+  c1.draw(f1, t, t < 1.55 ? 1 : Math.max(0, 1 - (t - 1.55) / 0.5));
+  s1Stars.forEach((s, i) => s.style.transform = `scale(${1 + 0.6 * Math.sin(t * 2 + i)})`);
+});
+tl.fromTo("#s1-logo", { opacity: 0, scale: 0.6, rotate: -12 }, { opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "back.out(1.6)" }, 1.45);
+tl.to("#s1-word", { clipPath: "inset(0 0% 0 0)", duration: 0.9, ease: "power3.out" }, 1.85);
+tl.fromTo("#s1-flash", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.in" }, 3.25);
+tl.fromTo("#s2-in", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.4);
+tl.fromTo("#s2-win", { y: 60 }, { y: 0, duration: 0.7, ease: "power3.out" }, 3.4);
+const wander = [[1500, 480], [620, 330], [1180, 260], [880, 420], [1320, 340], [760, 300]];
+clock(3.4, 3.6, (t) => {
+  const seg = Math.min(wander.length - 2, Math.floor(t / 0.62));
+  const u = FlittyComet.ease(Math.min(1, (t - seg * 0.62) / 0.62));
+  const [a, b] = [wander[seg], wander[seg + 1]];
+  document.getElementById("s2-cursor").style.transform = `translate(${a[0] + (b[0] - a[0]) * u}px, ${a[1] + (b[1] - a[1]) * u}px)`;
+});
+tl.fromTo("#s2-head", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 4);
+tl.fromTo("#s2-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 4.6);
+tl.fromTo("#s3-in", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 6.8);
+["#s3-k1", "#s3-k2", "#s3-k3"].forEach((k, i) => {
+  tl.to(k, { y: 16, boxShadow: "0 2px 0 #d8cfbf, 0 12px 30px rgba(20,18,16,0.14)", duration: 0.14, ease: "power2.in" }, 7.25 + i * 0.28);
+});
+const barEls = [...bars.children];
+clock(6.8, 3.6, (t) => {
+  const live = Math.max(0, Math.min(1, (t - 1.15) / 0.3));
+  barEls.forEach((b, i) => {
+    const h = 20 + live * (40 + 70 * Math.abs(Math.sin(t * 7 + i * 0.7)) * Math.abs(Math.sin(i * 0.37 + t * 2.3)));
+    b.style.height = h + "px";
+  });
+});
+tl.fromTo("#s3-head", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 8);
+tl.fromTo("#s3-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 8.55);
+tl.fromTo("#s4-in", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 10.2);
+tl.fromTo("#s4-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 10.4);
+tl.fromTo("#s4-cap", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 10.8);
+const answer = "Click Personalization, then Colors.";
+clock(10.2, 4.2, (t) => {
+  const shown = Math.max(0, Math.min(answer.length, Math.floor((t - 1.35) * 26)));
+  document.getElementById("s4-ans").textContent = answer.slice(0, shown);
+});
+tl.fromTo("#s5-in", { opacity: 0.6 }, { opacity: 1, duration: 0.2 }, 14.2);
+const target = [470, 120 + 52 + 30 + 4 * 64 + 23];
+const c5 = FlittyComet.create(document.getElementById("s5-comet"), 1);
+const f5 = [{ t0: 0.45, t1: 1.75, path: [[1347, 470], [1150, 60], [700, 120], target] }];
+clock(14.2, 4.6, (t) => c5.draw(f5, t, t < 1.75 ? 1 : 1 - Math.min(0.45, (t - 1.75) * 0.6)));
+gsap.set("#s5-ripple", { x: target[0] - 45, y: target[1] - 45 });
+tl.fromTo("#s5-ripple", { opacity: 0.9, scale: 0.3 }, { opacity: 0, scale: 2.4, duration: 0.8, ease: "power2.out" }, 15.95);
+tl.fromTo("#s5-target", { backgroundColor: "rgba(56,132,255,0)" }, { backgroundColor: "rgba(56,132,255,0.14)", duration: 0.3 }, 15.95);
+tl.fromTo("#s5-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, 16.05);
+tl.fromTo("#s5-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 16.3);
+tl.fromTo("#s5-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 16.85);
+const c6 = FlittyComet.create(document.getElementById("s6-comet"), 0.9);
+const f6 = [
+  { t0: 0.2, t1: 0.95, path: [[700, 900], [700, 520], [980, 320], [1160, 270]] },
+  { t0: 1.35, t1: 2.05, path: [[1160, 270], [1500, 40], [2050, 60], [2340, 245]] },
+  { t0: 2.45, t1: 3.15, path: [[2340, 245], [2700, 40], [3200, 60], [3410, 270]] }
+];
+clock(18.6, 4.2, (t) => c6.draw(f6, t));
+tl.fromTo("#s6-strip", { x: 0 }, { x: -1100, duration: 0.7, ease: "power3.inOut" }, 18.6 + 1.3);
+tl.to("#s6-strip", { x: -2200, duration: 0.7, ease: "power3.inOut" }, 18.6 + 2.4);
+tl.fromTo("#s6-c1", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 18.6 + 0.95);
+tl.fromTo("#s6-c2", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 18.6 + 2.05);
+tl.fromTo("#s6-c3", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 18.6 + 3.15);
+tl.fromTo("#s6-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 18.6 + 3.1);
+tl.fromTo("#s6-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out" }, 18.6 + 3.55);
+tl.fromTo("#s7-in", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 22.6);
+tl.fromTo("#s7-video", { scale: 1 }, { scale: 1.035, duration: 3.2, ease: "none" }, 22.6);
+tl.set("#s8-a", { opacity: 1 }, 25.75);
+tl.set("#s8-a", { opacity: 0 }, 26.75);
+tl.set("#s8-b", { opacity: 1 }, 26.75);
+tl.set("#s8-b", { opacity: 0 }, 27.75);
+tl.set("#s8-c", { opacity: 1 }, 27.75);
+tl.fromTo("#s9-in", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 28.6);
+tl.fromTo("#s9-l1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 28.75);
+tl.fromTo("#s9-l2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 29.05);
+tl.fromTo("#s9-logo", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 30.9);
+tl.fromTo("#s9-url", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 31.3);
+let swipeBox = null;
+const c9 = FlittyComet.create(document.getElementById("s9-comet"), 1);
+clock(28.6, 4.6, (t) => {
+  if (!swipeBox) {
+    const r = document.getElementById("s9-mt").getBoundingClientRect();
+    const root = document.getElementById("root").getBoundingClientRect();
+    const scale = root.width / 1920;
+    swipeBox = { x0: (r.left - root.left) / scale, x1: (r.right - root.left) / scale, y: (r.bottom - root.top) / scale - 26 };
+  }
+  const { x0, x1, y } = swipeBox;
+  const f9 = [{ t0: 1, t1: 2, path: [[x0 - 260, y + 160], [x0 - 60, y + 10], [x0 + 200, y], [x1 + 30, y - 10]] }];
+  c9.draw(f9, t, t < 2 ? Math.min(1, (t - 0.8) * 3) : Math.max(0, 1 - (t - 2) * 1.4));
+  const [cx] = FlittyComet.at(f9, t);
+  const p = Math.max(0, Math.min(1, (cx - x0) / (x1 - x0)));
+  const shown = t < 1 ? 0 : p;
+  document.getElementById("s9-swipe").style.transform = `scaleX(${shown})`;
+  document.getElementById("s9-ink").style.clipPath = `inset(0 ${(1 - shown) * 100}% 0 0)`;
+  s9Stars.forEach((s, i) => s.style.transform = `scale(${1 + 0.6 * Math.sin(t * 2 + i)})`);
+});
+window.__timelines["main"] = tl;</script></body>
+</html>
