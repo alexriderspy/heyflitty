@@ -1,0 +1,38 @@
+[
+  {
+    "id": "w0",
+    "text": "One",
+    "start": 0.299,
+    "end": 0.469
+  },
+  {
+    "id": "w1",
+    "text": "buddy,",
+    "start": 0.555,
+    "end": 0.939
+  },
+  {
+    "id": "w2",
+    "text": "on",
+    "start": 1.152,
+    "end": 1.408
+  },
+  {
+    "id": "w3",
+    "text": "Windows",
+    "start": 1.451,
+    "end": 1.792
+  },
+  {
+    "id": "w4",
+    "text": "and",
+    "start": 2.005,
+    "end": 2.304
+  },
+  {
+    "id": "w5",
+    "text": "Mac.",
+    "start": 2.432,
+    "end": 2.792
+  }
+]

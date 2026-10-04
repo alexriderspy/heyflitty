@@ -1,0 +1,56 @@
+[
+  {
+    "id": "w0",
+    "text": "Your",
+    "start": 0.299,
+    "end": 0.4267
+  },
+  {
+    "id": "w1",
+    "text": "own",
+    "start": 0.469,
+    "end": 0.597
+  },
+  {
+    "id": "w2",
+    "text": "key.",
+    "start": 0.683,
+    "end": 1.387
+  },
+  {
+    "id": "w3",
+    "text": "No",
+    "start": 1.92,
+    "end": 2.048
+  },
+  {
+    "id": "w4",
+    "text": "account.",
+    "start": 2.133,
+    "end": 2.645
+  },
+  {
+    "id": "w5",
+    "text": "Free",
+    "start": 2.944,
+    "end": 3.2
+  },
+  {
+    "id": "w6",
+    "text": "and",
+    "start": 3.371,
+    "end": 3.456
+  },
+  {
+    "id": "w7",
+    "text": "open",
+    "start": 3.499,
+    "end": 3.669
+  },
+  {
+    "id": "w8",
+    "text": "source.",
+    "start": 3.84,
+    "end": 4.232
+  }
+]

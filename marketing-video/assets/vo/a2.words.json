@@ -1,0 +1,62 @@
+[
+  {
+    "id": "w0",
+    "text": "Rest",
+    "start": 0.299,
+    "end": 0.5547
+  },
+  {
+    "id": "w1",
+    "text": "your",
+    "start": 0.64,
+    "end": 0.725
+  },
+  {
+    "id": "w2",
+    "text": "mouse",
+    "start": 0.768,
+    "end": 0.896
+  },
+  {
+    "id": "w3",
+    "text": "on",
+    "start": 1.024,
+    "end": 1.0667
+  },
+  {
+    "id": "w4",
+    "text": "anything,",
+    "start": 1.109,
+    "end": 1.515
+  },
+  {
+    "id": "w5",
+    "text": "and",
+    "start": 1.749,
+    "end": 1.92
+  },
+  {
+    "id": "w6",
+    "text": "ask",
+    "start": 1.963,
+    "end": 2.2187
+  },
+  {
+    "id": "w7",
+    "text": "what",
+    "start": 2.304,
+    "end": 2.432
+  },
+  {
+    "id": "w8",
+    "text": "it",
+    "start": 2.475,
+    "end": 2.517
+  },
+  {
+    "id": "w9",
+    "text": "is.",
+    "start": 2.56,
+    "end": 2.8388662131519276
+  }
+]

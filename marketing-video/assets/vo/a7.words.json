@@ -1,0 +1,50 @@
+[
+  {
+    "id": "w0",
+    "text": "Ask",
+    "start": 0.299,
+    "end": 0.469
+  },
+  {
+    "id": "w1",
+    "text": "out",
+    "start": 0.555,
+    "end": 0.6827
+  },
+  {
+    "id": "w2",
+    "text": "loud.",
+    "start": 0.725,
+    "end": 1.195
+  },
+  {
+    "id": "w3",
+    "text": "Flitty",
+    "start": 1.451,
+    "end": 1.749
+  },
+  {
+    "id": "w4",
+    "text": "shows",
+    "start": 1.835,
+    "end": 2.048
+  },
+  {
+    "id": "w5",
+    "text": "you",
+    "start": 2.091,
+    "end": 2.176
+  },
+  {
+    "id": "w6",
+    "text": "exactly",
+    "start": 2.219,
+    "end": 2.56
+  },
+  {
+    "id": "w7",
+    "text": "where.",
+    "start": 2.773,
+    "end": 3.047845804988662
+  }
+]
