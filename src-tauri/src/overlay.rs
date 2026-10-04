@@ -2,7 +2,10 @@
 //! The buddy is drawn in whichever overlay the mouse is on.
 
 use serde::Serialize;
-use tauri::{AppHandle, Emitter, PhysicalPosition, PhysicalSize, WebviewUrl, WebviewWindowBuilder};
+use std::thread;
+use std::time::Duration;
+
+use tauri::{AppHandle, Emitter, Manager, PhysicalPosition, PhysicalSize, WebviewUrl, WebviewWindowBuilder};
 
 use crate::platform;
 use crate::screens::Screen;
@@ -62,4 +65,16 @@ pub fn set_voice_state(app: &AppHandle, state: VoiceState) {
 
 pub fn point_at(app: &AppHandle, screen: &Screen, target: PointTarget) {
     let _ = app.emit_to(label_for(screen.index), "point", target);
+}
+
+/// Periodically re-raises every overlay above other topmost windows.
+pub fn start_topmost_guard(app: AppHandle, screens: Vec<Screen>) {
+    thread::spawn(move || loop {
+        for screen in &screens {
+            if let Some(window) = app.get_webview_window(&label_for(screen.index)) {
+                platform::keep_overlay_on_top(&window);
+            }
+        }
+        thread::sleep(Duration::from_millis(250));
+    });
 }

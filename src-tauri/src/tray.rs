@@ -30,15 +30,32 @@ pub fn install(app: &AppHandle) -> tauri::Result<()> {
 }
 
 pub fn open_settings(app: &AppHandle) {
-    if let Some(panel) = app.get_webview_window("panel") {
-        let _ = panel.show();
-        let _ = panel.set_focus();
-        return;
+    let panel = match app.get_webview_window("panel") {
+        Some(panel) => panel,
+        None => match WebviewWindowBuilder::new(app, "panel", WebviewUrl::App("panel.html".into()))
+            .title("Flitty")
+            .inner_size(420.0, 560.0)
+            .resizable(false)
+            .center()
+            .build()
+        {
+            Ok(panel) => panel,
+            Err(_) => return,
+        },
+    };
+    let _ = panel.unminimize();
+    let _ = panel.show();
+    bring_to_front(&panel);
+}
+
+/// Windows refuses focus requests from background apps (the tray, or a second
+/// launch handing off to us), so the panel would open behind other windows.
+/// Briefly making it topmost brings it forward reliably.
+fn bring_to_front(panel: &tauri::WebviewWindow) {
+    #[cfg(target_os = "windows")]
+    {
+        let _ = panel.set_always_on_top(true);
+        let _ = panel.set_always_on_top(false);
     }
-    let _ = WebviewWindowBuilder::new(app, "panel", WebviewUrl::App("panel.html".into()))
-        .title("Flitty")
-        .inner_size(420.0, 560.0)
-        .resizable(false)
-        .center()
-        .build();
+    let _ = panel.set_focus();
 }

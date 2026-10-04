@@ -22,7 +22,9 @@ pub fn capture_all() -> Result<Vec<ScreenCapture>, String> {
     let monitors = xcap::Monitor::all().map_err(|error| error.to_string())?;
     let mut captures = Vec::with_capacity(monitors.len());
     for (screen_index, monitor) in monitors.iter().enumerate() {
+        let grab_started = Instant::now();
         let raw = monitor.capture_image().map_err(|error| error.to_string())?;
+        let grab_time = grab_started.elapsed();
         let image = DynamicImage::ImageRgba8(raw);
         let resized = if image.width().max(image.height()) > MAX_EDGE_PIXELS {
             image.resize(MAX_EDGE_PIXELS, MAX_EDGE_PIXELS, FilterType::Triangle)
@@ -33,6 +35,7 @@ pub fn capture_all() -> Result<Vec<ScreenCapture>, String> {
         DynamicImage::ImageRgb8(resized.to_rgb8())
             .write_to(&mut Cursor::new(&mut jpeg), ImageFormat::Jpeg)
             .map_err(|error| error.to_string())?;
+        println!("[flitty] screen {screen_index}: grab {grab_time:?}, total {:?}", grab_started.elapsed());
         captures.push(ScreenCapture {
             screen_index,
             image_width: resized.width(),

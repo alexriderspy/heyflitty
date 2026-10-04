@@ -69,6 +69,7 @@ pub fn run() {
             let screen_list = screens::all(&handle);
             println!("[flitty] screens: {screen_list:?}");
             overlay::create_all(&handle, &screen_list)?;
+            overlay::start_topmost_guard(handle.clone(), screen_list.clone());
             cursor::start_stream(handle.clone(), screen_list);
             tray::install(&handle)?;
             handle.global_shortcut().register(push_to_talk)?;
