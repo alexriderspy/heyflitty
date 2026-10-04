@@ -1,5 +1,7 @@
 // The cursor buddy: follows the mouse, shows voice state, and flies to targets.
+import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { createSpeaker } from "./speech";
 
 type Point = { x: number; y: number };
 type CursorEvent = Point & { inside: boolean };
@@ -71,8 +73,36 @@ listen<CursorEvent>("cursor", ({ payload }) => {
   }
 });
 
+const speaker = createSpeaker(() => {
+  // Speech queue drained after the reply finished: back to idle.
+  if (status.className === "responding") status.className = "";
+});
+
+async function refreshVoice() {
+  const view = await invoke<{ settings: { voice: { voiceName: string } } }>("get_settings");
+  speaker.setPreferredVoice(view.settings.voice.voiceName);
+}
+refreshVoice();
+listen("settings-changed", refreshVoice);
+
 listen<VoiceState>("voice-state", ({ payload }) => {
-  status.className = payload === "idle" || payload === "responding" ? "" : payload;
+  status.className = payload === "idle" ? "" : payload;
+});
+
+listen<{ text: string }>("speak", ({ payload }) => speaker.say(payload.text));
+listen("stop-speech", () => speaker.stop());
+listen("response-complete", () => speaker.markReplyComplete());
+
+let noticeTimer: number | undefined;
+listen<{ text: string }>("notice", ({ payload }) => {
+  bubble.textContent = payload.text;
+  bubble.classList.add("notice");
+  bubble.style.opacity = "1";
+  window.clearTimeout(noticeTimer);
+  noticeTimer = window.setTimeout(() => {
+    bubble.style.opacity = "0";
+    bubble.classList.remove("notice");
+  }, 6000);
 });
 
 listen<boolean>("buddy-visibility", ({ payload }) => {
@@ -84,6 +114,7 @@ listen<PointTarget>("point", async ({ payload }) => {
   await fly({ ...position }, payload);
   mode = "pointing";
   render();
+  bubble.classList.remove("notice");
   bubble.textContent = payload.label;
   bubble.style.opacity = "1";
   await new Promise((resolve) => setTimeout(resolve, POINTING_HOLD_MS));

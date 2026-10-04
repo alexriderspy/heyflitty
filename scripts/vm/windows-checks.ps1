@@ -134,7 +134,7 @@ $appWindows = (FlittyWindows | Where-Object { ([Win]::GetWindowLongPtrW($_, -20)
 Result 'not-in-alt-tab' ($appWindows -eq 0) "windows with WS_EX_APPWINDOW: $appWindows"
 
 # 10. Resource use over 10 s idle (Flitty plus its WebView2 children).
-$webviewIds = @(Get-CimInstance Win32_Process -Filter "Name='msedgewebview2.exe'" | Where-Object { $_.CommandLine -match 'com.heyflitty.app' } | ForEach-Object ProcessId)
+$webviewIds = @(Get-CimInstance Win32_Process -Filter "Name='msedgewebview2.exe'" | Where-Object { $_.CommandLine -match 'com.heyflitty.desktop' } | ForEach-Object ProcessId)
 $all = @($proc.Id) + $webviewIds
 $cpu0 = (Get-Process -Id $all -ErrorAction SilentlyContinue | Measure-Object CPU -Sum).Sum; Start-Sleep -Seconds 10
 $cpu1 = (Get-Process -Id $all -ErrorAction SilentlyContinue | Measure-Object CPU -Sum).Sum

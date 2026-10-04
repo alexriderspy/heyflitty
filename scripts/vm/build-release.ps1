@@ -17,5 +17,5 @@ Set-Location $root
 $ErrorActionPreference = 'Continue'
 $started = Get-Date
 npm install --no-audit --no-fund --loglevel=error --update-notifier=false 2>&1 | Out-String | Select-Object -Last 1 | Out-Null
-npx tauri build --debug --no-bundle 2>&1 | Select-Object -Last 40
+npx tauri build --no-bundle 2>&1 | Select-String -Pattern '^(error|warning: unused)|-->|Finished|Built application|failed' | Select-Object -Last 25
 "build exit $LASTEXITCODE in $([int]((Get-Date)-$started).TotalSeconds)s"

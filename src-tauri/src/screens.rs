@@ -28,6 +28,10 @@ impl Screen {
     pub fn css_width(&self) -> f64 {
         self.width as f64 / self.scale
     }
+
+    pub fn css_height(&self) -> f64 {
+        self.height as f64 / self.scale
+    }
 }
 
 pub fn all(app: &AppHandle) -> Vec<Screen> {

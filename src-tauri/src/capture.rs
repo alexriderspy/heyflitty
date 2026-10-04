@@ -10,7 +10,9 @@ use image::{DynamicImage, ImageFormat};
 const MAX_EDGE_PIXELS: u32 = 1280;
 
 pub struct ScreenCapture {
-    pub screen_index: usize,
+    /// Monitor origin as xcap reports it: physical pixels on Windows, points on macOS.
+    pub monitor_x: i32,
+    pub monitor_y: i32,
     /// Size of the image the model sees; pointing coordinates come back in this space.
     pub image_width: u32,
     pub image_height: u32,
@@ -22,6 +24,8 @@ pub fn capture_all() -> Result<Vec<ScreenCapture>, String> {
     let monitors = xcap::Monitor::all().map_err(|error| error.to_string())?;
     let mut captures = Vec::with_capacity(monitors.len());
     for (screen_index, monitor) in monitors.iter().enumerate() {
+        let monitor_x = monitor.x().map_err(|error| error.to_string())?;
+        let monitor_y = monitor.y().map_err(|error| error.to_string())?;
         let grab_started = Instant::now();
         let raw = monitor.capture_image().map_err(|error| error.to_string())?;
         let grab_time = grab_started.elapsed();
@@ -37,7 +41,8 @@ pub fn capture_all() -> Result<Vec<ScreenCapture>, String> {
             .map_err(|error| error.to_string())?;
         println!("[flitty] screen {screen_index}: grab {grab_time:?}, total {:?}", grab_started.elapsed());
         captures.push(ScreenCapture {
-            screen_index,
+            monitor_x,
+            monitor_y,
             image_width: resized.width(),
             image_height: resized.height(),
             jpeg,
