@@ -34,7 +34,7 @@ pub fn open_settings(app: &AppHandle) {
         Some(panel) => panel,
         None => match WebviewWindowBuilder::new(app, "panel", WebviewUrl::App("panel.html".into()))
             .title("Flitty")
-            .inner_size(480.0, 720.0)
+            .inner_size(480.0, 420.0)
             .resizable(false)
             .center()
             .build()

@@ -28,9 +28,9 @@ pub fn parse(reply: &str) -> (String, Option<PointTag>) {
     let spoken = reply[..captures.get(0).expect("whole match").start()].trim().to_string();
     let tag = match (captures.get(1), captures.get(2)) {
         (Some(x), Some(y)) => Some(PointTag {
-            x: x.as_str().parse().unwrap_or(0.0),
-            y: y.as_str().parse().unwrap_or(0.0),
-            label: captures.get(3).map(|label| label.as_str().trim().to_string()).filter(|label| !label.is_empty()).unwrap_or_else(|| "here".into()),
+            x: x.as_str().parse().expect("pattern only matches digits"),
+            y: y.as_str().parse().expect("pattern only matches digits"),
+            label: captures.get(3).map(|label| label.as_str().trim().to_string()).unwrap_or_default(),
             screen_number: captures.get(4).and_then(|number| number.as_str().parse().ok()),
         }),
         _ => None,

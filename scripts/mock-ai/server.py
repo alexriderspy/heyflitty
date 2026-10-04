@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Fake AI provider for testing Flitty end to end without real API keys.
+"""Fake OpenAI API for testing Flitty end to end without a real key.
 
-Speaks just enough of the OpenAI chat/transcription and Anthropic Messages APIs:
+Speaks just enough of the chat, transcription and models endpoints:
 streams a canned reply that ends with a point tag, and records each request
 summary to last-request.json so tests can assert what Flitty sent.
 
@@ -28,8 +28,8 @@ def summarize(body: dict, api: str) -> dict:
         "api": api,
         "model": body.get("model"),
         "stream": body.get("stream"),
-        "has_system": bool(body.get("system")) or any(m.get("role") == "system" for m in messages),
-        "history_messages": len(messages) - 1 - (1 if api == "openai" else 0),
+        "has_system": any(m.get("role") == "system" for m in messages),
+        "history_messages": len(messages) - 2,
         "image_count": len(images),
         "texts": texts,
         "auth": "present" if body.get("_auth") else "absent",
@@ -49,6 +49,14 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.flush()
             time.sleep(0.05)
 
+    def do_GET(self):
+        ok = self.path.endswith("/models")
+        self.send_response(200 if ok else 404)
+        self.send_header("content-type", "application/json")
+        self.end_headers()
+        if ok:
+            self.wfile.write(b'{"data": []}')
+
     def do_POST(self):
         length = int(self.headers.get("content-length", 0))
         raw = self.rfile.read(length)
@@ -66,12 +74,6 @@ class Handler(BaseHTTPRequestHandler):
             RECORD.write_text(json.dumps(summarize(body, "openai"), indent=2))
             self._sse([{"choices": [{"delta": {"content": chunk}}]} for chunk in chunks])
             self.wfile.write(b"data: [DONE]\n\n")
-        elif self.path.endswith("/v1/messages"):
-            RECORD.write_text(json.dumps(summarize(body, "anthropic"), indent=2))
-            events = [{"type": "message_start"}] + [
-                {"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": chunk}} for chunk in chunks
-            ] + [{"type": "message_stop"}]
-            self._sse(events)
         else:
             self.send_response(404)
             self.end_headers()

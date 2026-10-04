@@ -73,14 +73,17 @@ listen<CursorEvent>("cursor", ({ payload }) => {
   }
 });
 
-const speaker = createSpeaker(() => {
-  // Speech queue drained after the reply finished: back to idle.
-  if (status.className === "responding") status.className = "";
-});
+const speaker = createSpeaker(
+  () => {
+    // Speech queue drained after the reply finished: back to idle.
+    if (status.className === "responding") status.className = "";
+  },
+  (voiceName) => showNotice(`the voice "${voiceName}" isn't installed; pick another in Settings`),
+);
 
 async function refreshVoice() {
-  const view = await invoke<{ settings: { voice: { voiceName: string } } }>("get_settings");
-  speaker.setPreferredVoice(view.settings.voice.voiceName);
+  const view = await invoke<{ settings: { voiceName: string } }>("get_settings");
+  speaker.setPreferredVoice(view.settings.voiceName);
 }
 refreshVoice();
 listen("settings-changed", refreshVoice);
@@ -94,8 +97,8 @@ listen("stop-speech", () => speaker.stop());
 listen("response-complete", () => speaker.markReplyComplete());
 
 let noticeTimer: number | undefined;
-listen<{ text: string }>("notice", ({ payload }) => {
-  bubble.textContent = payload.text;
+function showNotice(text: string) {
+  bubble.textContent = text;
   bubble.classList.add("notice");
   bubble.style.opacity = "1";
   window.clearTimeout(noticeTimer);
@@ -103,7 +106,8 @@ listen<{ text: string }>("notice", ({ payload }) => {
     bubble.style.opacity = "0";
     bubble.classList.remove("notice");
   }, 6000);
-});
+}
+listen<{ text: string }>("notice", ({ payload }) => showNotice(payload.text));
 
 listen<boolean>("buddy-visibility", ({ payload }) => {
   buddy.classList.toggle("hidden", !payload);
@@ -116,7 +120,7 @@ listen<PointTarget>("point", async ({ payload }) => {
   render();
   bubble.classList.remove("notice");
   bubble.textContent = payload.label;
-  bubble.style.opacity = "1";
+  bubble.style.opacity = payload.label ? "1" : "0";
   await new Promise((resolve) => setTimeout(resolve, POINTING_HOLD_MS));
   bubble.style.opacity = "0";
   mode = "flying";

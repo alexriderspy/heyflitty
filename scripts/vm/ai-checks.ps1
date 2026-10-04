@@ -1,6 +1,6 @@
-# End-to-end checks of the AI loop against the mock provider (scripts/mock-ai/server.py on the host).
-# Uses FLITTY_TEST_TRANSCRIPT so no microphone or transcription key is needed.
-param([string]$Scenario = 'openai')
+# End-to-end checks of the AI loop against the mock OpenAI server (scripts/mock-ai/server.py on the host).
+# Uses FLITTY_TEST_TRANSCRIPT so no microphone is needed, and a throwaway test key that is removed afterwards.
+param([string]$Scenario = 'reply')
 Add-Type -AssemblyName System.Windows.Forms, System.Drawing
 Add-Type @'
 using System; using System.Runtime.InteropServices;
@@ -21,21 +21,17 @@ function Shot($name) {
 }
 
 $mock = 'http://10.211.55.2:8766'
-$chat = switch ($Scenario) {
-  'openai'    { @{ api = 'open-ai-compatible'; baseUrl = $mock; model = 'mock-model' } }
-  'anthropic' { @{ api = 'anthropic'; baseUrl = $mock; model = 'mock-claude' } }
-  'no-key'    { @{ api = 'anthropic'; baseUrl = 'https://api.anthropic.com'; model = 'claude-sonnet-5-5' } }
-}
 $configDir = Join-Path $env:APPDATA 'com.heyflitty.desktop'
-New-Item -ItemType Directory -Force -Path $configDir | Out-Null
-@{ chat = $chat; transcription = @{ baseUrl = $mock; model = 'mock-whisper' }; voice = @{ voiceName = ''; muted = $false } } |
-  ConvertTo-Json -Depth 4 | Set-Content (Join-Path $configDir 'settings.json') -Encoding UTF8
+Remove-Item (Join-Path $configDir 'settings.json') -ErrorAction SilentlyContinue
+$credential = 'openai-api-key.com.heyflitty.desktop'
+cmdkey /delete:$credential 2>&1 | Out-Null
+if ($Scenario -eq 'reply') { cmdkey /generic:$credential /user:openai-api-key /pass:mock-test-key | Out-Null }
 
 # Launch in the interactive session with the test transcript set.
 $exe = Join-Path $env:USERPROFILE 'heyflitty\src-tauri\target\debug\flitty.exe'
 $log = Join-Path $env:TEMP 'flitty.log'
 Get-Process flitty -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Milliseconds 500
-$command = "/c set FLITTY_TEST_TRANSCRIPT=where do I search on this page&& `"$exe`" > `"$log`" 2>&1"
+$command = "/c set FLITTY_TEST_TRANSCRIPT=where do I search on this page&& set FLITTY_TEST_OPENAI_BASE_URL=$mock&& `"$exe`" > `"$log`" 2>&1"
 $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument $command -WorkingDirectory (Split-Path $exe)
 $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive
 Register-ScheduledTask -TaskName 'flitty' -Action $action -Principal $principal -Settings (New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::Zero)) -Force | Out-Null
@@ -47,9 +43,10 @@ PushToTalk 700
 Start-Sleep -Milliseconds 600
 Shot 'thinking'
 $deadline = (Get-Date).AddSeconds(15)
-while ((Get-Date) -lt $deadline -and -not (Select-String -Path $log -Pattern 'reply complete|provider key' -Quiet)) { Start-Sleep -Milliseconds 200 }
+while ((Get-Date) -lt $deadline -and -not (Select-String -Path $log -Pattern 'reply complete|API key' -Quiet)) { Start-Sleep -Milliseconds 200 }
 Start-Sleep -Milliseconds 1300
 Shot 'pointing'
 Start-Sleep -Seconds 2
 if ($Scenario -eq 'no-key') { Shot 'settings-prompt' }
-"LOG " + ((Get-Content $log | Where-Object { $_ -match 'first sentence|reply complete|captured|provider key|failed|error' }) -join ' || ')
+cmdkey /delete:$credential 2>&1 | Out-Null
+"LOG " + ((Get-Content $log | Where-Object { $_ -match 'first sentence|reply complete|captured|API key|failed|error' }) -join ' || ')

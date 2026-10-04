@@ -5,10 +5,9 @@
 
 mod audio;
 mod capture;
-mod chat;
 mod commands;
 mod cursor;
-mod errors;
+mod openai;
 mod overlay;
 mod pipeline;
 mod platform;
@@ -16,7 +15,6 @@ mod pointing;
 mod prompt;
 mod screens;
 mod settings;
-mod transcribe;
 mod tray;
 
 use tauri::Manager;
@@ -45,14 +43,14 @@ pub fn run() {
                 })
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![commands::get_settings, commands::save_settings, commands::test_keys])
+        .invoke_handler(tauri::generate_handler![commands::get_settings, commands::save_settings, commands::test_key])
         .setup(move |app| {
             // Lives in the menu bar: no Dock icon, never takes activation from other apps.
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
             let handle = app.handle().clone();
-            handle.manage(settings::SettingsStore::load(&handle));
+            handle.manage(settings::SettingsStore::load(&handle)?);
             handle.manage(pipeline::Assistant::new());
             let screen_list = screens::all(&handle);
             println!("[flitty] screens: {screen_list:?}");

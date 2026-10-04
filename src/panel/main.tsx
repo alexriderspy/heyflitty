@@ -3,40 +3,8 @@ import { createRoot } from "react-dom/client";
 import { invoke } from "@tauri-apps/api/core";
 import "./panel.css";
 
-type ChatApi = "anthropic" | "open-ai-compatible";
-type Settings = {
-  chat: { api: ChatApi; baseUrl: string; model: string };
-  transcription: { baseUrl: string; model: string; language: string };
-  voice: { voiceName: string; muted: boolean };
-};
-type SettingsView = { settings: Settings; hasChatKey: boolean; hasTranscriptionKey: boolean };
-type KeyCheck = { ok: boolean; message: string };
-
-/** Catches the common mix-up of pasting one provider's key into another's field. */
-function keyShapeWarning(baseUrl: string, key: string): string {
-  if (!key) return "";
-  const isAnthropicKey = key.startsWith("sk-ant-");
-  if (baseUrl.includes("anthropic.com") && !isAnthropicKey) return "This doesn't look like an Anthropic key (they start with sk-ant-).";
-  if (!baseUrl.includes("anthropic.com") && isAnthropicKey) return "This is an Anthropic key, but this provider isn't Anthropic.";
-  return "";
-}
-
-const CHAT_PRESETS: { name: string; api: ChatApi; baseUrl: string; model: string }[] = [
-  { name: "Anthropic", api: "anthropic", baseUrl: "https://api.anthropic.com", model: "claude-sonnet-5-5" },
-  { name: "OpenAI", api: "open-ai-compatible", baseUrl: "https://api.openai.com/v1", model: "gpt-5" },
-  { name: "Google Gemini", api: "open-ai-compatible", baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-2.5-flash" },
-  { name: "OpenRouter", api: "open-ai-compatible", baseUrl: "https://openrouter.ai/api/v1", model: "openrouter/auto" },
-  { name: "Ollama (local)", api: "open-ai-compatible", baseUrl: "http://localhost:11434/v1", model: "qwen2.5vl" },
-];
-
-const TRANSCRIPTION_PRESETS = [
-  { name: "OpenAI", baseUrl: "https://api.openai.com/v1", model: "gpt-4o-mini-transcribe" },
-  { name: "Groq", baseUrl: "https://api.groq.com/openai/v1", model: "whisper-large-v3-turbo" },
-];
-
-function presetName(presets: { name: string; baseUrl: string }[], baseUrl: string) {
-  return presets.find((preset) => preset.baseUrl === baseUrl)?.name ?? "Custom";
-}
+type Settings = { chatModel: string; transcriptionModel: string; voiceName: string; muted: boolean };
+type SettingsView = { settings: Settings; hasKey: boolean };
 
 function useSystemVoices() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>(() => speechSynthesis.getVoices());
@@ -51,10 +19,8 @@ function useSystemVoices() {
 function Panel() {
   const [view, setView] = useState<SettingsView | null>(null);
   const [draft, setDraft] = useState<Settings | null>(null);
-  const [chatKey, setChatKey] = useState("");
-  const [transcriptionKey, setTranscriptionKey] = useState("");
+  const [apiKey, setApiKey] = useState("");
   const [status, setStatus] = useState("");
-  const [checks, setChecks] = useState<{ chat: KeyCheck; transcription: KeyCheck } | null>(null);
   const [testing, setTesting] = useState(false);
   const voices = useSystemVoices();
 
@@ -67,40 +33,36 @@ function Panel() {
 
   if (!view || !draft) return null;
 
-  const update = (change: (settings: Settings) => Settings) => setDraft(change(structuredClone(draft)));
-
-  async function save() {
+  async function save(): Promise<boolean> {
     try {
-      const saved = await invoke<SettingsView>("save_settings", {
-        request: { settings: draft, chatKey: chatKey || null, transcriptionKey: transcriptionKey || null },
-      });
+      const saved = await invoke<SettingsView>("save_settings", { request: { settings: draft, apiKey: apiKey || null } });
       setView(saved);
-      setChatKey("");
-      setTranscriptionKey("");
+      setApiKey("");
       setStatus("Saved");
+      return true;
     } catch (error) {
       setStatus(`Couldn't save: ${error}`);
+      return false;
     }
   }
 
-  async function testKeys() {
+  async function testKey() {
     setTesting(true);
-    setChecks(null);
     try {
-      await save();
-      setChecks(await invoke<{ chat: KeyCheck; transcription: KeyCheck }>("test_keys"));
+      if (!(await save())) return;
+      await invoke("test_key");
+      setStatus("✓ OpenAI accepted your key");
+    } catch (error) {
+      setStatus(`✗ ${error}`);
     } finally {
       setTesting(false);
     }
   }
 
-  const chatWarning = keyShapeWarning(draft.chat.baseUrl, chatKey);
-  const transcriptionWarning = keyShapeWarning(draft.transcription.baseUrl, transcriptionKey);
-
   function previewVoice() {
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance("hey, I'm flitty. ask me anything about your screen.");
-    const voice = voices.find((candidate) => candidate.name === draft!.voice.voiceName);
+    const voice = voices.find((candidate) => candidate.name === draft!.voiceName);
     if (voice) utterance.voice = voice;
     speechSynthesis.speak(utterance);
   }
@@ -113,81 +75,14 @@ function Panel() {
       </header>
 
       <section>
-        <h2>AI model</h2>
+        <h2>OpenAI</h2>
         <label>
-          Provider
-          <select
-            value={presetName(CHAT_PRESETS, draft.chat.baseUrl)}
-            onChange={(event) => {
-              const preset = CHAT_PRESETS.find((candidate) => candidate.name === event.target.value);
-              if (preset) update((settings) => ({ ...settings, chat: { api: preset.api, baseUrl: preset.baseUrl, model: preset.model } }));
-            }}
-          >
-            {CHAT_PRESETS.map((preset) => <option key={preset.name}>{preset.name}</option>)}
-            <option>Custom</option>
-          </select>
-        </label>
-        <label>
-          API style
-          <select value={draft.chat.api} onChange={(event) => update((settings) => ({ ...settings, chat: { ...settings.chat, api: event.target.value as ChatApi } }))}>
-            <option value="anthropic">Anthropic Messages</option>
-            <option value="open-ai-compatible">OpenAI-compatible</option>
-          </select>
-        </label>
-        <label>
-          Base URL
-          <input value={draft.chat.baseUrl} onChange={(event) => update((settings) => ({ ...settings, chat: { ...settings.chat, baseUrl: event.target.value } }))} />
+          API key
+          <input type="password" autoComplete="off" value={apiKey} placeholder={view.hasKey ? "Saved. Type to replace." : "sk-..."} onChange={(event) => setApiKey(event.target.value)} />
         </label>
         <label>
           Model
-          <input value={draft.chat.model} onChange={(event) => update((settings) => ({ ...settings, chat: { ...settings.chat, model: event.target.value } }))} />
-        </label>
-        <label>
-          API key
-          <input type="password" autoComplete="off" value={chatKey} placeholder={view.hasChatKey ? "Saved. Type to replace." : "Paste your key"} onChange={(event) => setChatKey(event.target.value)} />
-        </label>
-        {chatWarning && <p className="warning">{chatWarning}</p>}
-        {checks && <p className={checks.chat.ok ? "check ok" : "check bad"}>{checks.chat.ok ? "✓" : "✗"} {checks.chat.message}</p>}
-      </section>
-
-      <section>
-        <h2>Speech to text</h2>
-        <label>
-          Provider
-          <select
-            value={presetName(TRANSCRIPTION_PRESETS, draft.transcription.baseUrl)}
-            onChange={(event) => {
-              const preset = TRANSCRIPTION_PRESETS.find((candidate) => candidate.name === event.target.value);
-              if (preset) update((settings) => ({ ...settings, transcription: { ...settings.transcription, baseUrl: preset.baseUrl, model: preset.model } }));
-            }}
-          >
-            {TRANSCRIPTION_PRESETS.map((preset) => <option key={preset.name}>{preset.name}</option>)}
-            <option>Custom</option>
-          </select>
-        </label>
-        <label>
-          Base URL
-          <input value={draft.transcription.baseUrl} onChange={(event) => update((settings) => ({ ...settings, transcription: { ...settings.transcription, baseUrl: event.target.value } }))} />
-        </label>
-        <label>
-          API key
-          <input
-            type="password"
-            autoComplete="off"
-            value={transcriptionKey}
-            placeholder={view.hasTranscriptionKey ? "Saved. Type to replace." : "Needed unless it's the same provider as the AI model"}
-            onChange={(event) => setTranscriptionKey(event.target.value)}
-          />
-        </label>
-        {transcriptionWarning && <p className="warning">{transcriptionWarning}</p>}
-        {checks && <p className={checks.transcription.ok ? "check ok" : "check bad"}>{checks.transcription.ok ? "✓" : "✗"} {checks.transcription.message}</p>}
-        <label>
-          Language
-          <input
-            value={draft.transcription.language}
-            placeholder="Blank to auto-detect"
-            onChange={(event) => update((settings) => ({ ...settings, transcription: { ...settings.transcription, language: event.target.value } }))}
-          />
+          <input value={draft.chatModel} onChange={(event) => setDraft({ ...draft, chatModel: event.target.value })} />
         </label>
       </section>
 
@@ -195,14 +90,14 @@ function Panel() {
         <h2>Voice</h2>
         <label>
           System voice
-          <select value={draft.voice.voiceName} onChange={(event) => update((settings) => ({ ...settings, voice: { ...settings.voice, voiceName: event.target.value } }))}>
-            <option value="">Best available</option>
+          <select value={draft.voiceName} onChange={(event) => setDraft({ ...draft, voiceName: event.target.value })}>
+            <option value="">Best English voice</option>
             {voices.map((voice) => <option key={voice.name} value={voice.name}>{voice.name}</option>)}
           </select>
         </label>
         <div className="row">
           <label className="inline">
-            <input type="checkbox" checked={draft.voice.muted} onChange={(event) => update((settings) => ({ ...settings, voice: { ...settings.voice, muted: event.target.checked } }))} />
+            <input type="checkbox" checked={draft.muted} onChange={(event) => setDraft({ ...draft, muted: event.target.checked })} />
             Don't speak replies
           </label>
           <button className="secondary" onClick={previewVoice}>Preview</button>
@@ -211,7 +106,7 @@ function Panel() {
 
       <footer>
         <span className="status">{status}</span>
-        <button className="secondary" onClick={testKeys} disabled={testing}>{testing ? "Testing…" : "Test keys"}</button>
+        <button className="secondary" onClick={testKey} disabled={testing}>{testing ? "Testing…" : "Test key"}</button>
         <button onClick={save}>Save</button>
       </footer>
     </main>

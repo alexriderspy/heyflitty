@@ -7,23 +7,13 @@ export type Speaker = {
   setPreferredVoice(name: string): void;
 };
 
-/** Natural-sounding voices first, then any English voice. */
-function pickVoice(preferredName: string): SpeechSynthesisVoice | undefined {
-  const voices = speechSynthesis.getVoices();
-  if (preferredName) {
-    const chosen = voices.find((voice) => voice.name === preferredName);
-    if (chosen) return chosen;
-  }
+/** With no voice chosen, prefer a natural-sounding English voice. */
+function bestEnglishVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
   const english = voices.filter((voice) => voice.lang.toLowerCase().startsWith("en"));
-  return (
-    english.find((voice) => /natural|neural|online/i.test(voice.name)) ??
-    english.find((voice) => voice.localService) ??
-    english[0] ??
-    voices[0]
-  );
+  return english.find((voice) => /natural|neural|online/i.test(voice.name)) ?? english.find((voice) => voice.localService) ?? english[0];
 }
 
-export function createSpeaker(onFinishedReply: () => void): Speaker {
+export function createSpeaker(onFinishedReply: () => void, onMissingVoice: (name: string) => void): Speaker {
   let preferredVoice = "";
   let pending = 0;
   let replyComplete = false;
@@ -37,8 +27,13 @@ export function createSpeaker(onFinishedReply: () => void): Speaker {
 
   return {
     say(text) {
+      const voices = speechSynthesis.getVoices();
+      const voice = preferredVoice ? voices.find((candidate) => candidate.name === preferredVoice) : bestEnglishVoice(voices);
+      if (preferredVoice && !voice) {
+        onMissingVoice(preferredVoice);
+        return;
+      }
       const utterance = new SpeechSynthesisUtterance(text);
-      const voice = pickVoice(preferredVoice);
       if (voice) utterance.voice = voice;
       utterance.rate = 1.05;
       pending += 1;

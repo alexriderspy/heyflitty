@@ -9,12 +9,11 @@ use tauri::{AppHandle, Emitter, Manager};
 
 use crate::audio::Recorder;
 use crate::capture::{self, ScreenCapture};
-use crate::chat::{self, ChatRequest, Exchange};
+use crate::openai::{self, ChatRequest, Exchange};
 use crate::overlay::{self, label_for, PointTarget, VoiceState};
 use crate::pointing::{self, SentenceSplitter};
 use crate::screens::{self, Screen};
-use crate::settings::{self, KeyKind, SettingsStore};
-use crate::transcribe;
+use crate::settings::{self, SettingsStore};
 use crate::{prompt, tray};
 
 const HISTORY_LIMIT: usize = 10;
@@ -72,7 +71,7 @@ pub fn on_release(app: &AppHandle) {
     tauri::async_runtime::spawn(async move {
         if let Err(error) = run_turn(&app, turn).await {
             if is_current(&app, turn) {
-                if crate::errors::points_to_settings(&error) {
+                if error.contains("Settings") {
                     tray::open_settings(&app);
                 }
                 notify(&app, &error);
@@ -92,6 +91,10 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
     let assistant = app.state::<Assistant>();
     let settings = app.state::<SettingsStore>().get();
     let started = Instant::now();
+    let Some(api_key) = settings::read_key() else {
+        tray::open_settings(app);
+        return Err("add your OpenAI API key in Settings first".into());
+    };
 
     let question = match test_transcript() {
         Some(text) => text,
@@ -105,12 +108,7 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
                 Err(error) => return Err(format!("recording failed: {error}")),
             };
             overlay::set_voice_state(app, VoiceState::Processing);
-            let key = settings::transcription_key(&settings);
-            if key.is_none() && needs_key(&settings.transcription.base_url) {
-                tray::open_settings(app);
-                return Err(format!("add a {} key under Speech to text so I can understand you", crate::errors::provider_name(&settings.transcription.base_url)));
-            }
-            let text = transcribe::transcribe(&assistant.http, &settings.transcription, key.as_deref(), recording.wav).await?;
+            let text = openai::transcribe(&assistant.http, &api_key, &settings.transcription_model, recording.wav).await?;
             println!("[flitty] heard ({:.1}s audio) in {:?}: {text}", recording.seconds, started.elapsed());
             text
         }
@@ -121,18 +119,15 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
     }
     overlay::set_voice_state(app, VoiceState::Processing);
 
-    let chat_key = settings::read_key(KeyKind::Chat);
-    if chat_key.is_none() && needs_key(&settings.chat.base_url) {
-        tray::open_settings(app);
-        return Err(format!("add your {} key under AI model first", crate::errors::provider_name(&settings.chat.base_url)));
-    }
-
     let screen_list = screens::all(app);
-    let cursor_screen = screens::under_cursor(app, &screen_list).or_else(|| screen_list.first().cloned()).ok_or("no screens found")?;
+    let cursor_screen = screens::under_cursor(app, &screen_list).ok_or("I couldn't tell which screen the mouse is on")?;
     let captures = tauri::async_runtime::spawn_blocking(capture::capture_all)
         .await
         .map_err(|error| error.to_string())??;
-    let matched: Vec<(&ScreenCapture, Screen)> = captures.iter().filter_map(|capture| match_screen(capture, &screen_list).map(|screen| (capture, screen))).collect();
+    let matched = captures
+        .iter()
+        .map(|capture| match_screen(capture, &screen_list).map(|screen| (capture, screen)).ok_or("a captured display didn't match any known screen"))
+        .collect::<Result<Vec<(&ScreenCapture, Screen)>, _>>()?;
     let labeled = matched
         .iter()
         .enumerate()
@@ -152,7 +147,7 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
 
     let mut splitter = SentenceSplitter::new();
     let mut started_speaking = false;
-    let voice_muted = settings.voice.muted;
+    let voice_muted = settings.muted;
     let speak_target = label_for(cursor_screen.index);
     let mut speak = |sentence: String| {
         if !is_current(app, turn) {
@@ -168,11 +163,10 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
         }
     };
 
-    let reply = chat::stream_reply(
+    let reply = openai::stream_reply(
         &assistant.http,
-        &settings.chat,
-        chat_key.as_deref(),
-        ChatRequest { system_prompt: prompt::SYSTEM_PROMPT, history: &history, question: &question, screens: labeled, max_tokens: MAX_REPLY_TOKENS },
+        &api_key,
+        ChatRequest { model: &settings.chat_model, system_prompt: prompt::SYSTEM_PROMPT, history: &history, question: &question, screens: labeled, max_tokens: MAX_REPLY_TOKENS },
         |delta| {
             for sentence in splitter.push(delta) {
                 speak(sentence);
@@ -190,10 +184,11 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
 
     let (spoken, tag) = pointing::parse(&reply);
     if let Some(tag) = tag {
-        let target = tag
-            .screen_number
-            .and_then(|number| matched.get(number.wrapping_sub(1)))
-            .or_else(|| matched.iter().find(|(_, screen)| screen.index == cursor_screen.index));
+        // No screen number means the cursor screen, per the prompt; an unknown number points nowhere.
+        let target = match tag.screen_number {
+            Some(number) => matched.get(number.wrapping_sub(1)),
+            None => matched.iter().find(|(_, screen)| screen.index == cursor_screen.index),
+        };
         if let Some((capture, screen)) = target {
             let x = (tag.x.clamp(0.0, capture.image_width as f64) / capture.image_width as f64) * screen.css_width();
             let y = (tag.y.clamp(0.0, capture.image_height as f64) / capture.image_height as f64) * screen.css_height();
@@ -224,17 +219,18 @@ fn match_screen(capture: &ScreenCapture, screen_list: &[Screen]) -> Option<Scree
         .cloned()
 }
 
-/// Hosted providers always need a key; self-hosted endpoints (Ollama, LM Studio) usually don't.
-pub fn needs_key(base_url: &str) -> bool {
-    ["anthropic.com", "openai.com", "openrouter.ai", "googleapis.com", "groq.com", "x.ai", "mistral.ai"]
-        .iter()
-        .any(|host| base_url.contains(host))
-}
 
 fn notify(app: &AppHandle, text: &str) {
     eprintln!("[flitty] {text}");
     overlay::set_voice_state(app, VoiceState::Idle);
-    let cursor_screen = screens::under_cursor(app, &screens::all(app));
-    let target = cursor_screen.map(|screen| label_for(screen.index)).unwrap_or_else(|| label_for(0));
-    let _ = app.emit_to(target.as_str(), "notice", NoticePayload { text: text.to_string() });
+    let payload = NoticePayload { text: text.to_string() };
+    match screens::under_cursor(app, &screens::all(app)) {
+        Some(screen) => {
+            let _ = app.emit_to(label_for(screen.index).as_str(), "notice", payload);
+        }
+        // Mouse position unknown: show it on every screen rather than guess one.
+        None => {
+            let _ = app.emit("notice", payload);
+        }
+    }
 }
