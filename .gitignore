@@ -11,3 +11,10 @@ marketing-video/node_modules/
 marketing-video/.media/
 marketing-video/.hyperframes/
 marketing-video/.thumbnails/
+launch-film/node_modules/
+launch-film/renders/
+launch-film/snapshots/
+launch-film/.hyperframes/
+launch-film/.thumbnails/
+launch-film/.media/
+marketing-video/voice-samples/

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "w0",
+    "text": "Your",
+    "start": 0.299,
+    "end": 0.469
+  },
+  {
+    "id": "w1",
+    "text": "own",
+    "start": 0.512,
+    "end": 0.64
+  },
+  {
+    "id": "w2",
+    "text": "key.",
+    "start": 0.725,
+    "end": 1.451
+  },
+  {
+    "id": "w3",
+    "text": "No",
+    "start": 1.963,
+    "end": 2.133
+  },
+  {
+    "id": "w4",
+    "text": "account.",
+    "start": 2.219,
+    "end": 2.731
+  },
+  {
+    "id": "w5",
+    "text": "No",
+    "start": 3.029,
+    "end": 3.2
+  },
+  {
+    "id": "w6",
+    "text": "server.",
+    "start": 3.243,
+    "end": 3.686
+  }
+]
