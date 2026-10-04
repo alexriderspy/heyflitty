@@ -73,4 +73,4 @@ Issues and pull requests are welcome. Contributions require agreeing to the [CLA
 
 MIT. See [LICENSE](LICENSE).
 
-Flitty's voice style and pointing approach were inspired by [Clicky](https://github.com/farzaa/clicky) (MIT).
+Flitty's system prompt is adapted from [Clicky](https://github.com/farzaa/clicky) (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Licenses of all bundled dependencies are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt), regenerated with `scripts/generate-licenses.sh` and shipped with the installer.
