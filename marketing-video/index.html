@@ -60,6 +60,48 @@
       .tag { position: absolute; left: 210px; top: 910px; font-size: 26px; color: #c7c2b9; display: flex; align-items: center; gap: 12px; }
       .tag::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: #ff5c5c; box-shadow: 0 0 0 6px rgba(255,92,92,0.18); }
       .card-line { position: absolute; left: 0; right: 0; top: 440px; text-align: center; font-family: "Instrument Serif", serif; font-size: 150px; color: #f3efe7; opacity: 0; }
+
+      /* monitor frames */
+      .screen { position: absolute; left: 70px; top: 120px; width: 1240px; height: 800px; border-radius: 26px; border: 10px solid #1b1a18; overflow: hidden; box-shadow: 0 40px 100px rgba(20,18,16,0.22); transform-origin: 0 0; }
+      .wall-win { position: absolute; inset: 0; background: radial-gradient(70% 90% at 62% 58%, #8cc0ff 0%, #3478e6 28%, #12348c 62%, #0a1846 100%); }
+      .wall-mac { position: absolute; inset: 0; background: linear-gradient(155deg, #f8cf92 0%, #ef9271 38%, #b9578c 68%, #4b3b92 100%); }
+      .taskbar { position: absolute; left: 0; right: 0; bottom: 0; height: 60px; background: rgba(238,241,248,0.86); display: flex; justify-content: center; align-items: center; gap: 16px; }
+      .taskbar i { width: 34px; height: 34px; border-radius: 8px; display: block; }
+      .taskbar .start { background: conic-gradient(#2f7cf6 0 25%, #4f95ff 0 50%, #2f7cf6 0 75%, #4f95ff 0); border-radius: 4px; width: 28px; height: 28px; }
+      .menubar { position: absolute; left: 0; right: 0; top: 0; height: 36px; background: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 26px; padding: 0 22px; font-size: 19px; color: #1d1d1f; }
+      .menubar b { font-weight: 700; }
+      .menubar .clock { margin-left: auto; }
+      .dock { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); height: 74px; padding: 0 14px; border-radius: 22px; background: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 12px; }
+      .dock i { width: 52px; height: 52px; border-radius: 13px; display: block; }
+      .ww { position: absolute; left: 34px; top: 26px; width: 1152px; height: 676px; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 22px 60px rgba(0,0,0,0.35); font-size: 21px; color: #1f1f1f; }
+      .ww .tb { height: 46px; background: #f3f3f3; display: flex; align-items: center; padding-left: 18px; font-size: 18px; color: #333; }
+      .ww .tb .ctl { margin-left: auto; display: flex; height: 100%; }
+      .ww .tb .ctl span { width: 58px; display: grid; place-items: center; font-size: 17px; color: #444; }
+      .mw { position: absolute; left: 70px; top: 70px; width: 1080px; height: 600px; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 22px 60px rgba(0,0,0,0.3); font-size: 21px; color: #1d1d1f; }
+      .lights { position: absolute; left: 20px; top: 20px; display: flex; gap: 9px; }
+      .lights i { width: 15px; height: 15px; border-radius: 50%; display: block; }
+      .content { position: absolute; left: 0; right: 0; top: 46px; bottom: 0; }
+      .abs { position: absolute; }
+      .layer { position: absolute; inset: 0; pointer-events: none; }
+      .ring { position: absolute; left: 0; top: 0; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; border: 3px dashed #3884ff; opacity: 0; }
+      .scap { position: absolute; width: 430px; background: rgba(20,18,16,0.94); color: #fff; border-radius: 18px; padding: 16px 20px; font-size: 24px; line-height: 1.35; box-shadow: 0 20px 50px rgba(0,0,0,0.3); opacity: 0; }
+      .scap .heard { display: block; font-size: 17px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+      .mouse { position: absolute; left: 0; top: 0; width: 30px; height: 42px; }
+      /* right column */
+      .badge { position: absolute; left: 1380px; top: 150px; display: flex; align-items: center; gap: 12px; padding: 10px 20px; border-radius: 999px; background: #141210; color: #f8f4ec; font-size: 24px; font-weight: 600; }
+      .keys { position: absolute; left: 1380px; top: 230px; display: flex; gap: 12px; }
+      .kc { height: 64px; padding: 0 22px; display: grid; place-items: center; background: #fffdf9; border: 2px solid #d8cfbf; border-radius: 16px; font-size: 26px; font-weight: 600; box-shadow: 0 8px 0 #d8cfbf; }
+      .wave { position: absolute; left: 1380px; top: 330px; width: 440px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+      .wave i { width: 8px; height: 10px; border-radius: 4px; background: #141210; display: block; }
+      .ask { position: absolute; left: 1380px; top: 330px; width: 460px; background: #fff; border: 2px solid #e4ddd0; border-radius: 28px 28px 28px 8px; padding: 22px 26px; font-size: 36px; line-height: 1.22; box-shadow: 0 16px 40px rgba(20,18,16,0.08); opacity: 0; }
+      .ask small { display: block; font-size: 19px; color: #6f6a62; margin-bottom: 6px; }
+      .copy { position: absolute; left: 1380px; top: 600px; width: 470px; opacity: 0; }
+      .copy h2 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 88px; line-height: 0.98; }
+      .copy p { margin-top: 20px; font-size: 27px; line-height: 1.35; color: #5f5a52; }
+      .card { position: absolute; background: #f6f6f8; border-radius: 12px; }
+      .row { position: absolute; display: flex; align-items: center; gap: 14px; white-space: nowrap; }
+      .cb { width: 24px; height: 24px; border-radius: 6px; border: 2px solid #8a8a8a; display: grid; place-items: center; color: #fff; font-size: 17px; font-weight: 700; }
+      .mon { position: absolute; display: grid; place-items: center; border-radius: 8px; background: #dfe6f3; border: 3px solid #b9c3d6; font-size: 48px; font-weight: 600; color: #3a4558; }
     </style>
     <script>
       // Flitty's comet cursor: a white-hot core, blue halo and a tapered tail sampled
@@ -125,136 +167,98 @@
         return { create, at, ease };
       })();
     </script>
-  </head>
   <body>
-    <div data-hf-id="hf-qtzs" id="root" data-composition-id="main" data-start="0" data-duration="33.2" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="31.4" data-width="1920" data-height="1080">
 
       <!-- 1 · The firefly -->
-      <section data-hf-id="hf-a99r" id="s1" class="clip scene dark" data-start="0" data-duration="3.6" data-track-index="0">
-        <div data-hf-id="hf-1uog" id="s1-stars" class="stage"></div>
-        <img data-hf-id="hf-e7lu" id="s1-logo" src="assets/logo-white.svg" alt="" style="position:absolute;left:600px;top:398px;width:250px;height:250px;opacity:0">
-        <div data-hf-id="hf-zxgt" id="s1-word" class="serif" style="position:absolute;left:890px;top:360px;font-size:300px;line-height:1;color:#f3efe7;clip-path:inset(0 100% 0 0)">flitty</div>
-        <div data-hf-id="hf-rdgv" id="s1-comet" class="stage"></div>
-        <div data-hf-id="hf-rppt" id="s1-flash" class="flash"></div>
+      <section id="s1" class="clip scene dark" data-start="0" data-duration="3.2" data-track-index="0">
+        <div id="s1-stars" class="stage"></div>
+        <img id="s1-logo" src="assets/logo-white.svg" alt="" style="position:absolute;left:600px;top:398px;width:250px;height:250px;opacity:0">
+        <div id="s1-word" class="serif" style="position:absolute;left:890px;top:360px;font-size:300px;line-height:1;color:#f3efe7;clip-path:inset(0 100% 0 0)">flitty</div>
+        <div id="s1-comet" class="stage"></div>
+        <div id="s1-flash" class="flash"></div>
       </section>
 
-      <!-- 2 · Lost in the ribbon -->
-      <section data-hf-id="hf-vemy" id="s2" class="clip scene light" data-start="3.4" data-duration="3.6" data-track-index="1">
-        <div data-hf-id="hf-kvvd" id="s2-in" class="stage">
-          <div data-hf-id="hf-tf0s" id="s2-win" class="win" style="left:190px;top:110px;width:1540px;height:440px">
-            <div data-hf-id="hf-ufsv" class="bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-tr97">Book1 - Excel</span></div>
-            <div data-hf-id="hf-5rmk" class="tabs"><span data-hf-id="hf-ycg7">File</span><b data-hf-id="hf-6n4e">Home</b><span data-hf-id="hf-z2t8">Insert</span><span data-hf-id="hf-vc9b">Draw</span><span data-hf-id="hf-21a8">Page Layout</span><span data-hf-id="hf-hxz2">Formulas</span><span data-hf-id="hf-lrch">Data</span><span data-hf-id="hf-l8rh">Review</span><span data-hf-id="hf-yjbw">View</span><span data-hf-id="hf-ah46">Help</span></div>
-            <div data-hf-id="hf-ifmy" class="ribbon" id="s2-ribbon"></div>
+      <!-- 2 · One story on Windows: "what's this port?" then setting up the monitor -->
+      <section id="s2" class="clip scene light" data-start="3.0" data-duration="15.6" data-track-index="1">
+        <div id="s2-in" class="stage">
+          <div id="s2-screen" class="screen">
+            <div class="wall-win"></div>
+            <div id="s2-browser" class="ww"></div>
+            <div id="s2-settings" class="ww" style="opacity:0"></div>
+            <div class="taskbar"><i class="start"></i><i style="background:#c9d3e6"></i><i style="background:#3d8bfd"></i><i style="background:#f4b740"></i><i style="background:#2fa36b"></i><i style="background:#8a6cf0"></i></div>
+            <div class="layer">
+              <div id="s2-ring" class="ring"></div>
+              <svg id="s2-mouse" class="mouse" viewBox="0 0 30 42"><path d="M2 2 L2 34 L10 26 L16 40 L22 37 L16 24 L27 24 Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>
+              <div id="s2-comet" class="layer"></div>
+              <div id="s2-chip1" data-layout-allow-overlap class="chip" style="opacity:0">HDMI port</div>
+              <div id="s2-chip2" data-layout-allow-overlap class="chip" style="opacity:0">Display 2</div>
+              <div id="s2-chip3" data-layout-allow-overlap class="chip" style="opacity:0">Make this my main display</div>
+              <div id="s2-cap1" data-layout-allow-overlap class="scap"><span class="heard">you: what's this port?</span><span id="s2-ans1"></span></div>
+              <div id="s2-cap2" data-layout-allow-overlap class="scap" style="width:380px"><span class="heard">you: how do I make the monitor my main display?</span><span id="s2-ans2"></span></div>
+            </div>
           </div>
-          <div data-hf-id="hf-0qh7" id="s2-cursor" style="position:absolute;left:0;top:0;width:30px;height:38px;background:#8a847b;clip-path:polygon(0 0, 100% 72%, 52% 72%, 30% 100%);"></div>
-          <div data-hf-id="hf-c55b" id="s2-head" class="headline" style="top:690px;font-size:190px">Can't find the <span data-hf-id="hf-0p7s" class="mk it"><span data-hf-id="hf-0ddh" id="s2-swipe" class="swipe"></span><span data-hf-id="hf-pf3s" class="txt">button?</span></span></div>
-        </div>
-      </section>
-
-      <!-- 3 · Hold and ask -->
-      <section data-hf-id="hf-nybr" id="s3" class="clip scene light" data-start="6.8" data-duration="3.6" data-track-index="2">
-        <div data-hf-id="hf-u0hi" id="s3-in" class="stage">
-          <div data-hf-id="hf-4eo4" id="s3-k1" class="key" style="left:300px;top:200px;width:330px;height:240px">Ctrl</div>
-          <div data-hf-id="hf-fq7o" id="s3-k2" class="key" style="left:680px;top:200px;width:330px;height:240px">Alt</div>
-          <div data-hf-id="hf-f76q" id="s3-k3" class="key" style="left:1060px;top:200px;width:560px;height:240px">Space</div>
-          <div data-hf-id="hf-v9i9" id="s3-bars" class="bars"></div>
-          <div data-hf-id="hf-wjwv" id="s3-head" class="headline" style="top:820px;font-size:170px">Hold. <span data-hf-id="hf-jqn4" class="mk it"><span data-hf-id="hf-14nc" id="s3-swipe" class="swipe"></span><span data-hf-id="hf-bed2" class="txt">Ask out loud.</span></span></div>
-        </div>
-      </section>
-
-      <!-- 4 · It answers, with captions -->
-      <section data-hf-id="hf-w0xb" id="s4" class="clip scene light" data-start="10.2" data-duration="4.2" data-track-index="3">
-        <div data-hf-id="hf-357n" id="s4-in" class="stage">
-          <div data-hf-id="hf-m852" class="win settings" style="left:110px;top:120px;width:1120px;height:840px">
-            <div data-hf-id="hf-c51b" class="bar"><i data-hf-id="hf-ylp6"></i><i data-hf-id="hf-0l8b"></i><i data-hf-id="hf-0zjc"></i><span data-hf-id="hf-6erw">Settings</span></div>
-            <div data-hf-id="hf-upiz" class="sidebar s4-side"></div>
-            <div data-hf-id="hf-ls1x" class="pane-line" style="left:400px;top:120px;width:320px;height:40px"></div>
-            <div data-hf-id="hf-nlaz" class="pane-line" style="left:400px;top:200px;width:640px"></div>
-            <div data-hf-id="hf-abux" class="pane-line" style="left:400px;top:250px;width:560px"></div>
-            <div data-hf-id="hf-drf9" class="pane-line" style="left:400px;top:330px;width:660px;height:120px;border-radius:18px"></div>
-            <div data-hf-id="hf-ysiv" class="pane-line" style="left:400px;top:480px;width:660px;height:120px;border-radius:18px"></div>
+          <div id="s2-side" class="stage">
+            <div id="s2-badge" class="badge" style="opacity:0">On Windows 11</div>
+            <div id="s2-keys" class="keys" style="opacity:0"><div class="kc">Ctrl</div><div class="kc">Alt</div><div class="kc" style="padding:0 60px">Space</div></div>
+            <div id="s2-wave" class="wave" style="opacity:0"></div>
+            <div id="s2-ask1" class="ask"><small>you, out loud</small>what's this port?</div>
+            <div id="s2-ask2" class="ask"><small>you, out loud</small>how do I make the monitor my main display?</div>
+            <div id="s2-copy1" class="copy"><h2>Ask about <span class="it">anything</span> you see.</h2><p>Circle it with your mouse, hold the keys and ask.</p></div>
+            <div id="s2-copy2" class="copy"><h2>Then it walks you <span class="it">through it.</span></h2><p>Step by step, right where you're looking.</p></div>
           </div>
-          <div data-hf-id="hf-eix4" id="s4-ptr" class="ptr" style="transform:translate(1330px,450px) rotate(-35deg)"></div>
-          <div data-hf-id="hf-cc9i" id="s4-cap" class="caption" style="left:1290px;top:520px"><span data-hf-id="hf-jf8c" id="s4-heard" class="heard">you: how do I turn on dark mode?</span><span data-hf-id="hf-6bz0" id="s4-ans"></span></div>
-          <div data-hf-id="hf-nbn4" id="s4-head" class="serif" style="position:absolute;left:1290px;top:230px;width:560px;font-size:84px;line-height:1.02">It answers. <span data-hf-id="hf-ks31" class="it">Out loud, with captions.</span></div>
         </div>
       </section>
 
-      <!-- 5 · The flight -->
-      <section data-hf-id="hf-pn3x" id="s5" class="clip scene light" data-start="14.2" data-duration="4.6" data-track-index="4">
-        <div data-hf-id="hf-bjuw" id="s5-in" class="stage">
-          <div data-hf-id="hf-4umy" class="win settings" style="left:110px;top:120px;width:1120px;height:840px">
-            <div data-hf-id="hf-bqqa" class="bar"><i data-hf-id="hf-zsm9"></i><i data-hf-id="hf-06xa"></i><i data-hf-id="hf-26gf"></i><span data-hf-id="hf-sbqc">Settings</span></div>
-            <div data-hf-id="hf-g1cc" class="sidebar s5-side"></div>
-            <div data-hf-id="hf-1yu1" class="pane-line" style="left:400px;top:120px;width:320px;height:40px"></div>
-            <div data-hf-id="hf-42xn" class="pane-line" style="left:400px;top:200px;width:640px"></div>
-            <div data-hf-id="hf-j2pp" class="pane-line" style="left:400px;top:250px;width:560px"></div>
-            <div data-hf-id="hf-d6bt" class="pane-line" style="left:400px;top:330px;width:660px;height:120px;border-radius:18px"></div>
-            <div data-hf-id="hf-0mfb" class="pane-line" style="left:400px;top:480px;width:660px;height:120px;border-radius:18px"></div>
+      <!-- 3 · The same task on Windows and on a Mac -->
+      <section id="s3" class="clip scene light" data-start="18.4" data-duration="6.2" data-track-index="2">
+        <div id="s3-win" class="screen">
+          <div class="wall-win"></div>
+          <div id="s3-settings" class="ww"></div>
+          <div class="taskbar"><i class="start"></i><i style="background:#c9d3e6"></i><i style="background:#3d8bfd"></i><i style="background:#f4b740"></i><i style="background:#2fa36b"></i><i style="background:#8a6cf0"></i></div>
+          <div class="layer">
+            <div id="s3-wring" class="ring" style="opacity:1"></div>
+            <div id="s3-wcomet" class="layer"></div>
+            <div id="s3-wchip" data-layout-allow-overlap class="chip">Make this my main display</div>
           </div>
-          <div data-hf-id="hf-2re6" id="s5-ripple" class="ripple" style="opacity:0"></div>
-          <div data-hf-id="hf-houz" id="s5-comet" class="stage"></div>
-          <div data-hf-id="hf-90ko" id="s5-chip" class="chip" style="left:500px;top:498px;opacity:0">Personalization</div>
-          <div data-hf-id="hf-zmnk" id="s5-head" class="serif" style="position:absolute;left:1290px;top:330px;width:560px;font-size:110px;line-height:1.02">It flies to the <span data-hf-id="hf-ijq1" class="mk it"><span data-hf-id="hf-3xx2" id="s5-swipe" class="swipe"></span><span data-hf-id="hf-zudy" class="txt">exact</span></span> button.</div>
         </div>
-      </section>
-
-      <!-- 6 · Any app, even full screen -->
-      <section data-hf-id="hf-qw13" id="s6" class="clip scene light" data-start="18.6" data-duration="4.2" data-track-index="5">
-        <div data-hf-id="hf-6vcq" id="s6-strip" class="strip">
-          <div data-hf-id="hf-vodg" class="win" style="left:510px;top:150px;width:900px;height:580px">
-            <div data-hf-id="hf-bcf9" class="bar"><i data-hf-id="hf-2krg"></i><i data-hf-id="hf-oz7w"></i><i data-hf-id="hf-okwv"></i><span data-hf-id="hf-y8a9">Budget.xlsx</span></div>
-            <div data-hf-id="hf-y6sm" id="s6-grid" style="position:absolute;left:30px;top:90px;right:30px;bottom:30px"></div>
-            <div data-hf-id="hf-40sq" class="sortbtn" style="left:640px;top:96px;background:#141210;color:#f8f4ec">Sort A–Z</div>
+        <div id="s3-mac" class="screen" style="left:987px;top:200px">
+          <div class="wall-mac"></div>
+          <div class="menubar"><b>System Settings</b><span>Edit</span><span>View</span><span>Window</span><span>Help</span><span class="clock">Mon 9:41 AM</span></div>
+          <div id="s3-macwin" class="mw"></div>
+          <div class="dock"><i style="background:#3d8bfd"></i><i style="background:#f4b740"></i><i style="background:#2fa36b"></i><i style="background:#ef6a5a"></i><i style="background:#8a6cf0"></i><i style="background:#9aa3b2"></i></div>
+          <div class="layer">
+            <div id="s3-mring" class="ring"></div>
+            <div id="s3-mcomet" class="layer"></div>
+            <div id="s3-mchip" data-layout-allow-overlap class="chip" style="opacity:0">Main display</div>
           </div>
-          <div data-hf-id="hf-10v3" class="win" style="left:1610px;top:150px;width:900px;height:580px;background:#1c1c20;border-color:#2c2c32">
-            <div data-hf-id="hf-81rc" class="bar" style="background:#26262c;color:#9a9aa3"><i data-hf-id="hf-o6lu"></i><i data-hf-id="hf-jqbp"></i><i data-hf-id="hf-qkg0"></i><span data-hf-id="hf-vnmd">app.py</span></div>
-            <div data-hf-id="hf-j91t" id="s6-code" style="position:absolute;left:40px;top:90px;right:40px;bottom:30px"></div>
-            <div data-hf-id="hf-mvij" class="runbtn" style="left:720px;top:70px;background:#3fb27f;color:#0d1f17">Run ▶</div>
-          </div>
-          <div data-hf-id="hf-huaa" class="win" style="left:2710px;top:150px;width:900px;height:580px">
-            <div data-hf-id="hf-e4kg" class="bar"><i data-hf-id="hf-q64z"></i><i data-hf-id="hf-prty"></i><i data-hf-id="hf-pdix"></i><span data-hf-id="hf-d4ry">Vacation edit</span></div>
-            <div data-hf-id="hf-i7yq" id="s6-tracks" style="position:absolute;left:30px;top:300px;right:30px;bottom:30px"></div>
-            <div data-hf-id="hf-ata6" style="position:absolute;left:30px;top:80px;width:560px;height:200px;border-radius:12px;background:linear-gradient(135deg,#f5c48c,#e98a6b 55%,#7b4e7e)"></div>
-            <div data-hf-id="hf-u8ov" class="exportbtn" style="left:690px;top:96px;background:#141210;color:#f8f4ec">Export</div>
-          </div>
-          <div data-hf-id="hf-vdtk" id="s6-comet" class="stage" style="width:4200px"></div>
-          <div data-hf-id="hf-d74j" id="s6-c1" class="chip" style="left:1000px;top:300px;opacity:0">Sort A–Z</div>
-          <div data-hf-id="hf-q0ja" id="s6-c2" class="chip" style="left:2230px;top:280px;opacity:0">Run</div>
-          <div data-hf-id="hf-zzjl" id="s6-c3" class="chip" style="left:3280px;top:300px;opacity:0">Export</div>
         </div>
-        <div data-hf-id="hf-i31t" id="s6-head" class="headline" style="top:830px;font-size:150px;opacity:0">Any app. <span data-hf-id="hf-iy12" class="mk it"><span data-hf-id="hf-ppfl" id="s6-swipe" class="swipe"></span><span data-hf-id="hf-59n2" class="txt">Even full screen.</span></span></div>
+        <div id="s3-b1" class="badge" style="left:90px;top:130px;opacity:0">Windows 10 &amp; 11</div>
+        <div id="s3-b2" class="badge" style="left:987px;top:130px;opacity:0">macOS</div>
+        <div id="s3-head" class="headline" style="top:800px;font-size:120px;opacity:0">One buddy. <span class="mk it"><span id="s3-swipe" class="swipe"></span><span class="txt">Windows and Mac.</span></span></div>
+        <div id="s3-sub" style="position:absolute;left:0;right:0;top:955px;text-align:center;font-size:28px;color:#5f5a52;opacity:0">Ctrl + Alt + Space on Windows &middot; Ctrl + Option + Space on Mac</div>
       </section>
 
-      <!-- 7 · Real, on Windows -->
-      <section data-hf-id="hf-la29" id="s7" class="clip scene dark" data-start="22.6" data-duration="3.2" data-track-index="6">
-        <div data-hf-id="hf-mywi" id="s7-in" class="stage">
-          <div data-hf-id="hf-ard8" class="frame-real"></div>
-          <div data-hf-id="hf-fzp3" class="tag">Real recording · Windows 11</div>
+      <!-- 4 · Yours -->
+      <section id="s4" class="clip scene dark" data-start="24.4" data-duration="2.8" data-track-index="3">
+        <div id="s4-a" class="card-line">Your own <span class="it">OpenAI key.</span></div>
+        <div id="s4-b" class="card-line">No account. <span class="it">No server.</span></div>
+        <div id="s4-c" class="card-line">Free and <span class="it">open source.</span></div>
+      </section>
+
+      <!-- 5 · Exactly where -->
+      <section id="s5" class="clip scene dark" data-start="27.0" data-duration="4.4" data-track-index="4">
+        <div id="s5-stars" class="stage"></div>
+        <div id="s5-in" class="stage">
+          <img id="s5-logo" src="assets/logo-white.svg" alt="" style="position:absolute;left:885px;top:150px;width:150px;height:150px">
+          <div id="s5-l1" class="headline" style="top:360px;font-size:150px;color:#f3efe7">Ask out loud.</div>
+          <div id="s5-l2" class="headline" style="top:540px;font-size:150px;color:#f3efe7">Flitty shows you <span class="mk it"><span id="s5-swipe" class="swipe" style="top:0.14em;bottom:0.02em"></span><span id="s5-mt" class="txt">exactly where.</span><span id="s5-ink" class="txt" style="position:absolute;left:0;top:0;color:#141210;clip-path:inset(0 100% 0 0)">exactly where.</span></span></div>
+          <div id="s5-url" style="position:absolute;left:0;right:0;top:860px;text-align:center;font-size:34px;color:#d9d3c8">Free for Windows &amp; Mac &middot; alexriderspy.github.io/heyflitty</div>
         </div>
-      </section>
-      <video data-hf-id="hf-25s1" id="s7-video" class="clip" src="assets/real-demo.mp4" muted playsinline data-start="22.6" data-duration="3.2" data-media-start="4.6" data-track-index="7" style="position:absolute;left:210px;top:192px;width:1500px;height:677px;object-fit:contain;background:#000;border-radius:16px"></video>
-
-      <!-- 8 · Yours -->
-      <section data-hf-id="hf-m40l" id="s8" class="clip scene dark" data-start="25.6" data-duration="3.2" data-track-index="8">
-        <div data-hf-id="hf-bkxb" id="s8-a" class="card-line">Your own <span data-hf-id="hf-ymlz" class="it">OpenAI key.</span></div>
-        <div data-hf-id="hf-h9q7" id="s8-b" class="card-line">No account. <span data-hf-id="hf-0cue" class="it">No server.</span></div>
-        <div data-hf-id="hf-wge5" id="s8-c" class="card-line">Free and <span data-hf-id="hf-w423" class="it">open source.</span></div>
+        <div id="s5-comet" class="stage"></div>
       </section>
 
-      <!-- 9 · Exactly where -->
-      <section data-hf-id="hf-2ft3" id="s9" class="clip scene dark" data-start="28.6" data-duration="4.6" data-track-index="9">
-        <div data-hf-id="hf-7fhk" id="s9-stars" class="stage"></div>
-        <div data-hf-id="hf-k9c4" id="s9-in" class="stage">
-          <img data-hf-id="hf-aw0r" id="s9-logo" src="assets/logo-white.svg" alt="" style="position:absolute;left:885px;top:150px;width:150px;height:150px">
-          <div data-hf-id="hf-wa2e" id="s9-l1" class="headline" style="top:360px;font-size:150px;color:#f3efe7">Ask out loud.</div>
-          <div data-hf-id="hf-vvnd" id="s9-l2" class="headline" style="top:540px;font-size:150px;color:#f3efe7">Flitty shows you <span data-hf-id="hf-hr3z" class="mk it"><span data-hf-id="hf-9hce" id="s9-swipe" class="swipe" style="top:0.14em;bottom:0.02em"></span><span data-hf-id="hf-uqwi" id="s9-mt" class="txt">exactly where.</span><span data-hf-id="hf-rcee" id="s9-ink" class="txt" style="position:absolute;left:0;top:0;color:#141210;clip-path:inset(0 100% 0 0)">exactly where.</span></span></div>
-          <div data-hf-id="hf-48d1" id="s9-url" style="position:absolute;left:0;right:0;top:860px;text-align:center;font-size:34px;color:#d9d3c8">Free for Windows · alexriderspy.github.io/heyflitty</div>
-        </div>
-        <div data-hf-id="hf-j26f" id="s9-comet" class="stage"></div>
-      </section>
-
-      <audio id="bgm" src="assets/music.wav" data-start="0" data-duration="33.2" data-track-index="10" data-volume="0.85" data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":1},{"t":31.4,"v":1},{"t":33.2,"v":0}]}]}'></audio>
+      <audio id="bgm" src="assets/music.wav" data-start="0" data-duration="31.4" data-track-index="10" data-volume="0.85" data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":1},{"t":29.6,"v":1},{"t":31.4,"v":0}]}]}'></audio>
     </div>
 
     <script>
@@ -276,171 +280,282 @@
         return list;
       }
       const s1Stars = stars("s1-stars", 70);
-      const s9Stars = stars("s9-stars", 70);
+      const s5Stars = stars("s5-stars", 70);
+      const $ = (id) => document.getElementById(id);
 
-      const ribbon = document.getElementById("s2-ribbon");
-      for (let i = 0; i < 48; i++) ribbon.appendChild(document.createElement("div"));
+      // ── Mock UIs ───────────────────────────────────────
+      const winControls = `<div class="ctl"><span>—</span><span>▢</span><span>✕</span></div>`;
 
-      const sideItems = ["Home", "System", "Bluetooth & devices", "Network & internet", "Personalization", "Apps", "Accounts", "Time & language", "Gaming", "Accessibility"];
-      // Sidebar rows sit 64px apart; row i is centred at y = 120 (window top) + 52 (bar) + 52 + i * 64.
-      document.querySelectorAll(".s4-side, .s5-side").forEach((side) => {
-        sideItems.forEach((name, i) => {
-          const row = document.createElement("div");
-          row.className = "it-row";
-          row.style.top = 30 + i * 64 + "px";
-          row.innerHTML = `<i></i>${name}`;
-          if (name === "Personalization" && side.classList.contains("s5-side")) row.id = "s5-target";
-          side.appendChild(row);
-        });
-      });
-
-      const bars = document.getElementById("s3-bars");
-      for (let i = 0; i < 34; i++) bars.appendChild(document.createElement("i"));
-
-      const grid = document.getElementById("s6-grid");
-      for (let r = 0; r < 9; r++) for (let c = 0; c < 6; c++) {
-        const cell = document.createElement("div");
-        Object.assign(cell.style, { position: "absolute", left: c * 140 + "px", top: 60 + r * 46 + "px", width: "130px", height: "36px", background: r === 0 ? "#e7dfd0" : "#f3eee4", borderRadius: "6px" });
-        grid.appendChild(cell);
-      }
-      const code = document.getElementById("s6-code");
-      const codeColors = ["#7aa2f7", "#c0caf5", "#9ece6a", "#bb9af7", "#c0caf5", "#e0af68"];
-      for (let i = 0; i < 12; i++) {
-        const line = document.createElement("div");
-        line.className = "code-line";
-        Object.assign(line.style, { left: (i % 3) * 40 + "px", top: 40 + i * 36 + "px", width: 200 + ((i * 97) % 420) + "px", background: codeColors[i % 6], opacity: 0.75 });
-        code.appendChild(line);
-      }
-      const tracks = document.getElementById("s6-tracks");
-      ["#e9c46a", "#8ecae6", "#f4a261"].forEach((color, i) => {
-        for (let j = 0; j < 4; j++) {
-          const clip = document.createElement("div");
-          Object.assign(clip.style, { position: "absolute", left: j * 210 + i * 30 + "px", top: i * 70 + "px", width: "180px", height: "54px", borderRadius: "10px", background: color, opacity: 0.85 });
-          tracks.appendChild(clip);
+      // A laptop drawn in perspective; ports sit on its left edge.
+      function laptopSVG() {
+        const P1 = [70, 370], U = [270, -80], V = [230, 120], L = [-28, -264], T = 50;
+        const pt = (u, v) => [P1[0] + u * U[0] + v * V[0], P1[1] + u * U[1] + v * V[1]];
+        const lid = (a, b) => [P1[0] + a * U[0] + b * L[0], P1[1] + a * U[1] + b * L[1]];
+        const side = (s, h) => [P1[0] + s * V[0], P1[1] + s * V[1] + h];
+        const down = (p) => [p[0], p[1] + T];
+        const poly = (pts, attrs) => `<polygon points="${pts.map((p) => p.map((n) => n.toFixed(1)).join(",")).join(" ")}" ${attrs}/>`;
+        let keys = "";
+        for (let r = 0; r < 5; r++) for (let c = 0; c < 13; c++) {
+          const u0 = 0.12 + c * 0.06, v0 = 0.14 + r * 0.08;
+          keys += poly([pt(u0, v0), pt(u0 + 0.05, v0), pt(u0 + 0.05, v0 + 0.065), pt(u0, v0 + 0.065)], 'fill="#3a3b42"');
         }
-      });
+        const port = (s0, s1, h0, h1) => [side(s0, h0), side(s1, h0), side(s1, h1), side(s0, h1)];
+        return `<svg viewBox="0 0 640 560" width="680" height="530" style="position:absolute;left:0;top:0">
+          <defs><linearGradient id="scr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9cc8ff"/><stop offset="0.45" stop-color="#3a7ff0"/><stop offset="1" stop-color="#0c2266"/></linearGradient></defs>
+          ${poly([P1, pt(1, 0), lid(1, 1), lid(0, 1)], 'fill="#1c1c20"')}
+          ${poly([lid(0.05, 0.06), lid(0.95, 0.06), lid(0.95, 0.94), lid(0.05, 0.94)], 'fill="url(#scr)"')}
+          ${poly([P1, pt(0, 1), down(pt(0, 1)), down(P1)], 'fill="#a3a8b1"')}
+          ${poly([pt(0, 1), pt(1, 1), down(pt(1, 1)), down(pt(0, 1))], 'fill="#c3c7ce"')}
+          ${poly([P1, pt(1, 0), pt(1, 1), pt(0, 1)], 'fill="#dcdfe4" stroke="#c9cdd4" stroke-width="2"')}
+          ${poly([pt(0.1, 0.11), pt(0.9, 0.11), pt(0.9, 0.56), pt(0.1, 0.56)], 'fill="#26272c"')}
+          ${keys}
+          ${poly([pt(0.36, 0.65), pt(0.64, 0.65), pt(0.64, 0.91), pt(0.36, 0.91)], 'fill="#ccd0d6"')}
+          ${poly(port(0.13, 0.19, 18, 32), 'fill="#2a2b30" stroke="#2a2b30" stroke-width="3" stroke-linejoin="round"')}
+          ${poly(port(0.23, 0.29, 18, 32), 'fill="#2a2b30" stroke="#2a2b30" stroke-width="3" stroke-linejoin="round"')}
+          ${poly([side(0.36, 14), side(0.51, 14), side(0.51, 27), side(0.48, 35), side(0.39, 35), side(0.36, 27)], 'id="port-hdmi" fill="#2a2b30"')}
+          ${poly(port(0.59, 0.72, 16, 34), 'fill="#2a2b30"')}
+          ${poly(port(0.61, 0.7, 21, 27), 'fill="#6b6f78"')}
+          <circle cx="${side(0.81, 25)[0]}" cy="${side(0.81, 25)[1]}" r="7" fill="#2a2b30"/>
+        </svg>`;
+      }
+
+      $("s2-browser").innerHTML = `
+        <div class="tb" style="background:#dfe3ea;padding-left:10px">
+          <div style="align-self:flex-end;height:38px;padding:0 22px;background:#fff;border-radius:10px 10px 0 0;display:flex;align-items:center;font-size:18px">Aero 14 laptop · Shop</div>${winControls}
+        </div>
+        <div class="content">
+          <div class="abs" style="left:0;right:0;top:0;height:54px;display:flex;align-items:center;gap:18px;padding:0 18px;border-bottom:1px solid #e6e6e6;color:#555">‹ &nbsp;› &nbsp;⟳
+            <div style="flex:1;height:36px;border-radius:18px;background:#f1f3f6;display:flex;align-items:center;padding:0 18px;font-size:18px;color:#444">shop.example.com/aero-14</div></div>
+          <div class="abs" style="left:20px;top:74px;width:680px;height:530px;background:#eef0f4;border-radius:16px;overflow:hidden">${laptopSVG()}</div>
+          <div class="abs" style="left:736px;top:92px;font-size:46px;font-weight:700">Aero 14</div>
+          <div class="abs" style="left:736px;top:154px;font-size:22px;color:#666">14-inch laptop</div>
+          <div class="abs" style="left:736px;top:198px;font-size:36px;font-weight:600">$1,099</div>
+          <div class="abs" style="left:736px;top:268px;font-size:21px;line-height:1.9;color:#333">Up to 18 hours of battery<br>2 × USB-C, HDMI, USB-A, audio<br>1.3 kg, all aluminium</div>
+          <div class="abs" style="left:736px;top:420px;width:230px;height:58px;border-radius:12px;background:#141210;color:#fff;display:grid;place-items:center;font-weight:600">Add to cart</div>
+          <div class="abs" style="left:736px;top:500px;font-size:20px;color:#3367d6">Compare models</div>
+        </div>`;
+
+      // Windows 11 Settings › Display; ids are prefixed so the page can appear twice.
+      function settingsHTML(p) {
+        const items = ["Home", "System", "Bluetooth & devices", "Network & internet", "Personalization", "Apps", "Accounts"];
+        const side = items.map((name, i) => `<div class="row" style="left:14px;top:${160 + i * 46}px;width:262px;height:40px;padding-left:16px;border-radius:8px;font-size:20px;${name === "System" ? "background:#e9eef6;font-weight:600" : ""}">${name}</div>`).join("");
+        return `
+          <div class="tb">Settings${winControls}</div>
+          <div class="content">
+            <div class="abs" style="left:24px;top:20px;width:56px;height:56px;border-radius:50%;background:#c5cfe0"></div>
+            <div class="abs" style="left:96px;top:24px;font-size:22px;font-weight:600">Alex</div>
+            <div class="abs" style="left:96px;top:52px;font-size:16px;color:#666">Local account</div>
+            <div class="abs" style="left:20px;top:100px;width:256px;height:40px;border-radius:8px;border:1px solid #d6d6d6;font-size:17px;color:#666;display:flex;align-items:center;padding-left:14px">Find a setting</div>
+            ${side}
+            <div class="abs" style="left:322px;top:16px;font-size:34px;font-weight:600">System &nbsp;›&nbsp; Display</div>
+            <div class="card" style="left:320px;top:80px;width:800px;height:230px">
+              <div id="${p}-mon1" class="mon" style="left:150px;top:44px;width:200px;height:125px">1</div>
+              <div id="${p}-mon2" class="mon" style="left:372px;top:58px;width:170px;height:106px">2</div>
+              <div class="abs" style="right:20px;bottom:16px;padding:6px 16px;border:1px solid #cfcfcf;border-radius:6px;background:#fff;font-size:17px">Identify</div>
+            </div>
+            <div class="card" style="left:320px;top:328px;width:800px;height:206px">
+              <div class="abs" style="left:24px;top:18px;font-size:21px;font-weight:600">Multiple displays</div>
+              <div class="row" style="left:24px;top:68px;font-size:20px"><div id="${p}-main" class="cb"></div>Make this my main display</div>
+              <div class="row" style="left:24px;top:114px;font-size:20px"><div class="cb" style="background:#1f5fc9;border-color:#1f5fc9">✓</div>Remember window locations based on monitor connection</div>
+              <div class="row" style="left:24px;top:160px;font-size:20px"><div class="cb" style="background:#1f5fc9;border-color:#1f5fc9">✓</div>Minimize windows when a monitor is disconnected</div>
+            </div>
+          </div>`;
+      }
+      $("s2-settings").innerHTML = settingsHTML("s2");
+      $("s3-settings").innerHTML = settingsHTML("s3");
+
+      // macOS System Settings › Displays.
+      {
+        const items = ["Wi-Fi", "Bluetooth", "Network", "Notifications", "Sound", "Displays", "Wallpaper", "Battery"];
+        const side = items.map((name, i) => `<div class="row" style="left:12px;top:${70 + i * 44}px;width:256px;height:38px;padding-left:14px;border-radius:8px;font-size:19px;${name === "Displays" ? "background:#1f63d0;color:#fff" : ""}">${name}</div>`).join("");
+        $("s3-macwin").innerHTML = `
+          <div class="abs" style="left:0;top:0;bottom:0;width:280px;background:#f1f1f3"></div>
+          <div class="lights"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+          ${side}
+          <div class="abs" style="left:310px;top:22px;font-size:26px;font-weight:700">Displays</div>
+          <div class="abs" style="left:430px;top:96px;width:160px;height:100px;border-radius:10px;background:#dfe6f3;border:3px solid #c3cbd9"></div>
+          <div class="abs" style="left:640px;top:80px;width:230px;height:132px;border-radius:10px;background:#dfe6f3;border:4px solid #2f7cf6"></div>
+          <div class="abs" style="left:430px;top:222px;width:160px;text-align:center;font-size:17px;color:#555">Built-in Display</div>
+          <div class="abs" style="left:640px;top:222px;width:230px;text-align:center;font-size:17px;color:#1d1d1f;font-weight:600">External Display</div>
+          <div class="card" style="left:310px;top:280px;width:740px;height:220px;background:#f5f5f7">
+            <div class="abs" style="left:22px;top:24px;font-size:20px">Use as</div>
+            <div id="s3-mmain" class="abs" style="right:20px;top:14px;padding:8px 18px;border-radius:8px;background:#fff;border:1px solid #d2d2d7;font-size:19px">Main display &nbsp;⌄</div>
+            <div class="abs" style="left:22px;top:96px;font-size:20px">Resolution</div>
+            <div class="abs" style="right:20px;top:96px;font-size:19px;color:#666">Default for display</div>
+            <div class="abs" style="left:22px;top:166px;font-size:20px">Brightness</div>
+            <div class="abs" style="right:20px;top:176px;width:280px;height:5px;border-radius:3px;background:linear-gradient(90deg,#2f7cf6 64%,#c8c8c8 64%)"></div>
+          </div>`;
+      }
+
+      const wave = $("s2-wave");
+      for (let i = 0; i < 26; i++) wave.appendChild(document.createElement("i"));
+      const waveBars = [...wave.children];
+
+      // Centre of an element in its monitor frame's own pixels, whatever transform the frame has.
+      const cache = {};
+      function at(id, frameId) {
+        if (cache[id]) return cache[id];
+        const frame = $(frameId), f = frame.getBoundingClientRect();
+        if (!f.width) return [0, 0];
+        const r = $(id).getBoundingClientRect(), k = f.width / frame.offsetWidth;
+        return (cache[id] = [(r.left + r.width / 2 - f.left) / k - frame.clientLeft, (r.top + r.height / 2 - f.top) / k - frame.clientTop]);
+      }
+      // left/top, because GSAP owns these elements' transforms for their entrances.
+      const place = (id, p, dx, dy) => { $(id).style.left = p[0] + dx + "px"; $(id).style.top = p[1] + dy + "px"; };
+      // The comet rests just below-right of a target, like a cursor tip, so the target stays visible.
+      const tip = (p) => [p[0] + 20, p[1] + 20];
+      const typed = (id, text, t, t0) => { $(id).textContent = text.slice(0, Math.max(0, Math.min(text.length, Math.floor((t - t0) * 32)))); };
 
       const tl = gsap.timeline({ paused: true });
       const clock = (start, duration, draw) => {
         const state = { t: 0 };
         tl.fromTo(state, { t: 0 }, { t: duration, duration, ease: "none", immediateRender: start === 0, onUpdate: () => draw(state.t) }, start);
       };
+      const fade = (sel, at, d, from, to) => tl.fromTo(sel, from, { ...to, duration: d || 0.4, ease: "power3.out" }, at);
 
       // ── 1 · The firefly ────────────────────────────────
-      const c1 = FlittyComet.create(document.getElementById("s1-comet"), 1.15);
+      const c1 = FlittyComet.create($("s1-comet"), 1.15);
       const f1 = [{ t0: 0.15, t1: 1.55, path: [[-120, 1000], [420, 300], [760, 170], [835, 420]] }];
-      clock(0, 3.6, (t) => {
+      clock(0, 3.2, (t) => {
         c1.draw(f1, t, t < 1.55 ? 1 : Math.max(0, 1 - (t - 1.55) / 0.5));
         s1Stars.forEach((s, i) => (s.style.transform = `scale(${1 + 0.6 * Math.sin(t * 2 + i)})`));
       });
       tl.fromTo("#s1-logo", { opacity: 0, scale: 0.6, rotate: -12 }, { opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "back.out(1.6)" }, 1.45);
       tl.to("#s1-word", { clipPath: "inset(0 0% 0 0)", duration: 0.9, ease: "power3.out" }, 1.85);
-      tl.fromTo("#s1-flash", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.in" }, 3.25);
+      tl.fromTo("#s1-flash", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.in" }, 2.85);
 
-      // ── 2 · Lost in the ribbon ─────────────────────────
-      tl.fromTo("#s2-in", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.4);
-      tl.fromTo("#s2-win", { y: 60 }, { y: 0, duration: 0.7, ease: "power3.out" }, 3.4);
-      const wander = [[1500, 480], [620, 330], [1180, 260], [880, 420], [1320, 340], [760, 300]];
-      clock(3.4, 3.6, (t) => {
-        const seg = Math.min(wander.length - 2, Math.floor(t / 0.62));
-        const u = FlittyComet.ease(Math.min(1, (t - seg * 0.62) / 0.62));
-        const [a, b] = [wander[seg], wander[seg + 1]];
-        document.getElementById("s2-cursor").style.transform = `translate(${a[0] + (b[0] - a[0]) * u}px, ${a[1] + (b[1] - a[1]) * u}px)`;
+      // ── 2 · Windows story ──────────────────────────────
+      const A = 3.0;
+      tl.fromTo("#s2-in", { opacity: 0 }, { opacity: 1, duration: 0.35 }, A);
+      fade("#s2-badge", A + 0.3, 0.4, { opacity: 0, y: 14 }, { opacity: 1, y: 0 });
+      fade("#s2-copy1", A + 0.6, 0.6, { opacity: 0, y: 30 }, { opacity: 1, y: 0 });
+      // Hold the keys while asking, twice.
+      [[A + 0.9, A + 2.6], [A + 8.3, A + 9.7]].forEach(([down, up]) => {
+        tl.fromTo("#s2-keys", { opacity: 0 }, { opacity: 1, duration: 0.25, immediateRender: false }, down - 0.3);
+        tl.to("#s2-keys .kc", { y: 7, boxShadow: "0 1px 0 #d8cfbf", duration: 0.12, stagger: 0.1 }, down);
+        tl.to("#s2-keys .kc", { y: 0, boxShadow: "0 8px 0 #d8cfbf", duration: 0.12 }, up);
       });
-      tl.fromTo("#s2-head", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 4.0);
-      tl.fromTo("#s2-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 4.6);
+      tl.fromTo("#s2-ask1", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, A + 2.5);
+      // Second question replaces the first.
+      tl.to(["#s2-ask1", "#s2-copy1"], { opacity: 0, duration: 0.3 }, A + 7.9);
+      tl.to("#s2-browser", { opacity: 0, duration: 0.45 }, A + 8.0);
+      tl.to("#s2-settings", { opacity: 1, duration: 0.45 }, A + 8.0);
+      fade("#s2-copy2", A + 8.5, 0.6, { opacity: 0, y: 30 }, { opacity: 1, y: 0 });
+      tl.fromTo("#s2-ask2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, A + 9.6);
+      tl.to("#s2-side", { opacity: 0, duration: 0.4 }, A + 14.9);
 
-      // ── 3 · Hold and ask ───────────────────────────────
-      tl.fromTo("#s3-in", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 6.8);
-      ["#s3-k1", "#s3-k2", "#s3-k3"].forEach((k, i) => {
-        tl.to(k, { y: 16, boxShadow: "0 2px 0 #d8cfbf, 0 12px 30px rgba(20,18,16,0.14)", duration: 0.14, ease: "power2.in" }, 7.25 + i * 0.28);
+      tl.fromTo("#s2-chip1", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, A + 3.65);
+      tl.to(["#s2-chip1", "#s2-cap1"], { opacity: 0, duration: 0.3 }, A + 7.8);
+      tl.to("#s2-cap1", { opacity: 1, duration: 0.3 }, A + 3.75);
+      tl.fromTo("#s2-chip2", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, A + 10.65);
+      tl.to("#s2-chip2", { opacity: 0, duration: 0.25 }, A + 11.6);
+      tl.to("#s2-cap2", { opacity: 1, duration: 0.3 }, A + 10.75);
+      tl.fromTo("#s2-chip3", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, A + 12.25);
+      tl.to("#s2-mouse", { opacity: 0, duration: 0.3 }, A + 7.8);
+      tl.fromTo("#s2-mon2", { borderColor: "#b9c3d6", backgroundColor: "#dfe6f3" }, { borderColor: "#2f6fe0", backgroundColor: "#d3e2fb", duration: 0.25 }, A + 10.6);
+      tl.fromTo("#s2-mon1", { borderColor: "#2f6fe0" }, { borderColor: "#b9c3d6", duration: 0.25 }, A + 10.6);
+
+      const c2 = FlittyComet.create($("s2-comet"), 0.8);
+      const ans1 = "That's an HDMI port. Plug your monitor in there and you get a second screen.";
+      const ans2 = "Click display 2, then tick Make this my main display.";
+      clock(A, 15.6, (t) => {
+        const H = at("port-hdmi", "s2-screen"), D = at("s2-mon2", "s2-screen"), C = at("s2-main", "s2-screen");
+        // The user's mouse drifts in and circles the port.
+        let m;
+        if (t < 0.5) {
+          const u = FlittyComet.ease(t / 0.5);
+          m = [H[0] + 300 - 250 * u, H[1] + 220 - 220 * u];
+        } else {
+          const u = Math.min(1, (t - 0.5) / 2.1), th = u * Math.PI * 3.5;
+          m = [H[0] + 50 * Math.cos(th), H[1] + 34 * Math.sin(th)];
+        }
+        $("s2-mouse").style.transform = `translate(${m[0]}px, ${m[1]}px)`;
+        const S = [H[0] + 50 * Math.cos(Math.PI * 3.5) + 34, H[1] + 34 * Math.sin(Math.PI * 3.5) + 30];
+        const flights = [
+          { t0: 2.9, t1: 3.6, path: [S, [S[0] + 90, S[1] - 200], [H[0] + 160, H[1] - 170], tip(H)] },
+          { t0: 9.0, t1: 9.001, path: [[620, 640], [620, 640], [620, 640], [620, 640]] },
+          { t0: 9.9, t1: 10.6, path: [[620, 640], [560, 300], [D[0] - 160, D[1] - 220], tip(D)] },
+          { t0: 11.6, t1: 12.2, path: [tip(D), [D[0] + 40, D[1] + 130], [C[0] + 200, C[1] - 40], tip(C)] },
+        ];
+        // Visible from the first flight, gone while the window changes, back for the second question.
+        const glow = t < 7.8 ? (t - 2.8) / 0.2 : t < 9.6 ? 1 - (t - 7.8) / 0.3 : (t - 9.6) / 0.25;
+        c2.draw(flights, t, Math.max(0, Math.min(1, glow)));
+        const pin = t < 7.9 ? H : t < 11.6 ? D : C;
+        const shown = (t > 3.6 && t < 7.9) || (t > 10.6 && t < 11.6) || t > 12.2;
+        const since = t > 12.2 ? t - 12.2 : t > 10.6 ? t - 10.6 : t - 3.6;
+        $("s2-ring").style.opacity = shown ? Math.min(1, since * 4) : 0;
+        $("s2-ring").style.transform = `translate(${pin[0]}px, ${pin[1]}px) rotate(${t * 60}deg) scale(${shown ? 1.3 - 0.3 * Math.min(1, since * 3) : 1})`;
+        place("s2-chip1", H, 28, 26);
+        place("s2-chip2", D, 40, 46);
+        place("s2-chip3", C, 330, -22);
+        place("s2-cap1", H, 70, -190);
+        place("s2-cap2", [30, 612], 0, 0);
+        typed("s2-ans1", ans1, t, 3.8);
+        typed("s2-ans2", ans2, t, 10.8);
+        // Live waveform while a key is held.
+        const live = (t > 1.0 && t < 2.6) || (t > 8.4 && t < 9.7);
+        $("s2-wave").style.opacity = live ? 1 : 0;
+        waveBars.forEach((b, i) => (b.style.height = 10 + (live ? 44 * Math.abs(Math.sin(t * 8 + i * 0.7)) * Math.abs(Math.sin(i * 0.4 + t * 2.6)) : 0) + "px"));
       });
-      const barEls = [...bars.children];
-      clock(6.8, 3.6, (t) => {
-        const live = Math.max(0, Math.min(1, (t - 1.15) / 0.3));
-        barEls.forEach((b, i) => {
-          const h = 20 + live * (40 + 70 * Math.abs(Math.sin(t * 7 + i * 0.7)) * Math.abs(Math.sin(i * 0.37 + t * 2.3)));
-          b.style.height = h + "px";
-        });
+
+      // ── 3 · Windows and Mac ────────────────────────────
+      const B = 18.4;
+      tl.fromTo("#s3-win", { x: 0, y: 0, scale: 1 }, { x: 20, y: 80, scale: 0.68, duration: 0.9, ease: "power3.inOut" }, B + 0.1);
+      tl.fromTo("#s3-mac", { x: 960, scale: 0.68 }, { x: 0, scale: 0.68, duration: 0.9, ease: "power3.out" }, B + 0.35);
+      fade("#s3-b1", B + 1.0, 0.4, { opacity: 0, y: 12 }, { opacity: 1, y: 0 });
+      fade("#s3-b2", B + 1.1, 0.4, { opacity: 0, y: 12 }, { opacity: 1, y: 0 });
+      fade("#s3-head", B + 1.3, 0.6, { opacity: 0, y: 30 }, { opacity: 1, y: 0 });
+      tl.fromTo("#s3-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, B + 1.9);
+      fade("#s3-sub", B + 2.3, 0.5, { opacity: 0 }, { opacity: 1 });
+      tl.fromTo("#s3-mchip", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, B + 2.35);
+      const c3w = FlittyComet.create($("s3-wcomet"), 0.8);
+      const c3m = FlittyComet.create($("s3-mcomet"), 0.8);
+      clock(B, 6.2, (t) => {
+        const C = at("s3-main", "s3-win");
+        c3w.draw([{ t0: 0, t1: 0.001, path: [tip(C), tip(C), tip(C), tip(C)] }], t);
+        $("s3-wring").style.transform = `translate(${C[0]}px, ${C[1]}px) rotate(${(t + 15.6) * 60}deg)`;
+        place("s3-wchip", C, 330, -22);
+        const M = at("s3-mmain", "s3-mac"), start = [560, 420];
+        c3m.draw([{ t0: 1.6, t1: 2.3, path: [start, [start[0] - 60, start[1] - 260], [M[0] - 240, M[1] - 160], tip(M)] }], t, Math.max(0, Math.min(1, (t - 1.3) / 0.3)));
+        const since = t - 2.3;
+        $("s3-mring").style.opacity = since > 0 ? Math.min(1, since * 4) : 0;
+        $("s3-mring").style.transform = `translate(${M[0]}px, ${M[1]}px) rotate(${t * 60}deg) scale(${since > 0 ? 1.3 - 0.3 * Math.min(1, since * 3) : 1})`;
+        place("s3-mchip", M, -330, -22);
       });
-      tl.fromTo("#s3-head", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 8.0);
-      tl.fromTo("#s3-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 8.55);
 
-      // ── 4 · It answers, with captions ──────────────────
-      tl.fromTo("#s4-in", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 10.2);
-      tl.fromTo("#s4-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 10.4);
-      tl.fromTo("#s4-cap", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 10.8);
-      const answer = "Click Personalization, then Colors.";
-      clock(10.2, 4.2, (t) => {
-        const shown = Math.max(0, Math.min(answer.length, Math.floor((t - 1.35) * 26)));
-        document.getElementById("s4-ans").textContent = answer.slice(0, shown);
-      });
+      // ── 4 · Yours (hard cuts) ──────────────────────────
+      tl.set("#s4-a", { opacity: 1 }, 24.55);
+      tl.set("#s4-a", { opacity: 0 }, 25.4);
+      tl.set("#s4-b", { opacity: 1 }, 25.4);
+      tl.set("#s4-b", { opacity: 0 }, 26.25);
+      tl.set("#s4-c", { opacity: 1 }, 26.25);
 
-      // ── 5 · The flight ─────────────────────────────────
-      tl.fromTo("#s5-in", { opacity: 0.6 }, { opacity: 1, duration: 0.2 }, 14.2);
-      const target = [470, 120 + 52 + 30 + 4 * 64 + 23];
-      const c5 = FlittyComet.create(document.getElementById("s5-comet"), 1);
-      const f5 = [{ t0: 0.45, t1: 1.75, path: [[1347, 470], [1150, 60], [700, 120], target] }];
-      clock(14.2, 4.6, (t) => c5.draw(f5, t, t < 1.75 ? 1 : 1 - Math.min(0.45, (t - 1.75) * 0.6)));
-      gsap.set("#s5-ripple", { x: target[0] - 45, y: target[1] - 45 });
-      tl.fromTo("#s5-ripple", { opacity: 0.9, scale: 0.3 }, { opacity: 0, scale: 2.4, duration: 0.8, ease: "power2.out" }, 15.95);
-      tl.fromTo("#s5-target", { backgroundColor: "rgba(56,132,255,0)" }, { backgroundColor: "rgba(56,132,255,0.14)", duration: 0.3 }, 15.95);
-      tl.fromTo("#s5-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, 16.05);
-      tl.fromTo("#s5-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 16.3);
-      tl.fromTo("#s5-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 16.85);
-
-      // ── 6 · Any app, even full screen ──────────────────
-      const c6 = FlittyComet.create(document.getElementById("s6-comet"), 0.9);
-      const f6 = [
-        { t0: 0.2, t1: 0.95, path: [[700, 900], [700, 520], [980, 320], [1160, 270]] },
-        { t0: 1.35, t1: 2.05, path: [[1160, 270], [1500, 40], [2050, 60], [2340, 245]] },
-        { t0: 2.45, t1: 3.15, path: [[2340, 245], [2700, 40], [3200, 60], [3410, 270]] },
-      ];
-      clock(18.6, 4.2, (t) => c6.draw(f6, t));
-      tl.fromTo("#s6-strip", { x: 0 }, { x: -1100, duration: 0.7, ease: "power3.inOut" }, 18.6 + 1.3);
-      tl.to("#s6-strip", { x: -2200, duration: 0.7, ease: "power3.inOut" }, 18.6 + 2.4);
-      tl.fromTo("#s6-c1", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 18.6 + 0.95);
-      tl.fromTo("#s6-c2", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 18.6 + 2.05);
-      tl.fromTo("#s6-c3", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 18.6 + 3.15);
-      tl.fromTo("#s6-head", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 18.6 + 3.1);
-      tl.fromTo("#s6-swipe", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out" }, 18.6 + 3.55);
-
-      // ── 7 · Real, on Windows ───────────────────────────
-      tl.fromTo("#s7-in", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 22.6);
-      tl.fromTo("#s7-video", { scale: 1 }, { scale: 1.035, duration: 3.2, ease: "none" }, 22.6);
-
-      // ── 8 · Yours (hard cuts) ──────────────────────────
-      tl.set("#s8-a", { opacity: 1 }, 25.75);
-      tl.set("#s8-a", { opacity: 0 }, 26.75);
-      tl.set("#s8-b", { opacity: 1 }, 26.75);
-      tl.set("#s8-b", { opacity: 0 }, 27.75);
-      tl.set("#s8-c", { opacity: 1 }, 27.75);
-
-      // ── 9 · Exactly where ──────────────────────────────
-      tl.fromTo("#s9-in", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 28.6);
-      tl.fromTo("#s9-l1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 28.75);
-      tl.fromTo("#s9-l2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 29.05);
-      tl.fromTo("#s9-logo", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 30.9);
-      tl.fromTo("#s9-url", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 31.3);
+      // ── 5 · Exactly where ──────────────────────────────
+      const E = 27.0;
+      tl.fromTo("#s5-in", { opacity: 0 }, { opacity: 1, duration: 0.4 }, E);
+      tl.fromTo("#s5-l1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, E + 0.15);
+      tl.fromTo("#s5-l2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, E + 0.45);
+      tl.fromTo("#s5-logo", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, E + 2.3);
+      tl.fromTo("#s5-url", { opacity: 0 }, { opacity: 1, duration: 0.5 }, E + 2.7);
       // The comet paints the marker as it passes under "exactly where."
       let swipeBox = null;
-      const c9 = FlittyComet.create(document.getElementById("s9-comet"), 1);
-      clock(28.6, 4.6, (t) => {
+      const c5 = FlittyComet.create($("s5-comet"), 1);
+      clock(E, 4.4, (t) => {
         if (!swipeBox) {
-          const r = document.getElementById("s9-mt").getBoundingClientRect();
-          const root = document.getElementById("root").getBoundingClientRect();
+          const r = $("s5-mt").getBoundingClientRect();
+          const root = $("root").getBoundingClientRect();
           const scale = root.width / 1920;
           swipeBox = { x0: (r.left - root.left) / scale, x1: (r.right - root.left) / scale, y: (r.bottom - root.top) / scale - 26 };
         }
         const { x0, x1, y } = swipeBox;
-        const f9 = [{ t0: 1.0, t1: 2.0, path: [[x0 - 260, y + 160], [x0 - 60, y + 10], [x0 + 200, y], [x1 + 30, y - 10]] }];
-        c9.draw(f9, t, t < 2.0 ? Math.min(1, (t - 0.8) * 3) : Math.max(0, 1 - (t - 2.0) * 1.4));
-        const [cx] = FlittyComet.at(f9, t);
+        const f5 = [{ t0: 1.0, t1: 2.0, path: [[x0 - 260, y + 160], [x0 - 60, y + 10], [x0 + 200, y], [x1 + 30, y - 10]] }];
+        c5.draw(f5, t, t < 2.0 ? Math.min(1, (t - 0.8) * 3) : Math.max(0, 1 - (t - 2.0) * 1.4));
+        const [cx] = FlittyComet.at(f5, t);
         const p = Math.max(0, Math.min(1, (cx - x0) / (x1 - x0)));
         const shown = t < 1.0 ? 0 : p;
-        document.getElementById("s9-swipe").style.transform = `scaleX(${shown})`;
-        document.getElementById("s9-ink").style.clipPath = `inset(0 ${(1 - shown) * 100}% 0 0)`;
-        s9Stars.forEach((s, i) => (s.style.transform = `scale(${1 + 0.6 * Math.sin(t * 2 + i)})`));
+        $("s5-swipe").style.transform = `scaleX(${shown})`;
+        $("s5-ink").style.clipPath = `inset(0 ${(1 - shown) * 100}% 0 0)`;
+        s5Stars.forEach((s, i) => (s.style.transform = `scale(${1 + 0.6 * Math.sin(t * 2 + i)})`));
       });
 
       window.__timelines["main"] = tl;

@@ -1,98 +1,44 @@
 ---
 format: 1920x1080
-duration: 30s
+duration: 31.4s
 message: "Ask out loud. Flitty shows you exactly where."
-arc: Hook → Problem → How (hotkey, ask, answer, point) → Anywhere → Proof → Trust → CTA
-audience: Windows users who get lost in software
+arc: Hook → one real task end to end on Windows → same task on Mac → trust → CTA
+audience: Windows (and Mac) users who get stuck in software
 mode: collaborative
 ---
 
 ## Frame 1 — The firefly
-- scene: On a dusk-dark stage a glowing comet orb streaks in on a curve; its trail settles into Flitty's dotted flight-path mark, and "flitty" writes in beside it
-- duration: 3.5s
-- transition_in: cut
+- scene: Dusk stage; the comet streaks in and becomes the Flitty mark; "flitty" writes in
+- duration: 3.2s
 - status: animated
-- blueprint: logo-assemble-lockup
-- src: index.html (scene 01)
+- src: index.html (scene 1)
 
-Open on the signature move so the viewer meets the comet first. The trail becoming the logo ties the effect to the brand.
-
-## Frame 2 — Lost in the ribbon
-- scene: Cream stage; a crowded Windows app ribbon with dozens of buttons; a grey cursor wanders; serif headline "Can't find the button?" with the marker swipe on "button"
-- duration: 3.5s
-- transition_in: light flash from the comet's exit
+## Frame 2 — "What's this port?" (Windows 11)
+- scene: A laptop product page in a browser. The user circles a port on the laptop picture while holding Ctrl Alt Space and asks "what's this port?". The comet flies to it, labels it "HDMI port" and captions "That's an HDMI port. Plug your monitor in there and you get a second screen."
+- duration: 7.8s (inside scene 2)
 - status: animated
-- blueprint: kinetic-type-beats
-- src: index.html (scene 02)
+- src: index.html (scene 2)
 
-The relatable pain in one look.
-
-## Frame 3 — Hold and ask
-- scene: Three oversized keycaps Ctrl, Alt, Space press down in sequence; a live waveform rises from them; headline "Hold. Ask out loud."
-- duration: 3.5s
-- transition_in: slide up
+## Frame 3 — "Make the monitor my main display" (Windows 11)
+- scene: Same screen, now Settings › Display. Second question; the comet flies to display 2, then to "Make this my main display", captioning each step.
+- duration: 7.8s (inside scene 2)
 - status: animated
-- blueprint: kinetic-type-beats
-- src: index.html (scene 03)
+- src: index.html (scene 2)
 
-Feature 1: the hotkey and voice.
-
-## Frame 4 — It answers, with captions
-- scene: A Windows Settings window; a "you:" bubble shows "how do I turn on dark mode?"; Flitty's dark caption card types the answer "Click Personalization, then Colors." beside the pointer
-- duration: 4s
-- transition_in: crossfade
+## Frame 4 — One buddy. Windows and Mac.
+- scene: The Windows screen slides left and a Mac screen joins it, showing the same task in System Settings › Displays; the comet points at "Use as: Main display". Hotkeys for both under the headline.
+- duration: 6.2s
 - status: animated
-- blueprint: prompt-type-submit-generate
-- src: index.html (scene 04)
+- src: index.html (scene 3)
 
-Feature 2: spoken answers, captioned on screen.
-
-## Frame 5 — The flight
-- scene: The comet orb lifts off and sweeps a long curve across the Settings window, lands exactly on "Personalization" with a soft ripple and a "Personalization" label; headline "It flies to the exact button."
-- duration: 4.5s
-- transition_in: continuous from frame 4
+## Frame 5 — Yours
+- scene: Three hard-cut lines on ink: your own OpenAI key · no account, no server · free and open source
+- duration: 2.6s
 - status: animated
-- blueprint: cursor-ui-demo
-- src: index.html (scene 05)
+- src: index.html (scene 4)
 
-Feature 3, the hero beat: exact pointing.
-
-## Frame 6 — Any app, even full screen
-- scene: Camera pans across three app windows (a spreadsheet, a code editor, a video editor); the comet hops between a button in each, leaving trails; caption "Any app. Even full screen."
-- duration: 4s
-- transition_in: whip pan
+## Frame 6 — Exactly where
+- scene: The comet paints the marker under "exactly where."; logo; "Free for Windows & Mac · alexriderspy.github.io/heyflitty"
+- duration: 4.4s
 - status: animated
-- blueprint: spatial-pan-stations
-- src: index.html (scene 06)
-
-Breadth.
-
-## Frame 7 — Real, on Windows
-- scene: The real Windows 11 recording plays in a dark frame (Flitty pointing at GitHub's Issues tab), tag "Real recording · Windows 11"
-- duration: 3s
-- transition_in: crossfade
-- status: animated
-- blueprint: device-surface-showcase
-- src: index.html (scene 07)
-
-Proof that the motion graphics are honest.
-
-## Frame 8 — Yours
-- scene: A three-card chain on ink: "Your own OpenAI key." → "No account. No server." → "Free and open source."
-- duration: 3s
-- transition_in: cut
-- status: animated
-- blueprint: titlecard-reveal
-- src: index.html (scene 08)
-
-Trust beats, fast.
-
-## Frame 9 — Exactly where
-- scene: Dusk stage; the comet sweeps under the line "Ask out loud. Flitty shows you exactly where." leaving the marker highlight behind "exactly where"; logo lockup and "Free for Windows · alexriderspy.github.io/heyflitty"
-- duration: 4s
-- transition_in: crossfade
-- status: animated
-- blueprint: logo-assemble-lockup
-- src: index.html (scene 09)
-
-The promise and the ask; the comet draws the brand's marker as its last act.
+- src: index.html (scene 5)

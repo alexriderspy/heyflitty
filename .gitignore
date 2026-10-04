@@ -9,3 +9,5 @@ marketing-video/snapshots/
 marketing-video/renders/
 marketing-video/node_modules/
 marketing-video/.media/
+marketing-video/.hyperframes/
+marketing-video/.thumbnails/

@@ -6,8 +6,8 @@ message: "Ask out loud. Flitty shows you exactly where."
 destination: website-hero
 aspect: 1920x1080
 language: en
-length: 30s
-angle: feature-tour
+length: 31s
+angle: one-story (single task end to end, Windows then Mac)
 ---
 
 ## Intent
