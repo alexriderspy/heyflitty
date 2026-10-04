@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flitty logo concepts</title>
+<style>
+  :root { --blue: #3884ff; --ink: #14171c; --paper: #f6f7f9; --muted: #6b7280; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 14px/1.45 -apple-system, "Segoe UI", system-ui, sans-serif; }
+  header { padding: 36px 40px 8px; }
+  h1 { margin: 0 0 6px; font-size: 26px; }
+  header p { margin: 0; color: var(--muted); max-width: 720px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; padding: 24px 40px 48px; }
+  .card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.04); }
+  .card h2 { margin: 0 0 4px; font-size: 16px; }
+  .card p { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
+  .hero { display: flex; gap: 12px; }
+  .tile { flex: 1; aspect-ratio: 1; border-radius: 12px; display: grid; place-items: center; }
+  .tile.light { background: var(--paper); }
+  .tile.dark { background: #15181d; }
+  .tile.app svg { width: 62%; }
+  .tile svg { width: 56%; height: auto; }
+  .sizes { display: flex; align-items: center; gap: 14px; margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: #e9ecf0; }
+  .sizes span { color: var(--muted); font-size: 12px; margin-right: auto; }
+  .taskbar { display: flex; align-items: center; gap: 10px; background: #202328; padding: 6px 10px; border-radius: 8px; }
+  .wordmark { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-weight: 700; font-size: 22px; letter-spacing: -0.02em; }
+  .wordmark svg { width: 30px; height: 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Flitty — logo concepts</h1>
+  <p>Six directions built around what Flitty does: a little cursor that <em>flits</em> to the right spot. Each is shown as an app icon, on light and dark, at real tray sizes (32 and 16 px), and next to the wordmark. All are plain SVG, so the chosen one drops straight into the app.</p>
+</header>
+<main class="grid" id="grid"></main>
+
+<script>
+// Each concept is one 64x64 SVG drawing; `fg` is the mark color, `cut` the color of holes cut into it.
+const concepts = [
+  {
+    name: "1 · The flit",
+    note: "The buddy cursor at the end of its curved flight path. Tells the whole product story in one shape.",
+    draw: (fg) => `
+      <path d="M10 50 C 14 22, 34 12, 44 20" fill="none" stroke="${fg}" stroke-width="5" stroke-linecap="round" stroke-dasharray="0.1 9"/>
+      <path d="M41 14 L58 30 L48 31 L44 40 Z" fill="${fg}"/>`,
+  },
+  {
+    name: "2 · Winged pointer",
+    note: "Flitty's in-app triangle with two motion wings. Friendly, a little playful, reads as 'quick helper'.",
+    draw: (fg) => `
+      <path d="M38 10 L50 44 L38 37 L26 44 Z" fill="${fg}"/>
+      <path d="M22 22 L8 18 M20 31 L6 31 M22 40 L10 45" stroke="${fg}" stroke-width="4.5" stroke-linecap="round"/>`,
+  },
+  {
+    name: "3 · f-arc monogram",
+    note: "A lowercase f whose top hooks into an arc ending in a pointer tip. Ownable and works as a letter mark.",
+    draw: (fg) => `
+      <path d="M26 56 V26 C26 14 34 9 44 12" fill="none" stroke="${fg}" stroke-width="7" stroke-linecap="round"/>
+      <path d="M16 30 H38" stroke="${fg}" stroke-width="7" stroke-linecap="round"/>
+      <path d="M42 5 L56 13 L47 16 L46 25 Z" fill="${fg}"/>`,
+  },
+  {
+    name: "4 · Firefly",
+    note: "A glowing dot with a tiny pointer tail, like a firefly guiding you. Soft and memorable; great as a mascot.",
+    draw: (fg) => `
+      <circle cx="30" cy="34" r="17" fill="${fg}" opacity="0.18"/>
+      <circle cx="30" cy="34" r="10" fill="${fg}"/>
+      <path d="M38 42 L54 56 L44 56 L41 63 Z" fill="${fg}" transform="translate(-2 -6)"/>`,
+  },
+  {
+    name: "5 · Talking pointer",
+    note: "A speech bubble whose tail is a cursor tip: it talks and it points. Most literal about voice + guidance.",
+    draw: (fg, cut) => `
+      <path d="M12 12 H52 A6 6 0 0 1 58 18 V38 A6 6 0 0 1 52 44 H34 L22 58 L24 44 H12 A6 6 0 0 1 6 38 V18 A6 6 0 0 1 12 12 Z" fill="${fg}"/>
+      <circle cx="21" cy="28" r="3.6" fill="${cut}"/><circle cx="32" cy="28" r="3.6" fill="${cut}"/><circle cx="43" cy="28" r="3.6" fill="${cut}"/>`,
+  },
+  {
+    name: "6 · Here → there",
+    note: "A start dot, an arc, and a target ring. Minimal and geometric; ages well and stays crisp at 16 px.",
+    draw: (fg) => `
+      <circle cx="12" cy="48" r="6" fill="${fg}"/>
+      <path d="M17 42 C 24 18, 40 12, 48 22" fill="none" stroke="${fg}" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="50" cy="28" r="9" fill="none" stroke="${fg}" stroke-width="5"/>`,
+  },
+];
+
+const svg = (inner, size = "") => `<svg viewBox="0 0 64 64" ${size} xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue").trim();
+
+document.getElementById("grid").innerHTML = concepts.map((concept) => `
+  <article class="card">
+    <h2>${concept.name}</h2>
+    <p>${concept.note}</p>
+    <div class="hero">
+      <div class="tile app" style="background:${blue}">${svg(concept.draw("white", blue))}</div>
+      <div class="tile light">${svg(concept.draw(blue, "white"))}</div>
+      <div class="tile dark">${svg(concept.draw(blue, "white"))}</div>
+    </div>
+    <div class="sizes">
+      <span>Tray / taskbar</span>
+      ${svg(concept.draw(blue, "white"), 'width="32" height="32"')}
+      ${svg(concept.draw(blue, "white"), 'width="16" height="16"')}
+      <div class="taskbar">${svg(concept.draw("white", "#202328"), 'width="20" height="20"')}${svg(concept.draw(blue, "white"), 'width="16" height="16"')}</div>
+    </div>
+    <div class="wordmark">${svg(concept.draw(blue, "white"))}flitty</div>
+  </article>`).join("");
+</script>
+</body>
+</html>
