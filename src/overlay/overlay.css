@@ -1,0 +1,20 @@
+:root { --flitty-blue: #3884ff; }
+html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; cursor: none; user-select: none; }
+#buddy { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; transition: opacity 0.2s; will-change: transform; }
+#buddy.hidden { opacity: 0 !important; }
+.pointer { position: absolute; left: -9px; top: -11px; fill: var(--flitty-blue); filter: drop-shadow(0 0 6px rgba(56, 132, 255, 0.8)); }
+#bubble { position: absolute; left: 18px; top: 10px; padding: 4px 9px; border-radius: 8px; white-space: nowrap; background: var(--flitty-blue);
+  color: white; font: 600 12px -apple-system, "Segoe UI", sans-serif; opacity: 0; transition: opacity 0.2s; }
+#status { position: absolute; left: 18px; top: 10px; display: flex; gap: 3px; align-items: center; height: 18px; opacity: 0; }
+#status.listening, #status.processing { opacity: 1; }
+#status span { width: 3px; height: 6px; border-radius: 2px; background: var(--flitty-blue); }
+#status.listening span { animation: bar 0.9s ease-in-out infinite; }
+#status.listening span:nth-child(2) { animation-delay: 0.15s; }
+#status.listening span:nth-child(3) { animation-delay: 0.3s; }
+#status.listening span:nth-child(4) { animation-delay: 0.45s; }
+#status.processing span { width: 6px; border-radius: 3px; animation: dot 0.8s ease-in-out infinite; }
+#status.processing span:nth-child(2) { animation-delay: 0.1s; }
+#status.processing span:nth-child(3) { animation-delay: 0.2s; }
+#status.processing span:nth-child(4) { display: none; }
+@keyframes bar { 50% { height: 18px; } }
+@keyframes dot { 50% { opacity: 0.2; } }

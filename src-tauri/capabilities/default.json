@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Overlays and the settings panel only listen to events and call app commands.",
+  "windows": ["overlay-*", "panel"],
+  "permissions": ["core:default"]
+}
