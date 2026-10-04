@@ -29,3 +29,4 @@ A ~30s feature-tour marketing video for Flitty's landing page hero. Built as pol
 - Brand: cream #f8f4ec, ink #141210, marker yellow #ffe066, cursor blue #3884ff; Instrument Serif + Geist; marker-highlight on key words, as on the site.
 - Feature beats: hotkey Ctrl+Alt+Space → ask out loud → captioned answer → flies to the exact button → any app, even full screen → private, your own key, no server → free and open source, Windows first → logo and download CTA.
 - Only claim what Flitty does: it points, it doesn't click for you.
+- assets/music.wav — music bed: warm, upbeat synth-pop from the HeyGen catalog (track bddcd06e, 44s), faded in over 0.6s and out over the last 1.8s.
