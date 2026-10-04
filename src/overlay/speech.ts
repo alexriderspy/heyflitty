@@ -5,6 +5,7 @@ export type Speaker = {
   stop(): void;
   markReplyComplete(): void;
   setPreferredVoice(name: string): void;
+  setMuted(muted: boolean): void;
 };
 
 /** With no voice chosen, prefer a natural-sounding English voice. */
@@ -13,8 +14,17 @@ function bestEnglishVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice 
   return english.find((voice) => /natural|neural|online/i.test(voice.name)) ?? english.find((voice) => voice.localService) ?? english[0];
 }
 
-export function createSpeaker(onFinishedReply: () => void, onMissingVoice: (name: string) => void): Speaker {
+/** How long a muted caption stays up: roughly reading speed. */
+const mutedCaptionMs = (text: string) => Math.max(1500, text.length * 55);
+
+export function createSpeaker(
+  onFinishedReply: () => void,
+  onMissingVoice: (name: string) => void,
+  onSentence: (text: string) => void,
+): Speaker {
   let preferredVoice = "";
+  let muted = false;
+  let mutedQueue: Promise<void> = Promise.resolve();
   let pending = 0;
   let replyComplete = false;
 
@@ -27,6 +37,17 @@ export function createSpeaker(onFinishedReply: () => void, onMissingVoice: (name
 
   return {
     say(text) {
+      if (muted) {
+        // No voice: show each sentence for about as long as it takes to read.
+        pending += 1;
+        mutedQueue = mutedQueue.then(async () => {
+          onSentence(text);
+          await new Promise((resolve) => setTimeout(resolve, mutedCaptionMs(text)));
+          pending = Math.max(0, pending - 1);
+          finishIfDone();
+        });
+        return;
+      }
       const voices = speechSynthesis.getVoices();
       const voice = preferredVoice ? voices.find((candidate) => candidate.name === preferredVoice) : bestEnglishVoice(voices);
       if (preferredVoice && !voice) {
@@ -41,6 +62,7 @@ export function createSpeaker(onFinishedReply: () => void, onMissingVoice: (name
         pending = Math.max(0, pending - 1);
         finishIfDone();
       };
+      utterance.onstart = () => onSentence(text);
       utterance.onend = done;
       utterance.onerror = done;
       speechSynthesis.speak(utterance);
@@ -56,6 +78,9 @@ export function createSpeaker(onFinishedReply: () => void, onMissingVoice: (name
     },
     setPreferredVoice(name) {
       preferredVoice = name;
+    },
+    setMuted(value) {
+      muted = value;
     },
   };
 }

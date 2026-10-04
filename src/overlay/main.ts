@@ -12,6 +12,11 @@ const buddy = document.getElementById("buddy")!;
 const pointer = buddy.querySelector<SVGElement>(".pointer")!;
 const bubble = document.getElementById("bubble")!;
 const status = document.getElementById("status")!;
+const caption = document.getElementById("caption")!;
+const captionHeard = caption.querySelector<HTMLElement>(".heard")!;
+const captionSpoken = caption.querySelector<HTMLElement>(".spoken")!;
+const CAPTION_WIDTH = 340;
+const CAPTION_LINGER_MS = 2500;
 
 // Sits beside the real cursor instead of under it.
 const FOLLOW_OFFSET: Point = { x: 22, y: 18 };
@@ -25,6 +30,10 @@ let activeFlight: { cancelled: boolean } | null = null;
 
 function render(rotationDegrees = RESTING_ROTATION_DEGREES) {
   buddy.style.transform = `translate(${position.x}px, ${position.y}px)`;
+  // Caption sits below-right of the buddy, flipped to the left near the screen edge.
+  const flip = position.x + 24 + CAPTION_WIDTH > window.innerWidth;
+  const captionX = flip ? position.x - CAPTION_WIDTH - 12 : position.x + 24;
+  caption.style.transform = `translate(${Math.max(8, captionX)}px, ${position.y + 30}px)`;
   pointer.style.transform = `rotate(${rotationDegrees}deg)`;
   buddy.style.opacity = mouse.inside || mode !== "follow" ? "1" : "0";
 }
@@ -73,17 +82,35 @@ listen<CursorEvent>("cursor", ({ payload }) => {
   }
 });
 
+let captionTimer: number | undefined;
+function showCaption(sentence: string) {
+  window.clearTimeout(captionTimer);
+  captionSpoken.textContent = sentence;
+  caption.classList.add("visible");
+}
+function hideCaptionSoon() {
+  window.clearTimeout(captionTimer);
+  captionTimer = window.setTimeout(() => {
+    caption.classList.remove("visible");
+    captionHeard.textContent = "";
+    captionSpoken.textContent = "";
+  }, CAPTION_LINGER_MS);
+}
+
 const speaker = createSpeaker(
   () => {
     // Speech queue drained after the reply finished: back to idle.
     if (status.className === "responding") status.className = "";
+    hideCaptionSoon();
   },
   (voiceName) => showNotice(`the voice "${voiceName}" isn't installed; pick another in Settings`),
+  showCaption,
 );
 
 async function refreshVoice() {
-  const view = await invoke<{ settings: { voiceName: string } }>("get_settings");
+  const view = await invoke<{ settings: { voiceName: string; muted: boolean } }>("get_settings");
   speaker.setPreferredVoice(view.settings.voiceName);
+  speaker.setMuted(view.settings.muted);
 }
 refreshVoice();
 listen("settings-changed", refreshVoice);
@@ -92,8 +119,17 @@ listen<VoiceState>("voice-state", ({ payload }) => {
   status.className = payload === "idle" ? "" : payload;
 });
 
+listen<{ text: string }>("heard", ({ payload }) => {
+  window.clearTimeout(captionTimer);
+  captionHeard.textContent = payload.text;
+  captionSpoken.textContent = "…";
+  caption.classList.add("visible");
+});
 listen<{ text: string }>("speak", ({ payload }) => speaker.say(payload.text));
-listen("stop-speech", () => speaker.stop());
+listen("stop-speech", () => {
+  speaker.stop();
+  caption.classList.remove("visible");
+});
 listen("response-complete", () => speaker.markReplyComplete());
 
 let noticeTimer: number | undefined;

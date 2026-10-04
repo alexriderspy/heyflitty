@@ -117,6 +117,9 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
         overlay::set_voice_state(app, VoiceState::Idle);
         return Ok(());
     }
+    if let Some(screen) = screens::under_cursor(app, &screens::all(app)) {
+        let _ = app.emit_to(label_for(screen.index).as_str(), "heard", SpeakPayload { text: question.clone() });
+    }
     overlay::set_voice_state(app, VoiceState::Processing);
 
     let screen_list = screens::all(app);
@@ -147,7 +150,6 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
 
     let mut splitter = SentenceSplitter::new();
     let mut started_speaking = false;
-    let voice_muted = settings.muted;
     let speak_target = label_for(cursor_screen.index);
     let mut speak = |sentence: String| {
         if !is_current(app, turn) {
@@ -158,9 +160,7 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
             println!("[flitty] first sentence after {:?}", started.elapsed());
             overlay::set_voice_state(app, VoiceState::Responding);
         }
-        if !voice_muted {
-            let _ = app.emit_to(speak_target.as_str(), "speak", SpeakPayload { text: sentence });
-        }
+        let _ = app.emit_to(speak_target.as_str(), "speak", SpeakPayload { text: sentence });
     };
 
     let reply = openai::stream_reply(

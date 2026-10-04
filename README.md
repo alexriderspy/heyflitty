@@ -5,14 +5,15 @@
 <h1 align="center">Flitty</h1>
 
 <p align="center">
-  Your AI screen buddy that shows you exactly where to click.<br />
-  Hold a hotkey, ask out loud, and Flitty answers in a voice and flies a little cursor to the button you need.
+  <b>Your AI screen buddy that shows you exactly where to click.</b><br />
+  Hold a hotkey, ask out loud, and Flitty answers in a voice, shows the answer on screen,<br />and flies a little cursor to the exact button you need. Built for Windows, works on macOS.
 </p>
 
 <p align="center">
-  <a href="https://github.com/alexriderspy/heyflitty/releases/latest">Download for Windows</a> ·
-  <a href="#how-it-works">How it works</a> ·
-  <a href="#build-from-source">Build from source</a>
+  <a href="https://github.com/alexriderspy/heyflitty/releases/latest"><b>Download for Windows</b></a> ·
+  <a href="#macos">macOS</a> ·
+  <a href="https://github.com/alexriderspy/heyflitty/issues/new/choose">Report an issue</a> ·
+  <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
 ---
@@ -23,11 +24,19 @@
 2. **Let go.** Flitty looks at your screen and answers in a voice.
 3. **It points.** A small cursor flies across your screen to the exact button or menu it's talking about.
 
-It works over any app, including full-screen ones, and never gets in the way: clicks and typing pass straight through.
+It works over any app, including full-screen ones, and never gets in the way: clicks and typing pass straight through. Everything it says is also captioned next to the cursor.
+
+## Why Flitty
+
+Flitty is inspired by HeyClicky, which showed how good an AI buddy on your screen can feel, but it's Mac-only and closed. Flitty brings the idea to Windows:
+
+- **Windows first.** Windows 10 and 11, x64 and ARM64. macOS works too.
+- **Free and open source.** MIT licensed. No account, no subscription.
+- **Your key, your data.** Uses your own OpenAI API key, talking to OpenAI directly. There's no Flitty server.
 
 ## Requirements
 
-- Windows 10 or 11 (x64 or ARM64). macOS is coming.
+- Windows 10 or 11 (x64 or ARM64), or macOS 14.2+ (see [macOS](#macos)).
 - An [OpenAI API key](https://platform.openai.com/api-keys). You pay OpenAI directly for what you use.
 - A microphone.
 
@@ -38,6 +47,10 @@ It works over any app, including full-screen ones, and never gets in the way: cl
 3. Click the Flitty icon in the system tray, open **Settings**, paste your OpenAI key and press **Test key**.
 
 The installer isn't code-signed yet, so Windows may show "Windows protected your PC". Click **More info → Run anyway**.
+
+### macOS
+
+Flitty runs on macOS too. There's no signed Mac download yet, so for now run it from source (see [Build from source](#build-from-source)). The first time, macOS asks for Microphone and Screen Recording permission.
 
 ## How it works
 
@@ -50,7 +63,7 @@ The installer isn't code-signed yet, so Windows may show "Windows protected your
 
 - Flitty only records while you **hold the hotkey**, and takes a screenshot only when you **let go** of it.
 - Audio and screenshots go **straight from your computer to OpenAI** using your own key. There is no Flitty server.
-- Recordings and screenshots are never saved to disk. Your API key is kept in Windows Credential Manager.
+- Recordings and screenshots are never saved to disk. Your API key is kept in Windows Credential Manager (Keychain on macOS).
 
 ## Build from source
 
@@ -65,9 +78,12 @@ npm run tauri dev
 
 Build the Windows installer with `npm run tauri build -- --bundles nsis`.
 
-## Contributing
+## Report issues and contribute
 
-Issues and pull requests are welcome. Contributions require agreeing to the [CLA](CLA.md).
+- **Found a bug?** [Open an issue](https://github.com/alexriderspy/heyflitty/issues/new/choose). Include your Windows version and what Flitty said next to the cursor.
+- **Have an idea?** Open a feature request, or just send a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build and test.
+
+Contributions require agreeing to the [CLA](CLA.md).
 
 ## License
 
