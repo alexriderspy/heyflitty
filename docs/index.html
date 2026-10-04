@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flitty — your AI screen buddy</title>
+<meta name="description" content="Hold a hotkey, ask out loud, and Flitty answers in a voice and flies a little cursor to the exact button you need. Free and open source for Windows." />
+<meta property="og:title" content="Flitty — your AI screen buddy" />
+<meta property="og:description" content="Ask out loud. Flitty answers and points at the exact button. Free, open source, Windows." />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0b0c;
+    --muted: #5d6169;
+    --line: #e7e8eb;
+    --paper: #ffffff;
+    --soft: #f5f5f7;
+    --accent: #3884ff;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 Inter, -apple-system, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; text-decoration: none; }
+  .brand img { width: 30px; height: 30px; }
+  nav .links { display: flex; gap: 24px; font-size: 14px; color: var(--muted); }
+  nav .links a { text-decoration: none; }
+  nav .links a:hover { color: var(--ink); }
+
+  .hero { text-align: center; padding: 64px 0 40px; }
+  .hero h1 { font-size: clamp(40px, 7vw, 72px); line-height: 1.02; letter-spacing: -0.045em; margin: 0 0 20px; font-weight: 800; }
+  .hero p.lead { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 600px; margin: 0 auto 32px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .button { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--ink); transition: transform 0.15s ease; }
+  .button:hover { transform: translateY(-1px); }
+  .button.primary { background: var(--ink); color: white; }
+  .button svg { width: 18px; height: 18px; }
+  .fineprint { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .fineprint a { color: var(--muted); }
+
+  /* Demo: a pretend app window with the buddy flying to a button. */
+  .demo { margin: 48px auto 0; max-width: 880px; border-radius: 18px; border: 1px solid var(--line); background: var(--soft); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08); overflow: hidden; }
+  .demo .bar { height: 40px; display: flex; align-items: center; gap: 7px; padding: 0 16px; border-bottom: 1px solid var(--line); background: white; }
+  .demo .bar i { width: 11px; height: 11px; border-radius: 50%; background: #dcdde1; }
+  .demo .screen { position: relative; aspect-ratio: 16 / 9; background: white; }
+  .fake-toolbar { position: absolute; top: 6%; left: 5%; right: 5%; display: flex; gap: 2.5%; align-items: center; }
+  .fake-toolbar span { height: 12px; border-radius: 6px; background: #ececef; flex: 1; }
+  .fake-toolbar .target { flex: 0 0 auto; padding: 0.6em 1.1em; height: auto; border-radius: 0.6em; background: var(--ink); color: white; font-size: clamp(8px, 1.4vw, 13px); font-weight: 600; }
+  .fake-body { position: absolute; top: 22%; left: 5%; right: 5%; display: grid; gap: 14px; }
+  .fake-body span { height: 12px; border-radius: 6px; background: #f0f0f2; }
+  .fake-body span:nth-child(2) { width: 82%; } .fake-body span:nth-child(3) { width: 64%; } .fake-body span:nth-child(5) { width: 74%; }
+  .trail { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .trail .buddy { fill: var(--accent); filter: drop-shadow(0 0 6px rgba(56, 132, 255, 0.7)); }
+  .trail .flight { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0.1 12; opacity: 0; animation: trail 7s ease-in-out infinite; }
+  .bubble { position: absolute; padding: 10px 14px; border-radius: 14px; background: var(--ink); color: white; font-size: 14px; max-width: 280px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18); opacity: 0; }
+  .bubble.ask { left: 30%; top: 66%; border-bottom-left-radius: 4px; background: white; color: var(--ink); border: 1px solid var(--line); animation: ask 7s ease infinite; }
+  .bubble.answer { right: 8%; top: 22%; border-top-right-radius: 4px; animation: answer 7s ease infinite; }
+  .keys { position: absolute; left: 5%; bottom: 7%; display: flex; gap: 6px; animation: keys 7s ease infinite; }
+  .keys kbd { font: 600 12px Inter, sans-serif; padding: 6px 9px; border-radius: 7px; background: white; border: 1px solid var(--line); border-bottom-width: 3px; }
+  @keyframes trail { 0%, 30% { opacity: 0; } 40%, 80% { opacity: 0.55; } 90%, 100% { opacity: 0; } }
+  @keyframes ask { 0%, 4% { opacity: 0; transform: translateY(6px); } 10%, 44% { opacity: 1; transform: none; } 50%, 100% { opacity: 0; } }
+  @keyframes answer { 0%, 50% { opacity: 0; transform: translateY(6px); } 56%, 86% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; } }
+  @keyframes keys { 0%, 2% { opacity: 0; } 6%, 28% { opacity: 1; } 32%, 100% { opacity: 0; } }
+
+  section { padding: 88px 0; }
+  section h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; margin: 0 0 12px; text-align: center; }
+  section .sub { text-align: center; color: var(--muted); margin: 0 auto 48px; max-width: 560px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .step { border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+  .step .num { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: white; display: grid; place-items: center; font-weight: 700; font-size: 14px; margin-bottom: 16px; }
+  .step h3 { margin: 0 0 6px; font-size: 18px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+  kbd.inline { font: 600 13px Inter, sans-serif; padding: 1px 7px; border-radius: 6px; border: 1px solid var(--line); border-bottom-width: 2px; background: white; color: var(--ink); }
+
+  .features { background: var(--soft); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .feature { background: white; border-radius: 16px; padding: 26px; border: 1px solid var(--line); }
+  .feature h3 { margin: 0 0 6px; font-size: 18px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .faq { max-width: 720px; margin: 0 auto; }
+  details { border-bottom: 1px solid var(--line); padding: 18px 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::after { content: "+"; color: var(--muted); font-weight: 400; font-size: 22px; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+
+  .final { text-align: center; }
+  .final img { width: 64px; height: 64px; margin-bottom: 16px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  @media (max-width: 760px) {
+    nav .links a:not(.github) { display: none; }
+    .steps, .grid { grid-template-columns: 1fr; }
+    section { padding: 64px 0; }
+    .bubble { font-size: 12px; max-width: 200px; }
+    .bubble.answer { right: 4%; top: 30%; }
+    .bubble.ask { left: auto; right: 6%; top: 58%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trail .flight, .bubble, .keys { animation: none; }
+    .bubble.answer, .trail .flight { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#"><img src="logo.svg" alt="" />flitty</a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+      <a class="github" href="https://github.com/alexriderspy/heyflitty">GitHub</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Ask out loud.<br />Flitty shows you where.</h1>
+    <p class="lead">An AI buddy that lives next to your cursor. Hold a hotkey, ask anything about what's on your screen, and Flitty answers in a voice and flies straight to the button you need.</p>
+    <div class="cta">
+      <a class="button primary" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/Flitty_0.1.0_x64-setup.exe">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.4v7.1H3zm0 13 7.5 1.1v-7H3zm8.4 1.2L21 21V12.6h-9.6zm0-15.4v7.2H21V3z"/></svg>
+        Download for Windows
+      </a>
+      <a class="button" href="https://github.com/alexriderspy/heyflitty">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5Z"/></svg>
+        View source
+      </a>
+    </div>
+    <div class="fineprint">Free and open source · Windows 10 &amp; 11 · Uses your own OpenAI key · <a href="https://github.com/alexriderspy/heyflitty/releases/latest">ARM64 build</a></div>
+
+    <div class="demo" aria-label="Animation: someone asks where to share a document and Flitty's cursor flies to the Share button">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="screen">
+        <div class="fake-toolbar"><span></span><span></span><span></span><span></span><span class="target">Share</span></div>
+        <div class="fake-body"><span></span><span></span><span></span><span></span><span></span></div>
+        <svg class="trail" viewBox="0 0 880 495">
+          <path id="flight" class="flight" d="M 290 360 C 330 210, 580 140, 772 94" />
+          <!-- The buddy rides the same path, so it stays aligned at any size. -->
+          <path class="buddy" d="M0 -12 L9 10 L0 5 L-9 10 Z" transform="rotate(-35)">
+            <animateMotion dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.52;0.86;1" keyPoints="0;0;1;1;0" keySplines="0 0 1 1;0.45 0 0.25 1;0 0 1 1;0.45 0 0.25 1">
+              <mpath href="#flight" />
+            </animateMotion>
+          </path>
+        </svg>
+        <div class="keys"><kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>Space</kbd></div>
+        <div class="bubble ask">"how do I share this with my team?"</div>
+        <div class="bubble answer">click Share, top right, then add their emails.</div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <h2>Three seconds, no typing</h2>
+    <p class="sub">Works over any app: spreadsheets, design tools, settings screens, even full-screen ones.</p>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h3>Hold and ask</h3><p>Hold <kbd class="inline">Ctrl</kbd> <kbd class="inline">Alt</kbd> <kbd class="inline">Space</kbd> and ask like you'd ask a friend: "where's the export button?"</p></div>
+      <div class="step"><div class="num">2</div><h3>Let go</h3><p>Flitty looks at your screen and starts answering out loud within a moment.</p></div>
+      <div class="step"><div class="num">3</div><h3>Follow the cursor</h3><p>A little cursor flies to the exact button or menu, so you never have to hunt for it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="wrap">
+    <h2>Small, private, yours</h2>
+    <p class="sub">No account, no subscription, no server in the middle.</p>
+    <div class="grid">
+      <div class="feature"><h3>Points at things</h3><p>It doesn't just tell you where something is. It flies to it, on whichever monitor it's on.</p></div>
+      <div class="feature"><h3>Never in your way</h3><p>Clicks and typing pass straight through Flitty. It never steals focus, even over full-screen apps.</p></div>
+      <div class="feature"><h3>Your key, your data</h3><p>Audio and screenshots go straight from your PC to OpenAI with your own API key, only when you use the hotkey. Nothing is saved.</p></div>
+      <div class="feature"><h3>Open source</h3><p>Every line is on GitHub under the MIT license. Read it, fork it, improve it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap faq">
+    <h2>Questions</h2>
+    <p class="sub"></p>
+    <details><summary>Is it free?</summary><p>Flitty is free and open source. It uses your own OpenAI API key, so you pay OpenAI directly for what you use, usually a fraction of a cent per question.</p></details>
+    <details><summary>What does it send, and when?</summary><p>Only when you use the hotkey: the recording of your question and a screenshot of your displays, sent directly to OpenAI. Flitty has no server and saves no recordings or screenshots. Your key is stored in Windows Credential Manager.</p></details>
+    <details><summary>Does it work on Mac?</summary><p>Windows comes first. A macOS version is on the way.</p></details>
+    <details><summary>Windows says "Windows protected your PC"</summary><p>The installer isn't code-signed yet. Click <strong>More info</strong>, then <strong>Run anyway</strong>. You can check the source and build it yourself from GitHub.</p></details>
+    <details><summary>How do I get an OpenAI key?</summary><p>Create one at <a href="https://platform.openai.com/api-keys">platform.openai.com/api-keys</a>, then paste it into Flitty's Settings (click the tray icon) and press Test key.</p></details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <img src="logo.svg" alt="" />
+    <h2>Stop hunting for buttons.</h2>
+    <p class="sub">Install Flitty in under a minute.</p>
+    <div class="cta">
+      <a class="button primary" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/Flitty_0.1.0_x64-setup.exe">Download for Windows</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Flitty · MIT license</span>
+    <span><a href="https://github.com/alexriderspy/heyflitty">GitHub</a> · <a href="https://github.com/alexriderspy/heyflitty/issues">Report an issue</a></span>
+  </div>
+</footer>
+</body>
+</html>
