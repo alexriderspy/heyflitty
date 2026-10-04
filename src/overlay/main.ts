@@ -30,10 +30,15 @@ let activeFlight: { cancelled: boolean } | null = null;
 
 function render(rotationDegrees = RESTING_ROTATION_DEGREES) {
   buddy.style.transform = `translate(${position.x}px, ${position.y}px)`;
-  // Caption sits below-right of the buddy, flipped to the left near the screen edge.
+  // Caption sits below-right of the buddy, flipped left or above near the screen edges (the taskbar, say).
   const flip = position.x + 24 + CAPTION_WIDTH > window.innerWidth;
   const captionX = flip ? position.x - CAPTION_WIDTH - 12 : position.x + 24;
-  caption.style.transform = `translate(${Math.max(8, captionX)}px, ${position.y + 30}px)`;
+  const above = position.y + 30 + caption.offsetHeight > window.innerHeight - 8;
+  const captionY = above ? position.y - caption.offsetHeight - 16 : position.y + 30;
+  caption.style.transform = `translate(${Math.max(8, captionX)}px, ${Math.max(8, captionY)}px)`;
+  // The label flips the same way so it never hangs off the screen.
+  buddy.classList.toggle("near-bottom", position.y + 44 > window.innerHeight);
+  buddy.classList.toggle("near-right", position.x + 18 + bubble.offsetWidth > window.innerWidth - 4);
   pointer.style.transform = `rotate(${rotationDegrees}deg)`;
   buddy.style.opacity = mouse.inside || mode !== "follow" ? "1" : "0";
 }
@@ -157,6 +162,7 @@ listen<PointTarget>("point", async ({ payload }) => {
   bubble.classList.remove("notice");
   bubble.textContent = payload.label;
   bubble.style.opacity = payload.label ? "1" : "0";
+  render();
   await new Promise((resolve) => setTimeout(resolve, POINTING_HOLD_MS));
   bubble.style.opacity = "0";
   mode = "flying";

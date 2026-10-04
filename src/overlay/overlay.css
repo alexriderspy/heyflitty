@@ -18,6 +18,8 @@ html, body { margin: 0; height: 100%; background: transparent; overflow: hidden;
 #status.processing span:nth-child(4) { display: none; }
 @keyframes bar { 50% { height: 18px; } }
 @keyframes dot { 50% { opacity: 0.2; } }
+#buddy.near-bottom #bubble { top: -28px; }
+#buddy.near-right #bubble { left: auto; right: 18px; }
 #bubble.notice { background: #2b2f36; width: max-content; max-width: 320px; white-space: normal; line-height: 1.35; }
 #status.responding { opacity: 1; }
 #status.responding span { animation: bar 1.4s ease-in-out infinite; height: 4px; opacity: 0.7; }

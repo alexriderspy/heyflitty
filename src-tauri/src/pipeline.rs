@@ -144,7 +144,8 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
         Some(point) => tauri::async_runtime::spawn_blocking(move || elements::element_under(point.x as i32, point.y as i32)).await.ok().flatten(),
         None => None,
     };
-    let captures = tauri::async_runtime::spawn_blocking(capture::capture_all)
+    let mouse_point = mouse.map(|point| (point.x, point.y));
+    let captures = tauri::async_runtime::spawn_blocking(move || capture::capture_all(mouse_point))
         .await
         .map_err(|error| error.to_string())??;
     let matched = captures
@@ -275,7 +276,7 @@ fn describe_elements(ui_elements: &[UiElement], matched: &[(&ScreenCapture, Scre
             Some(format!("[#{}] {} \"{}\" at {},{} on screen {}", element.id, element.role, element.name, image_x.round(), image_y.round(), position + 1))
         })
         .collect();
-    (!lines.is_empty()).then(|| format!("clickable elements in the focused window:\n{}", lines.join("\n")))
+    (!lines.is_empty()).then(|| format!("clickable elements in the focused window and the taskbar:\n{}", lines.join("\n")))
 }
 
 /// xcap and Tauri list monitors independently; match them by origin.

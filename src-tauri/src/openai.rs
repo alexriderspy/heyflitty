@@ -123,6 +123,13 @@ fn chat_body(request: &ChatRequest) -> Value {
         content.push(json!({ "type": "text", "text": label }));
         content.push(json!({ "type": "image_url", "image_url": { "url": format!("data:image/jpeg;base64,{image}") } }));
     }
+    for (capture, _) in &request.screens {
+        if let Some(closeup) = &capture.closeup {
+            let image = base64::engine::general_purpose::STANDARD.encode(closeup);
+            content.push(json!({ "type": "text", "text": "close-up of the area around the mouse pointer, at full resolution; the red ring marks the pointer. point using the screenshot's coordinates above, never the close-up's." }));
+            content.push(json!({ "type": "image_url", "image_url": { "url": format!("data:image/jpeg;base64,{image}") } }));
+        }
+    }
     if let Some(context) = &request.context {
         content.push(json!({ "type": "text", "text": context }));
     }

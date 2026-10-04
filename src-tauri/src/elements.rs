@@ -1,4 +1,4 @@
-//! The clickable controls in the focused window, from Windows UI Automation.
+//! The clickable controls in the focused window and the taskbar, from Windows UI Automation.
 //! The model picks one by id, so the cursor lands on the control's real bounds
 //! instead of a coordinate guessed from pixels.
 
@@ -6,7 +6,7 @@
 #[derive(Clone, Debug)]
 pub struct UiElement {
     pub id: usize,
-    pub role: &'static str,
+    pub role: String,
     pub name: String,
     pub left: i32,
     pub top: i32,
@@ -26,17 +26,36 @@ const MAX_ELEMENTS: usize = 250;
 
 #[cfg(target_os = "windows")]
 pub fn focused_window_elements() -> Result<Vec<UiElement>, String> {
-    use uiautomation::types::{ControlType, Handle, TreeScope, UIProperty};
+    use uiautomation::types::Handle;
     use uiautomation::UIAutomation;
-    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+    use windows::core::w;
+    use windows::Win32::UI::WindowsAndMessaging::{FindWindowW, GetForegroundWindow};
 
     let automation = UIAutomation::new().map_err(|error| error.to_string())?;
-    // SAFETY: plain Win32 call with no arguments.
-    let foreground = unsafe { GetForegroundWindow() };
+    // SAFETY: plain Win32 calls; the class name is a static wide string.
+    let (foreground, taskbar) = unsafe { (GetForegroundWindow(), FindWindowW(w!("Shell_TrayWnd"), None).unwrap_or_default()) };
+    let mut elements = Vec::new();
     let window = automation.element_from_handle(Handle::from(foreground)).map_err(|error| error.to_string())?;
+    collect(&automation, &window, "", MAX_ELEMENTS, &mut elements)?;
+    // The taskbar holds Wi-Fi, volume, battery and the clock, which people ask about all the time.
+    if !taskbar.is_invalid() && taskbar != foreground {
+        if let Ok(bar) = automation.element_from_handle(Handle::from(taskbar)) {
+            let _ = collect(&automation, &bar, "taskbar ", MAX_ELEMENTS + MAX_TASKBAR_ELEMENTS, &mut elements);
+        }
+    }
+    Ok(elements)
+}
+
+#[cfg(target_os = "windows")]
+const MAX_TASKBAR_ELEMENTS: usize = 40;
+
+/// Appends the visible, named, clickable descendants of `window` until `elements` holds `limit`.
+#[cfg(target_os = "windows")]
+fn collect(automation: &uiautomation::UIAutomation, window: &uiautomation::UIElement, prefix: &'static str, limit: usize, elements: &mut Vec<UiElement>) -> Result<(), String> {
+    use uiautomation::types::{TreeScope, UIProperty};
+
     // Browsers keep hidden bars just outside the window; only list controls inside it.
     let frame = window.get_bounding_rectangle().map_err(|error| error.to_string())?;
-
     // Fetch name, type, bounds and visibility in one cross-process round trip.
     let cache = automation.create_cache_request().map_err(|error| error.to_string())?;
     for property in [UIProperty::Name, UIProperty::ControlType, UIProperty::BoundingRectangle, UIProperty::IsOffscreen] {
@@ -45,8 +64,10 @@ pub fn focused_window_elements() -> Result<Vec<UiElement>, String> {
     let everything = automation.create_true_condition().map_err(|error| error.to_string())?;
     let nodes = window.find_all_build_cache(TreeScope::Descendants, &everything, &cache).map_err(|error| error.to_string())?;
 
-    let mut elements = Vec::new();
     for node in nodes {
+        if elements.len() >= limit {
+            break;
+        }
         let Ok(control_type) = node.get_cached_control_type() else { continue };
         let Some(role) = clickable_role(control_type) else { continue };
         let offscreen = node
@@ -61,12 +82,9 @@ pub fn focused_window_elements() -> Result<Vec<UiElement>, String> {
         if offscreen || outside || name.is_empty() || right <= left || bottom <= top {
             continue;
         }
-        elements.push(UiElement { id: elements.len() + 1, role, name: name.chars().take(80).collect(), left, top, right, bottom });
-        if elements.len() == MAX_ELEMENTS {
-            break;
-        }
+        elements.push(UiElement { id: elements.len() + 1, role: format!("{prefix}{role}"), name: name.chars().take(80).collect(), left, top, right, bottom });
     }
-    Ok(elements)
+    Ok(())
 }
 
 #[cfg(target_os = "windows")]
