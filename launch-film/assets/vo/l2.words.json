@@ -1,44 +1,50 @@
 [
   {
     "id": "w0",
-    "text": "Stuck",
+    "text": "Stop",
     "start": 0.299,
     "end": 0.5547
   },
   {
     "id": "w1",
-    "text": "on",
-    "start": 0.597,
-    "end": 0.683
+    "text": "googling",
+    "start": 0.64,
+    "end": 0.981
   },
   {
     "id": "w2",
-    "text": "a",
-    "start": 0.725,
-    "end": 0.768
-  },
-  {
-    "id": "w3",
-    "text": "button",
-    "start": 0.811,
-    "end": 0.9387
-  },
-  {
-    "id": "w4",
-    "text": "you",
-    "start": 1.109,
+    "text": "how",
+    "start": 1.152,
     "end": 1.28
   },
   {
-    "id": "w5",
-    "text": "can't",
+    "id": "w3",
+    "text": "to",
     "start": 1.323,
-    "end": 1.536
+    "end": 1.4507
+  },
+  {
+    "id": "w4",
+    "text": "use",
+    "start": 1.493,
+    "end": 1.5787
+  },
+  {
+    "id": "w5",
+    "text": "your",
+    "start": 1.621,
+    "end": 1.7067
   },
   {
     "id": "w6",
-    "text": "find?",
-    "start": 1.621,
-    "end": 2.172607709750567
+    "text": "own",
+    "start": 1.792,
+    "end": 1.877
+  },
+  {
+    "id": "w7",
+    "text": "computer.",
+    "start": 1.963,
+    "end": 2.537
   }
 ]
