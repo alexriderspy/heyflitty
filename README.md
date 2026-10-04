@@ -25,8 +25,8 @@
 </p>
 
 <p align="center">
-  <img src="docs/demo.gif" width="860" alt="Flitty on Windows: asked 'where can I see the open issues?' on a GitHub page, it captions the answer and its cursor flies to the Issues tab" />
-  <br /><sub>Real recording on Windows 11. Asked: <i>"where can I see the open issues?"</i></sub>
+  <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4"><img src="docs/flitty-launch.gif" width="860" alt="Flitty on Windows: the user circles a port on a laptop photo and asks what it is; Flitty labels it HDMI port, then walks them through making the monitor their main display in Settings" /></a>
+  <br /><sub>Ask about anything on screen, then let it walk you through. <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4">Watch the full video with sound ▶</a></sub>
 </p>
 
 ---
@@ -63,7 +63,16 @@ There's no signed Mac download yet, so run it from source (see [Build from sourc
 1. **Hold <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>** and ask a question out loud. Flitty records only while you hold the keys.
 2. **Let go.** It transcribes your question, takes a screenshot, and on Windows reads the clickable controls in the focused window.
 3. **It answers.** An OpenAI model replies; Flitty speaks and captions it sentence by sentence as it streams in.
-4. **It points.** The model names the control it means, and Flitty's cursor flies to that control's real position. For things that aren't standard controls (a canvas, a game), it points by screen coordinates instead.
+4. **It points.** The model names the control it means, and Flitty's cursor flies to that control's real position. For things that aren't standard controls (a photo, a diagram, a game), it points by screen coordinates instead.
+
+Ask about **"this"** and Flitty looks at whatever your mouse is on: rest the pointer on a port in a photo and ask "what's this?", and it names the port and points at it.
+
+<details>
+<summary><b>See a real recording</b></summary>
+<br />
+<img src="docs/demo.gif" width="860" alt="Flitty on Windows: asked 'where can I see the open issues?' on a GitHub page, it captions the answer and its cursor flies to the Issues tab" />
+<br /><sub>Windows 11, unedited. Asked: <i>"where can I see the open issues?"</i></sub>
+</details>
 
 ## Privacy
 
