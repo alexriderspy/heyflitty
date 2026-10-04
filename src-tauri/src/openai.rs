@@ -34,6 +34,8 @@ pub struct ChatRequest<'a> {
     pub question: &'a str,
     /// Each screenshot with the label the model uses to refer to it.
     pub screens: Vec<(&'a ScreenCapture, String)>,
+    /// Extra text sent before the question, such as the list of clickable elements.
+    pub context: Option<String>,
     pub max_tokens: u32,
 }
 
@@ -120,6 +122,9 @@ fn chat_body(request: &ChatRequest) -> Value {
         let image = base64::engine::general_purpose::STANDARD.encode(&capture.jpeg);
         content.push(json!({ "type": "text", "text": label }));
         content.push(json!({ "type": "image_url", "image_url": { "url": format!("data:image/jpeg;base64,{image}") } }));
+    }
+    if let Some(context) = &request.context {
+        content.push(json!({ "type": "text", "text": context }));
     }
     content.push(json!({ "type": "text", "text": request.question }));
     messages.push(json!({ "role": "user", "content": content }));

@@ -16,16 +16,19 @@ struct CursorPayload {
     inside: bool,
 }
 
-/// Only sends when the mouse moved, and only to overlays it is on or just left,
-/// so an idle mouse costs nothing in the webviews.
+/// Sends when the mouse moves, only to overlays it is on or just left, plus a
+/// once-a-second refresh so a freshly loaded overlay learns where the mouse is.
 pub fn start_stream(app: AppHandle, screens: Vec<Screen>) {
     thread::spawn(move || {
         let mut last_position: Option<(f64, f64)> = None;
         let mut inside_last_frame = vec![false; screens.len()];
+        let mut frames_since_send = 0u32;
         loop {
             let frame_started = Instant::now();
+            frames_since_send += 1;
             if let Ok(position) = app.cursor_position() {
-                if last_position != Some((position.x, position.y)) {
+                if last_position != Some((position.x, position.y)) || frames_since_send >= 60 {
+                    frames_since_send = 0;
                     last_position = Some((position.x, position.y));
                     for (slot, screen) in screens.iter().enumerate() {
                         let inside = screen.contains(position.x, position.y);

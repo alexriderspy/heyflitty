@@ -11,7 +11,8 @@ use crate::audio::Recorder;
 use crate::capture::{self, ScreenCapture};
 use crate::openai::{self, ChatRequest, Exchange};
 use crate::overlay::{self, label_for, PointTarget, VoiceState};
-use crate::pointing::{self, SentenceSplitter};
+use crate::elements::{self, UiElement};
+use crate::pointing::{self, PointTarget as Target, SentenceSplitter};
 use crate::screens::{self, Screen};
 use crate::settings::{self, SettingsStore};
 use crate::{prompt, tray};
@@ -58,6 +59,11 @@ pub fn on_press(app: &AppHandle) {
     assistant.turn.fetch_add(1, Ordering::SeqCst);
     let _ = app.emit("stop-speech", ());
     overlay::set_voice_state(app, VoiceState::Listening);
+    // Chromium-based apps build their accessibility tree only once a UI Automation client
+    // asks; asking now means the full tree is ready by the time the hotkey is released.
+    std::thread::spawn(|| {
+        let _ = elements::focused_window_elements();
+    });
     if test_transcript().is_none() {
         if let Err(error) = assistant.recorder.start() {
             notify(app, &format!("I can't hear you: {error}"));
@@ -124,6 +130,14 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
 
     let screen_list = screens::all(app);
     let cursor_screen = screens::under_cursor(app, &screen_list).ok_or("I couldn't tell which screen the mouse is on")?;
+    // Read the controls first: the screenshot shows the same moment.
+    let ui_elements = tauri::async_runtime::spawn_blocking(elements::focused_window_elements)
+        .await
+        .map_err(|error| error.to_string())?
+        .unwrap_or_else(|error| {
+            eprintln!("[flitty] couldn't read UI elements: {error}");
+            Vec::new()
+        });
     let captures = tauri::async_runtime::spawn_blocking(capture::capture_all)
         .await
         .map_err(|error| error.to_string())??;
@@ -139,6 +153,13 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
             (*capture, format!("screen {} of {}{focus}, image is {}x{} pixels", position + 1, matched.len(), capture.image_width, capture.image_height))
         })
         .collect::<Vec<_>>();
+    let element_list = describe_elements(&ui_elements, &matched);
+    println!("[flitty] {} UI elements listed", ui_elements.len());
+    if cfg!(debug_assertions) {
+        if let Some(list) = &element_list {
+            println!("[flitty] {list}");
+        }
+    }
 
     let history: Vec<Exchange> = assistant
         .history
@@ -166,7 +187,7 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
     let reply = openai::stream_reply(
         &assistant.http,
         &api_key,
-        ChatRequest { model: &settings.chat_model, system_prompt: prompt::SYSTEM_PROMPT, history: &history, question: &question, screens: labeled, max_tokens: MAX_REPLY_TOKENS },
+        ChatRequest { model: &settings.chat_model, system_prompt: prompt::SYSTEM_PROMPT, history: &history, question: &question, screens: labeled, context: element_list, max_tokens: MAX_REPLY_TOKENS },
         |delta| {
             for sentence in splitter.push(delta) {
                 speak(sentence);
@@ -184,15 +205,32 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
 
     let (spoken, tag) = pointing::parse(&reply);
     if let Some(tag) = tag {
-        // No screen number means the cursor screen, per the prompt; an unknown number points nowhere.
-        let target = match tag.screen_number {
-            Some(number) => matched.get(number.wrapping_sub(1)),
-            None => matched.iter().find(|(_, screen)| screen.index == cursor_screen.index),
-        };
-        if let Some((capture, screen)) = target {
-            let x = (tag.x.clamp(0.0, capture.image_width as f64) / capture.image_width as f64) * screen.css_width();
-            let y = (tag.y.clamp(0.0, capture.image_height as f64) / capture.image_height as f64) * screen.css_height();
-            overlay::point_at(app, screen, PointTarget { x, y, label: tag.label });
+        match tag.target {
+            Target::Element(id) => match ui_elements.iter().find(|element| element.id == id) {
+                Some(element) => {
+                    let (center_x, center_y) = element.center();
+                    match screen_list.iter().find(|screen| screen.contains(center_x, center_y)) {
+                        Some(screen) => {
+                            let (x, y) = screen.to_local_css(center_x, center_y);
+                            overlay::point_at(app, screen, PointTarget { x, y, label: tag.label });
+                        }
+                        None => eprintln!("[flitty] element #{id} is not on any screen"),
+                    }
+                }
+                None => eprintln!("[flitty] model pointed at unknown element #{id}"),
+            },
+            Target::Pixels { x: image_x, y: image_y, screen_number } => {
+                // No screen number means the cursor screen, per the prompt; an unknown number points nowhere.
+                let target = match screen_number {
+                    Some(number) => matched.get(number.wrapping_sub(1)),
+                    None => matched.iter().find(|(_, screen)| screen.index == cursor_screen.index),
+                };
+                if let Some((capture, screen)) = target {
+                    let x = (image_x.clamp(0.0, capture.image_width as f64) / capture.image_width as f64) * screen.css_width();
+                    let y = (image_y.clamp(0.0, capture.image_height as f64) / capture.image_height as f64) * screen.css_height();
+                    overlay::point_at(app, screen, PointTarget { x, y, label: tag.label });
+                }
+            }
         }
     }
     if !started_speaking {
@@ -204,6 +242,21 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
     let overflow = history.len().saturating_sub(HISTORY_LIMIT);
     history.drain(..overflow);
     Ok(())
+}
+
+/// One line per element, with its center in the pixels of the screenshot it appears in.
+fn describe_elements(ui_elements: &[UiElement], matched: &[(&ScreenCapture, Screen)]) -> Option<String> {
+    let lines: Vec<String> = ui_elements
+        .iter()
+        .filter_map(|element| {
+            let (center_x, center_y) = element.center();
+            let (position, (capture, screen)) = matched.iter().enumerate().find(|(_, (_, screen))| screen.contains(center_x, center_y))?;
+            let image_x = (center_x - screen.x as f64) / screen.width as f64 * capture.image_width as f64;
+            let image_y = (center_y - screen.y as f64) / screen.height as f64 * capture.image_height as f64;
+            Some(format!("[#{}] {} \"{}\" at {},{} on screen {}", element.id, element.role, element.name, image_x.round(), image_y.round(), position + 1))
+        })
+        .collect();
+    (!lines.is_empty()).then(|| format!("clickable elements in the focused window:\n{}", lines.join("\n")))
 }
 
 /// xcap and Tauri list monitors independently; match them by origin.

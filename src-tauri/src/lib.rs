@@ -7,6 +7,7 @@ mod audio;
 mod capture;
 mod commands;
 mod cursor;
+mod elements;
 mod openai;
 mod overlay;
 mod pipeline;
