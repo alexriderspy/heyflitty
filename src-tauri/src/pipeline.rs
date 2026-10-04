@@ -138,8 +138,12 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
             eprintln!("[flitty] couldn't read UI elements: {error}");
             Vec::new()
         });
-    // Where the mouse is, so "what's this?" can mean the thing under the pointer.
+    // Where the mouse is and what it is over, so "what's this?" can mean the thing under the pointer.
     let mouse = app.cursor_position().ok();
+    let under_mouse = match mouse {
+        Some(point) => tauri::async_runtime::spawn_blocking(move || elements::element_under(point.x as i32, point.y as i32)).await.ok().flatten(),
+        None => None,
+    };
     let captures = tauri::async_runtime::spawn_blocking(capture::capture_all)
         .await
         .map_err(|error| error.to_string())??;
@@ -155,13 +159,19 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
                 Some(point) => {
                     let x = (point.x - screen.x as f64) / screen.width as f64 * capture.image_width as f64;
                     let y = (point.y - screen.y as f64) / screen.height as f64 * capture.image_height as f64;
-                    format!(" (cursor screen, mouse pointer at {},{})", x.round(), y.round())
+                    let over = under_mouse.as_ref().map(|element| format!(", over {element}")).unwrap_or_default();
+                    format!(" (cursor screen, mouse pointer at {},{}{over})", x.round(), y.round())
                 }
                 None => String::new(),
             };
             (*capture, format!("screen {} of {}{focus}, image is {}x{} pixels", position + 1, matched.len(), capture.image_width, capture.image_height))
         })
         .collect::<Vec<_>>();
+    if cfg!(debug_assertions) {
+        for (_, label) in &labeled {
+            println!("[flitty] {label}");
+        }
+    }
     let element_list = describe_elements(&ui_elements, &matched);
     println!("[flitty] {} UI elements listed", ui_elements.len());
     if cfg!(debug_assertions) {

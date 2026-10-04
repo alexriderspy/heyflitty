@@ -34,6 +34,8 @@ pub fn focused_window_elements() -> Result<Vec<UiElement>, String> {
     // SAFETY: plain Win32 call with no arguments.
     let foreground = unsafe { GetForegroundWindow() };
     let window = automation.element_from_handle(Handle::from(foreground)).map_err(|error| error.to_string())?;
+    // Browsers keep hidden bars just outside the window; only list controls inside it.
+    let frame = window.get_bounding_rectangle().map_err(|error| error.to_string())?;
 
     // Fetch name, type, bounds and visibility in one cross-process round trip.
     let cache = automation.create_cache_request().map_err(|error| error.to_string())?;
@@ -46,21 +48,7 @@ pub fn focused_window_elements() -> Result<Vec<UiElement>, String> {
     let mut elements = Vec::new();
     for node in nodes {
         let Ok(control_type) = node.get_cached_control_type() else { continue };
-        let role = match control_type {
-            ControlType::Button => "button",
-            ControlType::SplitButton => "button",
-            ControlType::MenuItem => "menu item",
-            ControlType::ListItem => "list item",
-            ControlType::TabItem => "tab",
-            ControlType::TreeItem => "tree item",
-            ControlType::Hyperlink => "link",
-            ControlType::CheckBox => "checkbox",
-            ControlType::RadioButton => "radio button",
-            ControlType::ComboBox => "dropdown",
-            ControlType::Edit => "text box",
-            ControlType::Slider => "slider",
-            _ => continue,
-        };
+        let Some(role) = clickable_role(control_type) else { continue };
         let offscreen = node
             .get_cached_property_value(UIProperty::IsOffscreen)
             .ok()
@@ -69,7 +57,8 @@ pub fn focused_window_elements() -> Result<Vec<UiElement>, String> {
         let name = node.get_cached_name().unwrap_or_default().trim().to_string();
         let Ok(bounds) = node.get_cached_bounding_rectangle() else { continue };
         let (left, top, right, bottom) = (bounds.get_left(), bounds.get_top(), bounds.get_right(), bounds.get_bottom());
-        if offscreen || name.is_empty() || right <= left || bottom <= top {
+        let outside = left < frame.get_left() || top < frame.get_top() || right > frame.get_right() || bottom > frame.get_bottom();
+        if offscreen || outside || name.is_empty() || right <= left || bottom <= top {
             continue;
         }
         elements.push(UiElement { id: elements.len() + 1, role, name: name.chars().take(80).collect(), left, top, right, bottom });
@@ -78,6 +67,44 @@ pub fn focused_window_elements() -> Result<Vec<UiElement>, String> {
         }
     }
     Ok(elements)
+}
+
+#[cfg(target_os = "windows")]
+fn clickable_role(control_type: uiautomation::types::ControlType) -> Option<&'static str> {
+    use uiautomation::types::ControlType;
+    Some(match control_type {
+        ControlType::Button | ControlType::SplitButton => "button",
+        ControlType::MenuItem => "menu item",
+        ControlType::ListItem => "list item",
+        ControlType::TabItem => "tab",
+        ControlType::TreeItem => "tree item",
+        ControlType::Hyperlink => "link",
+        ControlType::CheckBox => "checkbox",
+        ControlType::RadioButton => "radio button",
+        ControlType::ComboBox => "dropdown",
+        ControlType::Edit => "text box",
+        ControlType::Slider => "slider",
+        _ => return None,
+    })
+}
+
+/// What is directly under a screen point, like `button "Save"` or `image`, so "this" has a referent.
+#[cfg(target_os = "windows")]
+pub fn element_under(x: i32, y: i32) -> Option<String> {
+    use uiautomation::types::Point;
+    use uiautomation::UIAutomation;
+
+    let automation = UIAutomation::new().ok()?;
+    let node = automation.element_from_point(Point::new(x, y)).ok()?;
+    let control_type = node.get_control_type().ok()?;
+    let role = clickable_role(control_type).map(str::to_string).unwrap_or_else(|| format!("{control_type:?}").to_lowercase());
+    let name: String = node.get_name().unwrap_or_default().trim().chars().take(80).collect();
+    Some(if name.is_empty() { role } else { format!("{role} \"{name}\"") })
+}
+
+#[cfg(not(target_os = "windows"))]
+pub fn element_under(_x: i32, _y: i32) -> Option<String> {
+    None
 }
 
 /// UI Automation is Windows-only; elsewhere the model points by coordinates.
