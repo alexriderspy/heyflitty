@@ -3,269 +3,258 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>flitty — an ai buddy that shows you where to click</title>
-<meta name="description" content="hold a hotkey, ask out loud, and flitty answers in a voice and flies a little cursor to the exact button you need. free and open source for windows." />
-<meta property="og:title" content="flitty — an ai buddy that shows you where to click" />
-<meta property="og:description" content="ask out loud. flitty answers and points at the exact button. free, open source, windows." />
+<title>Flitty — the screen buddy that shows you where to click</title>
+<meta name="description" content="Hold a hotkey, ask out loud, and Flitty answers, captions it, and flies a little cursor to the exact button you need. Free and open source, built for Windows." />
+<meta property="og:title" content="Flitty — the screen buddy that shows you where to click" />
+<meta property="og:description" content="Ask out loud. Flitty answers and points at the exact button. Free, open source, built for Windows." />
+<meta property="og:image" content="demo-poster.jpg" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --ink: #0d0d0e;
-    --muted: #6a6d74;
-    --line: #e4e4e7;
-    --paper: #f6f6f4;
-    --card: #ffffff;
-    --accent: #3884ff;
-    --sticky: #fff3a6;
+    --cream: #f8f4ec;
+    --ink: #141210;
+    --muted: #6f6a62;
+    --line: #e4ddd0;
+    --card: #fffdf9;
+    --marker: #ffe066;
+    --night: #121214;
+    --night-card: #1c1c20;
+    --night-line: #2c2c32;
+    --blue: #3884ff;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    margin: 0; color: var(--ink); font: 16px/1.55 Inter, -apple-system, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased;
-    background-color: var(--paper);
-    background-image: radial-gradient(circle, #d4d4d1 1px, transparent 1.2px);
-    background-size: 26px 26px;
-  }
+  body { margin: 0; background: var(--cream); color: var(--ink); font: 17px/1.6 Geist, -apple-system, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: inherit; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  .serif { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; }
+  /* Hand-drawn-looking highlighter swipe behind a word. */
+  .marker { background: linear-gradient(176deg, transparent 38%, var(--marker) 39%, var(--marker) 88%, transparent 89%); padding: 0 0.08em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 
-  nav { position: sticky; top: 0; z-index: 10; background: rgba(246, 246, 244, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.04); }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .brand img { width: 30px; height: 30px; display: block; }
-  nav .right { display: flex; align-items: center; gap: 22px; font-size: 15px; }
-  nav .right a { text-decoration: none; color: var(--muted); }
-  nav .right a:hover { color: var(--ink); }
-  nav .right a.get { color: var(--ink); font-weight: 600; }
+  nav { padding: 22px 0; }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 26px; }
+  .brand img { width: 28px; height: 28px; }
+  nav .links { display: flex; align-items: center; gap: 26px; font-size: 15px; color: var(--muted); }
+  nav .links a { text-decoration: none; }
+  nav .links a:hover { color: var(--ink); }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; font-weight: 500; font-size: 16px; text-decoration: none; border: 1px solid var(--ink); transition: transform 0.15s ease; white-space: nowrap; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn svg { width: 17px; height: 17px; }
+  .btn.dark { background: var(--ink); color: var(--cream); }
+  .btn.small { padding: 8px 16px; font-size: 14px; }
 
-  /* Hero with scattered desktop objects. */
-  .hero { position: relative; text-align: center; padding: 96px 0 40px; }
-  .hero h1 { font-size: clamp(64px, 12vw, 128px); line-height: 0.95; letter-spacing: -0.055em; margin: 0 0 18px; font-weight: 600; }
-  .hero .tagline { font-size: clamp(19px, 2.4vw, 24px); margin: 0 0 36px; }
-  .pill { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-width: 280px; padding: 15px 28px; border-radius: 999px; font-size: 19px; font-weight: 500; text-decoration: none; transition: transform 0.15s ease; }
-  .pill:hover { transform: translateY(-1px); }
-  .pill svg { width: 20px; height: 20px; }
-  .pill.primary { background: linear-gradient(#26272b, #0d0d0e); color: white; box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 24px rgba(0,0,0,0.18); }
-  .pill.ghost { background: linear-gradient(#ffffff, #f0f0ef); border: 1px solid #d5d5d3; box-shadow: inset 0 1px 0 white, 0 6px 18px rgba(0,0,0,0.06); }
-  .stack { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-  .note { font-size: 14px; color: var(--muted); margin: -2px 0 6px; }
+  .hero { padding-top: 48px; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .badge b { background: var(--ink); color: var(--cream); font-weight: 500; padding: 2px 9px; border-radius: 999px; font-size: 12px; }
+  .hero h1 { font-size: clamp(54px, 8.5vw, 112px); line-height: 0.98; letter-spacing: -0.02em; margin: 22px 0 22px; max-width: 980px; }
+  .hero h1 em { font-style: italic; }
+  .hero .lead { font-size: clamp(18px, 2vw, 21px); color: var(--muted); max-width: 600px; margin: 0 0 30px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .cta .meta { font-size: 14px; color: var(--muted); margin-left: 6px; }
 
-  .object { position: absolute; pointer-events: none; animation: bob 6s ease-in-out infinite; }
-  .object.sticky { left: 3%; top: 70px; width: 150px; padding: 16px 14px 18px; background: var(--sticky); font: 600 22px/1.1 Caveat, cursive; transform: rotate(-6deg); box-shadow: 0 10px 24px rgba(0,0,0,0.1); text-align: left; }
-  .object.window { right: 2%; top: 92px; width: 168px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 12px 30px rgba(0,0,0,0.08); transform: rotate(5deg); animation-delay: -2s; overflow: hidden; }
-  .object.window .bar { height: 18px; background: #efefee; display: flex; gap: 4px; align-items: center; padding: 0 7px; }
-  .object.window .bar i { width: 6px; height: 6px; border-radius: 50%; background: #d0d0ce; }
-  .object.window .body { padding: 12px; display: grid; gap: 7px; }
-  .object.window .body span { height: 7px; border-radius: 4px; background: #ececeb; }
-  .object.window .body b { justify-self: end; font-size: 10px; padding: 3px 8px; border-radius: 5px; background: var(--ink); color: white; }
-  .object.badge { left: 9%; top: 290px; width: 78px; height: 78px; border-radius: 20px; background: white; border: 1px solid var(--line); display: grid; place-items: center; box-shadow: 0 10px 24px rgba(0,0,0,0.08); transform: rotate(8deg); animation-delay: -4s; }
-  .object.badge img { width: 50px; }
-  .object.keys { right: 7%; top: 300px; display: flex; gap: 6px; transform: rotate(-7deg); animation-delay: -1s; }
-  .object.keys kbd { font: 600 14px Inter, sans-serif; padding: 9px 12px; border-radius: 10px; background: white; border: 1px solid #d8d8d6; border-bottom-width: 4px; box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
-  @keyframes bob { 50% { translate: 0 -8px; } }
+  /* Real recording in a dark frame. */
+  .stage { margin-top: 64px; background: var(--night); border-radius: 28px; padding: 22px; box-shadow: 0 40px 100px rgba(20, 18, 16, 0.25); }
+  .stage .top { display: flex; align-items: center; gap: 8px; padding: 0 6px 16px; color: #8d8d96; font-size: 13px; }
+  .stage .top i { width: 10px; height: 10px; border-radius: 50%; background: #3a3a41; }
+  .stage .top span { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; }
+  .stage .top span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #ff5c5c; box-shadow: 0 0 0 4px rgba(255, 92, 92, 0.15); }
+  .stage video { width: 100%; display: block; border-radius: 14px; background: #000; }
+  .stage .say { display: flex; gap: 14px; flex-wrap: wrap; padding: 18px 6px 4px; color: #b8b8c0; font-size: 14px; }
+  .stage .say kbd { font: 500 12px Geist, sans-serif; color: #e8e8ee; padding: 3px 8px; border-radius: 6px; border: 1px solid #3a3a41; border-bottom-width: 2px; }
 
-  /* Demo window. */
-  .demo { margin: 72px auto 0; max-width: 860px; border-radius: 18px; border: 1px solid var(--line); background: var(--card); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1); overflow: hidden; }
-  .demo .bar { height: 38px; display: flex; align-items: center; gap: 7px; padding: 0 16px; border-bottom: 1px solid var(--line); }
-  .demo .bar i { width: 11px; height: 11px; border-radius: 50%; background: #dedede; }
-  .demo .bar em { margin-left: auto; margin-right: auto; font-style: normal; font-size: 12px; color: var(--muted); }
-  .demo .screen { position: relative; aspect-ratio: 16 / 9; }
-  .fake-toolbar { position: absolute; top: 6%; left: 5%; right: 5%; display: flex; gap: 2.5%; align-items: center; }
-  .fake-toolbar span { height: 12px; border-radius: 6px; background: #ececef; flex: 1; }
-  .fake-toolbar .target { flex: 0 0 auto; padding: 0.6em 1.1em; height: auto; border-radius: 0.6em; background: var(--ink); color: white; font-size: clamp(8px, 1.4vw, 13px); font-weight: 600; }
-  .fake-body { position: absolute; top: 22%; left: 5%; right: 5%; display: grid; gap: 14px; }
-  .fake-body span { height: 12px; border-radius: 6px; background: #f1f1f2; }
-  .fake-body span:nth-child(2) { width: 82%; } .fake-body span:nth-child(3) { width: 64%; } .fake-body span:nth-child(5) { width: 74%; }
-  .trail { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  .trail .buddy { fill: var(--accent); filter: drop-shadow(0 0 6px rgba(56, 132, 255, 0.7)); }
-  .trail .flight { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0.1 12; opacity: 0; animation: trail 7s ease-in-out infinite; }
-  .bubble { position: absolute; padding: 10px 14px; border-radius: 16px; font-size: 14px; max-width: 280px; opacity: 0; }
-  .bubble.ask { left: 30%; top: 66%; border-bottom-left-radius: 4px; background: white; border: 1px solid var(--line); box-shadow: 0 8px 22px rgba(0,0,0,0.08); animation: ask 7s ease infinite; }
-  .bubble.answer { right: 8%; top: 22%; border-top-right-radius: 4px; background: var(--ink); color: white; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18); animation: answer 7s ease infinite; }
-  .demo .keys { position: absolute; left: 5%; bottom: 7%; display: flex; gap: 6px; animation: keys 7s ease infinite; }
-  .demo .keys kbd { font: 600 12px Inter, sans-serif; padding: 6px 9px; border-radius: 7px; background: white; border: 1px solid var(--line); border-bottom-width: 3px; }
-  @keyframes trail { 0%, 30% { opacity: 0; } 40%, 80% { opacity: 0.55; } 90%, 100% { opacity: 0; } }
-  @keyframes ask { 0%, 4% { opacity: 0; transform: translateY(6px); } 10%, 44% { opacity: 1; transform: none; } 50%, 100% { opacity: 0; } }
-  @keyframes answer { 0%, 50% { opacity: 0; transform: translateY(6px); } 56%, 86% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; } }
-  @keyframes keys { 0%, 2% { opacity: 0; } 6%, 28% { opacity: 1; } 32%, 100% { opacity: 0; } }
-  .caption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
+  section { padding: 120px 0; }
+  .eyebrow { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h2.big { font-size: clamp(40px, 5.6vw, 72px); line-height: 1.02; letter-spacing: -0.015em; margin: 0 0 18px; max-width: 860px; }
 
-  /* Feature rows: text on one side, a small visual on the other. */
-  section { padding: 96px 0; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 56px 0; border-top: 1px dashed #cfcfcc; }
-  .row:first-child { border-top: 0; }
-  .row h2 { font-size: clamp(28px, 3.6vw, 40px); letter-spacing: -0.03em; margin: 0 0 10px; font-weight: 600; }
-  .row p { color: var(--muted); margin: 0; font-size: 17px; max-width: 420px; }
-  .visual { background: var(--card); border: 1px solid var(--line); border-radius: 18px; min-height: 220px; display: grid; place-items: center; box-shadow: 0 16px 40px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
-  .wave { display: flex; gap: 7px; align-items: center; height: 60px; }
-  .wave i { width: 8px; border-radius: 6px; background: var(--ink); animation: wave 1.1s ease-in-out infinite; }
-  .wave i:nth-child(odd) { animation-delay: -0.4s; } .wave i:nth-child(3n) { animation-delay: -0.8s; }
-  @keyframes wave { 0%, 100% { height: 10px; opacity: 0.35; } 50% { height: 56px; opacity: 1; } }
-  .apps { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 28px; }
-  .apps span { padding: 9px 14px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); font-size: 14px; }
-  .lock { display: grid; gap: 10px; padding: 28px; width: 100%; max-width: 340px; }
-  .lock div { display: flex; align-items: center; gap: 10px; font-size: 14px; padding: 10px 14px; border-radius: 12px; background: var(--paper); }
-  .lock div b { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: white; display: grid; place-items: center; font-size: 12px; }
-  .code { font: 13px/1.6 ui-monospace, "SF Mono", Menlo, monospace; text-align: left; padding: 24px 28px; width: 100%; color: #444; }
-  .code b { color: var(--ink); }
-  .code .comment { color: #999; }
+  /* Story cards in the style of a to-do list. */
+  .stories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
+  .story { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 16px; }
+  .story .who { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+  .story .who b { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); font-weight: 600; font-size: 13px; }
+  .story .ask { font-family: "Instrument Serif", Georgia, serif; font-size: 27px; line-height: 1.15; }
+  .story .reply { margin-top: auto; display: flex; gap: 10px; align-items: flex-start; font-size: 15px; background: var(--cream); border-radius: 14px; padding: 12px 14px; }
+  .story .reply img { width: 20px; margin-top: 2px; }
 
-  /* Maker's note, written like a letter. */
-  .letter { max-width: 620px; margin: 0 auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 40px 44px; box-shadow: 0 20px 50px rgba(0,0,0,0.06); font-size: 18px; line-height: 1.65; }
-  .letter .label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
-  .letter p { margin: 0 0 16px; }
-  .letter .sign { font: 600 30px Caveat, cursive; margin-top: 8px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 56px; }
+  .step .n { font-family: "Instrument Serif", Georgia, serif; font-size: 64px; line-height: 1; color: #c9bfae; }
+  .step h3 { font-size: 21px; margin: 10px 0 6px; font-weight: 600; }
+  .step p { margin: 0; color: var(--muted); font-size: 16px; }
+  kbd.k { font: 500 13px Geist, sans-serif; padding: 2px 8px; border-radius: 6px; background: var(--card); border: 1px solid var(--line); border-bottom-width: 2px; }
 
-  .section-title { text-align: center; margin: 0 0 40px; }
-  .section-title .label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .section-title h2 { font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.03em; margin: 8px 0 0; font-weight: 600; }
-  .faq { max-width: 720px; margin: 0 auto; }
-  details { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; margin-bottom: 10px; }
-  summary { cursor: pointer; font-weight: 500; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
-  summary::after { content: "+"; color: var(--muted); font-size: 22px; line-height: 1; }
-  details[open] summary::after { content: "–"; }
-  details p { color: var(--muted); margin: 10px 0 0; }
+  /* Dark section with a faint grid. */
+  .night { background-color: var(--night); color: #ececf1; background-image: linear-gradient(var(--night-line) 1px, transparent 1px), linear-gradient(90deg, var(--night-line) 1px, transparent 1px); background-size: 64px 64px; background-position: center top; }
+  .night .eyebrow { color: #8d8d96; }
+  .night .lead { color: #a3a3ad; max-width: 560px; margin: 0; font-size: 19px; }
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 56px; }
+  .card { background: rgba(28, 28, 32, 0.85); border: 1px solid var(--night-line); border-radius: 20px; padding: 28px; backdrop-filter: blur(6px); }
+  .card h3 { margin: 0 0 8px; font-size: 20px; font-weight: 600; }
+  .card p { margin: 0; color: #a3a3ad; font-size: 16px; }
+  .card .icon { width: 38px; height: 38px; border-radius: 10px; background: #2a2a31; display: grid; place-items: center; margin-bottom: 18px; color: #fff; font-size: 18px; }
 
-  .final { text-align: center; }
-  .final h2 { font-size: clamp(36px, 6vw, 64px); letter-spacing: -0.045em; margin: 0 0 28px; font-weight: 600; }
-  footer { padding: 40px 0 56px; color: var(--muted); font-size: 14px; }
-  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 28px; }
+  .note { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
+  .note .mascot { background: var(--card); border: 1px solid var(--line); border-radius: 28px; aspect-ratio: 1; display: grid; place-items: center; transform: rotate(-4deg); }
+  .note .mascot img { width: 60%; }
+  .note .letter { font-family: "Instrument Serif", Georgia, serif; font-size: clamp(26px, 3vw, 34px); line-height: 1.3; }
+  .note .letter p { margin: 0 0 18px; }
+  .note .sign { font-family: Geist, sans-serif; font-size: 15px; color: var(--muted); }
+
+  .faq { display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; }
+  details { border-top: 1px solid var(--line); padding: 20px 0; }
+  details:last-child { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 16px; font-size: 18px; font-weight: 500; }
+  summary::after { content: "+"; color: var(--muted); font-size: 24px; line-height: 1; transition: transform 0.2s; }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { color: var(--muted); margin: 10px 0 0; font-size: 16px; }
+
+  .final { text-align: center; padding: 140px 0 120px; }
+  .final h2 { font-size: clamp(48px, 7vw, 96px); line-height: 1; margin: 0 0 32px; letter-spacing: -0.02em; }
+  .final .cta { justify-content: center; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 48px; font-size: 14px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
-  footer .disclaimer { width: 100%; font-style: italic; }
 
-  @media (max-width: 860px) {
-    .object { display: none; }
-    .row { grid-template-columns: 1fr; gap: 24px; }
-    .row .visual { order: 2; }
-    nav .right a:not(.get) { display: none; }
-    .letter { padding: 30px 26px; font-size: 17px; }
-    .bubble { font-size: 12px; max-width: 200px; }
-    .bubble.answer { right: 4%; top: 30%; }
-    .bubble.ask { left: auto; right: 6%; top: 58%; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .object, .trail .flight, .bubble, .demo .keys, .wave i { animation: none; }
-    .bubble.answer, .trail .flight { opacity: 1; }
+  @media (max-width: 880px) {
+    nav .links a:not(.btn) { display: none; }
+    .stories, .steps, .cards, .faq, .note { grid-template-columns: 1fr; }
+    .note .mascot { width: 160px; }
+    section { padding: 84px 0; }
+    .stage { padding: 12px; border-radius: 20px; }
   }
 </style>
 </head>
 <body>
 <nav>
   <div class="wrap">
-    <a class="brand" href="#" aria-label="flitty home"><img src="logo.svg" alt="" /></a>
-    <div class="right">
-      <a href="#features">features</a>
-      <a href="#faq">faq</a>
-      <a href="https://github.com/alexriderspy/heyflitty">github</a>
-      <a class="get" href="https://github.com/alexriderspy/heyflitty/releases/latest">get flitty</a>
+    <a class="brand serif" href="#"><img src="logo.svg" alt="" />flitty</a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#private">Privacy</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/alexriderspy/heyflitty">GitHub</a>
+      <a class="btn small dark" href="https://github.com/alexriderspy/heyflitty/releases/latest">Download</a>
     </div>
   </div>
 </nav>
 
 <header class="hero wrap">
-  <div class="object sticky">where is the export button??</div>
-  <div class="object window"><div class="bar"><i></i><i></i><i></i></div><div class="body"><span></span><span></span><span></span><b>Export</b></div></div>
-  <div class="object badge"><img src="logo.svg" alt="" /></div>
-  <div class="object keys"><kbd>ctrl</kbd><kbd>alt</kbd><kbd>space</kbd></div>
-
-  <h1>flitty</h1>
-  <p class="tagline">an ai buddy that shows you exactly where to click</p>
-  <div class="stack">
-    <a class="pill primary" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/Flitty_0.1.0_x64-setup.exe">
+  <span class="badge"><b>Free</b> Built for Windows · works on macOS · open source</span>
+  <h1 class="serif">Ask out loud.<br />Flitty shows you<br /><em class="marker">exactly where.</em></h1>
+  <p class="lead">A tiny AI buddy that lives next to your cursor. Hold a hotkey, ask anything about what's on your screen, and it answers, captions the answer, and flies straight to the button you need.</p>
+  <div class="cta">
+    <a class="btn dark" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/Flitty_0.1.0_x64-setup.exe">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.4v7.1H3zm0 13 7.5 1.1v-7H3zm8.4 1.2L21 21V12.6h-9.6zm0-15.4v7.2H21V3z"/></svg>
-      download for windows
+      Download for Windows
     </a>
-    <p class="note">100% free and open source. windows 10 &amp; 11. bring your own openai key.</p>
-    <a class="pill ghost" href="https://github.com/alexriderspy/heyflitty">
+    <a class="btn" href="https://github.com/alexriderspy/heyflitty">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5Z"/></svg>
-      star on github
+      Star on GitHub
     </a>
+    <span class="meta">Windows 10 &amp; 11 · bring your own OpenAI key</span>
   </div>
 
-  <div class="demo" aria-label="animation: someone asks how to share a document and flitty's cursor flies to the share button">
-    <div class="bar"><i></i><i></i><i></i><em>any app on your screen</em></div>
-    <div class="screen">
-      <div class="fake-toolbar"><span></span><span></span><span></span><span></span><span class="target">Share</span></div>
-      <div class="fake-body"><span></span><span></span><span></span><span></span><span></span></div>
-      <svg class="trail" viewBox="0 0 880 495">
-        <path id="flight" class="flight" d="M 290 360 C 330 210, 580 140, 772 94" />
-        <!-- The buddy rides the same path, so it stays aligned at any size. -->
-        <path class="buddy" d="M0 -12 L9 10 L0 5 L-9 10 Z" transform="rotate(-35)">
-          <animateMotion dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.52;0.86;1" keyPoints="0;0;1;1;0" keySplines="0 0 1 1;0.45 0 0.25 1;0 0 1 1;0.45 0 0.25 1">
-            <mpath href="#flight" />
-          </animateMotion>
-        </path>
-      </svg>
-      <div class="keys"><kbd>Ctrl</kbd><kbd>Alt</kbd><kbd>Space</kbd></div>
-      <div class="bubble ask">"how do i share this with my team?"</div>
-      <div class="bubble answer">click share, top right, then add their emails.</div>
-    </div>
+  <div class="stage">
+    <div class="top"><i></i><i></i><i></i><span>real recording · Windows 11</span></div>
+    <video src="demo.mp4" poster="demo-poster.jpg" autoplay muted loop playsinline aria-label="Flitty answering 'where can I see the open issues?' on a GitHub page, captioning the answer and pointing at the Issues tab"></video>
+    <div class="say"><span>Asked:</span><span>"where can I see the open issues?"</span><span style="margin-left:auto">hold <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>Space</kbd>, ask, let go</span></div>
   </div>
-  <p class="caption">hold, ask, let go. that's it.</p>
 </header>
 
-<section id="features">
+<section>
   <div class="wrap">
-    <div class="row">
-      <div><h2>just say it out loud</h2><p>hold ctrl + alt + space and ask like you'd ask a friend sitting next to you. no typing, no pasting screenshots into a chat.</p></div>
-      <div class="visual"><div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <p class="eyebrow">For everyone who's ever hunted for a button</p>
+    <h2 class="big serif">It's always <span class="marker">one click away.</span> You just can't see it.</h2>
+    <div class="stories">
+      <div class="story">
+        <div class="who"><b style="background:#ffd9c2">P</b>Priya, finishing a report in Excel</div>
+        <div class="ask">"How do I freeze the top row?"</div>
+        <div class="reply"><img src="logo.svg" alt="" />Tells her it's under View, and flies to the View tab.</div>
+      </div>
+      <div class="story">
+        <div class="who"><b style="background:#d4e7ff">M</b>Marcus, on a brand new laptop</div>
+        <div class="ask">"Where do I change my display scaling?"</div>
+        <div class="reply"><img src="logo.svg" alt="" />Points at Display in Settings and explains the Scale dropdown.</div>
+      </div>
+      <div class="story">
+        <div class="who"><b style="background:#dff3d6">J</b>June, learning Figma</div>
+        <div class="ask">"How do I turn this into a component?"</div>
+        <div class="reply"><img src="logo.svg" alt="" />Talks her through it while pointing at the toolbar button.</div>
+      </div>
     </div>
-    <div class="row">
-      <div class="visual"><div class="apps"><span>excel</span><span>figma</span><span>premiere</span><span>windows settings</span><span>vs code</span><span>photoshop</span><span>notion</span><span>blender</span></div></div>
-      <div><h2>it points at the button</h2><p>flitty sees what you see. it answers out loud and flies a little cursor to the exact button or menu, on whichever screen it's on. works with any app, even full screen.</p></div>
+  </div>
+</section>
+
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2 class="big serif">Three seconds, no typing.</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Hold and ask</h3><p>Hold <kbd class="k">Ctrl</kbd> <kbd class="k">Alt</kbd> <kbd class="k">Space</kbd> anywhere and ask like you'd ask a friend sitting next to you.</p></div>
+      <div class="step"><div class="n">2</div><h3>Let go</h3><p>Flitty looks at your screen and starts answering out loud, with every sentence captioned next to the cursor.</p></div>
+      <div class="step"><div class="n">3</div><h3>Follow the cursor</h3><p>A little blue cursor flies to the exact control. On Windows it reads the real button positions, so it lands right on them.</p></div>
     </div>
-    <div class="row">
-      <div><h2>your key, your data</h2><p>no account, no subscription, no flitty server. flitty only listens while you hold the hotkey, and sends your question straight to openai with your own key.</p></div>
-      <div class="visual"><div class="lock"><div><b>1</b>you hold the hotkey</div><div><b>2</b>your pc talks to openai directly</div><div><b>3</b>nothing is saved</div></div></div>
-    </div>
-    <div class="row">
-      <div class="visual"><div class="code"><b>$</b> git clone github.com/alexriderspy/heyflitty<br /><b>$</b> npm install<br /><b>$</b> npm run tauri dev<br /><br /><span class="comment">// mit licensed. read it, fork it, make it yours.</span></div></div>
-      <div><h2>open source, all of it</h2><p>every line lives on github under the mit license. see exactly what it does with your screen, or build your own version.</p></div>
+  </div>
+</section>
+
+<section id="private" class="night">
+  <div class="wrap">
+    <p class="eyebrow">Private by design</p>
+    <h2 class="big serif">Your key. Your screen.<br />No middleman.</h2>
+    <p class="lead">Flitty has no servers and no accounts. It talks to OpenAI directly with your own key, and only when you ask.</p>
+    <div class="cards">
+      <div class="card"><div class="icon">⌨︎</div><h3>Only when you hold the hotkey</h3><p>It records while you hold the keys and takes one screenshot when you let go. Never in the background.</p></div>
+      <div class="card"><div class="icon">⇢</div><h3>Straight to OpenAI</h3><p>Your question, the screenshot and the names of the on-screen buttons go from your PC to OpenAI with your API key. You pay OpenAI directly, usually a fraction of a cent.</p></div>
+      <div class="card"><div class="icon">∅</div><h3>Nothing saved</h3><p>Recordings and screenshots are never written to disk. Your key stays in Windows Credential Manager.</p></div>
+      <div class="card"><div class="icon">{ }</div><h3>Open source</h3><p>Every line is on GitHub under the MIT license. Read exactly what it does, or build your own.</p></div>
     </div>
   </div>
 </section>
 
 <section>
-  <div class="wrap">
-    <div class="letter">
-      <div class="label">a note</div>
-      <p>software keeps getting more powerful and harder to find your way around. the answer is usually one button away, you just can't see it.</p>
-      <p>flitty is the friend who leans over and says "it's right there." free, open, and yours to change.</p>
-      <p>it's early. try it, break it, and tell me what you think on github.</p>
-      <div class="sign">sreemanti</div>
+  <div class="wrap note">
+    <div class="mascot"><img src="logo.svg" alt="the Flitty mark" /></div>
+    <div>
+      <p class="eyebrow">A note from the maker</p>
+      <div class="letter">
+        <p>Software keeps getting more powerful and harder to find your way around. The answer is usually one button away. You just can't see it.</p>
+        <p>Flitty is the friend who leans over and says <span class="marker">"it's right there."</span> Free, open, and yours to change.</p>
+      </div>
+      <div class="sign">Sreemanti · maker of Flitty</div>
     </div>
   </div>
 </section>
 
-<section id="faq">
-  <div class="wrap">
-    <div class="section-title"><div class="label">faq</div><h2>good questions</h2></div>
-    <div class="faq">
-      <details><summary>what is flitty?</summary><p>an ai buddy that lives next to your cursor on windows. hold the hotkey, ask anything about what's on your screen, and it answers out loud and points at the exact spot.</p></details>
-      <details><summary>is it free?</summary><p>flitty is free and open source. it uses your own openai api key, so you pay openai directly for what you use, usually a fraction of a cent per question.</p></details>
-      <details><summary>is it watching my screen all the time?</summary><p>no. it records only while you hold the hotkey and takes a screenshot only when you let go. recordings and screenshots are never saved, and there's no flitty server: they go straight from your pc to openai.</p></details>
-      <details><summary>which apps does it work with?</summary><p>anything on your screen. if you can see it, flitty can see it. no plugins needed.</p></details>
-      <details><summary>does it work on mac?</summary><p>windows comes first. a mac version is on the way.</p></details>
-      <details><summary>windows says "windows protected your pc"</summary><p>the installer isn't code-signed yet. click <strong>more info</strong>, then <strong>run anyway</strong>. you can read the source and build it yourself on github.</p></details>
-      <details><summary>how do i get an openai key?</summary><p>create one at <a href="https://platform.openai.com/api-keys">platform.openai.com/api-keys</a>, paste it into flitty's settings (click the tray icon), and press test key.</p></details>
+<section id="faq" style="padding-top:0">
+  <div class="wrap faq">
+    <div><p class="eyebrow">FAQ</p><h2 class="big serif">Good questions.</h2></div>
+    <div>
+      <details><summary>Is it free?</summary><p>Flitty is free and open source. It uses your own OpenAI API key, so you pay OpenAI directly for what you use, usually a fraction of a cent per question.</p></details>
+      <details><summary>Is it watching my screen all the time?</summary><p>No. It records only while you hold the hotkey and takes a screenshot only when you let go. Nothing is saved, and there's no Flitty server.</p></details>
+      <details><summary>Which apps does it work with?</summary><p>Anything on your screen. On Windows it also reads the names and positions of buttons and menus, so pointing is exact in most apps.</p></details>
+      <details><summary>Does it work on Mac?</summary><p>Yes, from source for now. Windows is the focus; a signed Mac download is coming.</p></details>
+      <details><summary>Windows says "Windows protected your PC"</summary><p>The installer isn't code-signed yet. Click More info, then Run anyway. You can read the source and build it yourself.</p></details>
+      <details><summary>How do I get an OpenAI key?</summary><p>Create one at <a href="https://platform.openai.com/api-keys">platform.openai.com/api-keys</a>, paste it into Flitty's settings (click the tray icon) and press Test key.</p></details>
     </div>
   </div>
 </section>
 
 <section class="final">
   <div class="wrap">
-    <h2>stop hunting for buttons.</h2>
-    <a class="pill primary" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/Flitty_0.1.0_x64-setup.exe">download for windows</a>
+    <h2 class="serif">Stop hunting<br />for <em class="marker">buttons.</em></h2>
+    <div class="cta">
+      <a class="btn dark" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/Flitty_0.1.0_x64-setup.exe">Download for Windows</a>
+      <a class="btn" href="https://github.com/alexriderspy/heyflitty/issues">Report an issue</a>
+    </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <span>© 2026 flitty · mit license</span>
-    <span><a href="https://github.com/alexriderspy/heyflitty">github</a> · <a href="https://github.com/alexriderspy/heyflitty/issues">feedback</a> · <a href="https://github.com/alexriderspy/heyflitty/releases/latest">arm64 build</a></span>
-    <span class="disclaimer">flitty only listens while you hold the hotkey. recordings and screenshots are never stored.</span>
+    <span>© 2026 Flitty · MIT license</span>
+    <span><a href="https://github.com/alexriderspy/heyflitty">GitHub</a> · <a href="https://github.com/alexriderspy/heyflitty/releases/latest">ARM64 build</a> · <a href="https://github.com/alexriderspy/heyflitty/blob/main/CONTRIBUTING.md">Contribute</a></span>
   </div>
 </footer>
 </body>

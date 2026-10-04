@@ -1,69 +1,75 @@
 <p align="center">
-  <img src="docs/logo.svg" width="96" height="96" alt="Flitty logo" />
+  <img src="docs/logo.svg" width="88" height="88" alt="Flitty logo" />
 </p>
 
 <h1 align="center">Flitty</h1>
 
 <p align="center">
-  <b>Your AI screen buddy that shows you exactly where to click.</b><br />
-  Hold a hotkey, ask out loud, and Flitty answers in a voice, shows the answer on screen,<br />and flies a little cursor to the exact button you need. Built for Windows, works on macOS.
+  <b>Ask out loud. Flitty shows you exactly where to click.</b><br />
+  A tiny AI buddy that lives next to your cursor: it answers in a voice, captions the answer,<br />and flies straight to the button you need. Built for Windows, works on macOS.
+</p>
+
+<p align="center">
+  <a href="https://github.com/alexriderspy/heyflitty/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/alexriderspy/heyflitty?label=download&color=111111" /></a>
+  <img alt="Platforms" src="https://img.shields.io/badge/platform-Windows%2010%20%7C%2011%20%7C%20macOS-111111" />
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-111111" /></a>
+  <a href="https://github.com/alexriderspy/heyflitty/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/alexriderspy/heyflitty?style=flat&color=111111" /></a>
 </p>
 
 <p align="center">
   <a href="https://github.com/alexriderspy/heyflitty/releases/latest"><b>Download for Windows</b></a> ·
-  <a href="#macos">macOS</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#privacy">Privacy</a> ·
   <a href="https://github.com/alexriderspy/heyflitty/issues/new/choose">Report an issue</a> ·
   <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
+<p align="center">
+  <img src="docs/demo.gif" width="860" alt="Flitty on Windows: asked 'where can I see the open issues?' on a GitHub page, it captions the answer and its cursor flies to the Issues tab" />
+  <br /><sub>Real recording on Windows 11. Asked: <i>"where can I see the open issues?"</i></sub>
+</p>
+
 ---
-
-## What it does
-
-1. **Hold `Ctrl` + `Alt` + `Space`** anywhere and ask a question out loud, like "where do I turn on dark mode?"
-2. **Let go.** Flitty looks at your screen and answers in a voice.
-3. **It points.** A small cursor flies across your screen to the exact button or menu it's talking about.
-
-It works over any app, including full-screen ones, and never gets in the way: clicks and typing pass straight through. Everything it says is also captioned next to the cursor.
 
 ## Why Flitty
 
-Flitty is inspired by HeyClicky, which showed how good an AI buddy on your screen can feel, but it's Mac-only and closed. Flitty brings the idea to Windows:
+Flitty is inspired by HeyClicky, which showed how good an AI buddy on your screen can feel. HeyClicky is Mac-only and closed; Flitty brings the idea to Windows and keeps it open.
 
-- **Windows first.** Windows 10 and 11, x64 and ARM64. macOS works too.
-- **Free and open source.** MIT licensed. No account, no subscription.
-- **Your key, your data.** Uses your own OpenAI API key, talking to OpenAI directly. There's no Flitty server.
-
-## Requirements
-
-- Windows 10 or 11 (x64 or ARM64), or macOS 14.2+ (see [macOS](#macos)).
-- An [OpenAI API key](https://platform.openai.com/api-keys). You pay OpenAI directly for what you use.
-- A microphone.
+| | |
+|---|---|
+| 🪟 **Windows first** | Windows 10 and 11, x64 and ARM64. macOS works too. |
+| 🎯 **Points at the real button** | On Windows it reads the names and positions of on-screen controls through UI Automation, so the cursor lands exactly on them. |
+| 💬 **Talks and captions** | Answers out loud with your system voice, with every sentence captioned next to the cursor. |
+| 🔒 **Your key, your data** | No account, no subscription, no Flitty server. It talks to OpenAI directly with your own key. |
+| 🧩 **Open source** | MIT licensed. Read it, fork it, make it yours. |
 
 ## Install
 
 1. Download `Flitty_<version>_x64-setup.exe` from the [latest release](https://github.com/alexriderspy/heyflitty/releases/latest) (`arm64` for Snapdragon laptops).
-2. Run it. It installs for your user account only, no admin rights needed.
-3. Click the Flitty icon in the system tray, open **Settings**, paste your OpenAI key and press **Test key**.
+2. Run it. It installs for your user only, no admin rights needed.
+3. Click the Flitty icon in the system tray → **Settings** → paste your [OpenAI API key](https://platform.openai.com/api-keys) → **Test key**.
 
-The installer isn't code-signed yet, so Windows may show "Windows protected your PC". Click **More info → Run anyway**.
+> [!NOTE]
+> The installer isn't code-signed yet, so Windows may show "Windows protected your PC". Click **More info → Run anyway**.
 
-### macOS
+<details>
+<summary><b>macOS</b></summary>
 
-Flitty runs on macOS too. There's no signed Mac download yet, so for now run it from source (see [Build from source](#build-from-source)). The first time, macOS asks for Microphone and Screen Recording permission.
+There's no signed Mac download yet, so run it from source (see [Build from source](#build-from-source)). The first time, macOS asks for Microphone and Screen Recording permission.
+</details>
 
 ## How it works
 
-- While you hold the hotkey, Flitty records your microphone.
-- When you let go, it sends the recording to OpenAI for transcription, takes a screenshot of your displays, and sends your question and the screenshot to an OpenAI model.
-- The reply streams back and is spoken sentence by sentence with your system's built-in voice.
-- If the answer is about something on screen, the model includes its coordinates and Flitty's cursor flies there.
+1. **Hold <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>** and ask a question out loud. Flitty records only while you hold the keys.
+2. **Let go.** It transcribes your question, takes a screenshot, and on Windows reads the clickable controls in the focused window.
+3. **It answers.** An OpenAI model replies; Flitty speaks and captions it sentence by sentence as it streams in.
+4. **It points.** The model names the control it means, and Flitty's cursor flies to that control's real position. For things that aren't standard controls (a canvas, a game), it points by screen coordinates instead.
 
 ## Privacy
 
-- Flitty only records while you **hold the hotkey**, and takes a screenshot only when you **let go** of it.
-- Audio and screenshots go **straight from your computer to OpenAI** using your own key. There is no Flitty server.
-- Recordings and screenshots are never saved to disk. Your API key is kept in Windows Credential Manager (Keychain on macOS).
+- Flitty only records while you **hold the hotkey**, and takes a screenshot only when you **let go**.
+- Audio, the screenshot and the list of on-screen controls go **straight from your computer to OpenAI** using your key. There is no Flitty server.
+- Recordings and screenshots are never saved to disk. Your API key is stored in Windows Credential Manager (Keychain on macOS).
 
 ## Build from source
 
@@ -80,8 +86,8 @@ Build the Windows installer with `npm run tauri build -- --bundles nsis`.
 
 ## Report issues and contribute
 
-- **Found a bug?** [Open an issue](https://github.com/alexriderspy/heyflitty/issues/new/choose). Include your Windows version and what Flitty said next to the cursor.
-- **Have an idea?** Open a feature request, or just send a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build and test.
+- **Found a bug?** [Open an issue](https://github.com/alexriderspy/heyflitty/issues/new/choose) with your Windows version and the message Flitty showed next to the cursor.
+- **Have an idea?** Open a feature request, or send a pull request. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to build and test, including a mock OpenAI server so you don't need a key.
 
 Contributions require agreeing to the [CLA](CLA.md).
 
@@ -89,4 +95,4 @@ Contributions require agreeing to the [CLA](CLA.md).
 
 MIT. See [LICENSE](LICENSE).
 
-Flitty's system prompt is adapted from [Clicky](https://github.com/farzaa/clicky) (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Licenses of all bundled dependencies are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt), regenerated with `scripts/generate-licenses.sh` and shipped with the installer.
+Flitty's system prompt is adapted from [Clicky](https://github.com/farzaa/clicky) (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Licenses of all bundled dependencies are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt), shipped with the installer.
