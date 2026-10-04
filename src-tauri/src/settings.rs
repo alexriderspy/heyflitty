@@ -75,7 +75,7 @@ pub fn read_key() -> Option<String> {
     // set but empty means "no key".
     if cfg!(debug_assertions) {
         if let Ok(test_key) = std::env::var("FLITTY_TEST_API_KEY") {
-            return (!test_key.is_empty()).then_some(test_key);
+            return (!test_key.trim().is_empty()).then_some(test_key);
         }
     }
     entry().ok()?.get_password().ok().filter(|key| !key.is_empty())
