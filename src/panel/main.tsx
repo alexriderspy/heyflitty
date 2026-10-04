@@ -6,10 +6,20 @@ import "./panel.css";
 type ChatApi = "anthropic" | "open-ai-compatible";
 type Settings = {
   chat: { api: ChatApi; baseUrl: string; model: string };
-  transcription: { baseUrl: string; model: string };
+  transcription: { baseUrl: string; model: string; language: string };
   voice: { voiceName: string; muted: boolean };
 };
 type SettingsView = { settings: Settings; hasChatKey: boolean; hasTranscriptionKey: boolean };
+type KeyCheck = { ok: boolean; message: string };
+
+/** Catches the common mix-up of pasting one provider's key into another's field. */
+function keyShapeWarning(baseUrl: string, key: string): string {
+  if (!key) return "";
+  const isAnthropicKey = key.startsWith("sk-ant-");
+  if (baseUrl.includes("anthropic.com") && !isAnthropicKey) return "This doesn't look like an Anthropic key (they start with sk-ant-).";
+  if (!baseUrl.includes("anthropic.com") && isAnthropicKey) return "This is an Anthropic key, but this provider isn't Anthropic.";
+  return "";
+}
 
 const CHAT_PRESETS: { name: string; api: ChatApi; baseUrl: string; model: string }[] = [
   { name: "Anthropic", api: "anthropic", baseUrl: "https://api.anthropic.com", model: "claude-sonnet-5-5" },
@@ -44,6 +54,8 @@ function Panel() {
   const [chatKey, setChatKey] = useState("");
   const [transcriptionKey, setTranscriptionKey] = useState("");
   const [status, setStatus] = useState("");
+  const [checks, setChecks] = useState<{ chat: KeyCheck; transcription: KeyCheck } | null>(null);
+  const [testing, setTesting] = useState(false);
   const voices = useSystemVoices();
 
   useEffect(() => {
@@ -70,6 +82,20 @@ function Panel() {
       setStatus(`Couldn't save: ${error}`);
     }
   }
+
+  async function testKeys() {
+    setTesting(true);
+    setChecks(null);
+    try {
+      await save();
+      setChecks(await invoke<{ chat: KeyCheck; transcription: KeyCheck }>("test_keys"));
+    } finally {
+      setTesting(false);
+    }
+  }
+
+  const chatWarning = keyShapeWarning(draft.chat.baseUrl, chatKey);
+  const transcriptionWarning = keyShapeWarning(draft.transcription.baseUrl, transcriptionKey);
 
   function previewVoice() {
     speechSynthesis.cancel();
@@ -120,6 +146,8 @@ function Panel() {
           API key
           <input type="password" autoComplete="off" value={chatKey} placeholder={view.hasChatKey ? "Saved. Type to replace." : "Paste your key"} onChange={(event) => setChatKey(event.target.value)} />
         </label>
+        {chatWarning && <p className="warning">{chatWarning}</p>}
+        {checks && <p className={checks.chat.ok ? "check ok" : "check bad"}>{checks.chat.ok ? "✓" : "✗"} {checks.chat.message}</p>}
       </section>
 
       <section>
@@ -130,7 +158,7 @@ function Panel() {
             value={presetName(TRANSCRIPTION_PRESETS, draft.transcription.baseUrl)}
             onChange={(event) => {
               const preset = TRANSCRIPTION_PRESETS.find((candidate) => candidate.name === event.target.value);
-              if (preset) update((settings) => ({ ...settings, transcription: { baseUrl: preset.baseUrl, model: preset.model } }));
+              if (preset) update((settings) => ({ ...settings, transcription: { ...settings.transcription, baseUrl: preset.baseUrl, model: preset.model } }));
             }}
           >
             {TRANSCRIPTION_PRESETS.map((preset) => <option key={preset.name}>{preset.name}</option>)}
@@ -147,8 +175,18 @@ function Panel() {
             type="password"
             autoComplete="off"
             value={transcriptionKey}
-            placeholder={view.hasTranscriptionKey ? "Saved. Type to replace." : "Optional: uses the AI model key if empty"}
+            placeholder={view.hasTranscriptionKey ? "Saved. Type to replace." : "Needed unless it's the same provider as the AI model"}
             onChange={(event) => setTranscriptionKey(event.target.value)}
+          />
+        </label>
+        {transcriptionWarning && <p className="warning">{transcriptionWarning}</p>}
+        {checks && <p className={checks.transcription.ok ? "check ok" : "check bad"}>{checks.transcription.ok ? "✓" : "✗"} {checks.transcription.message}</p>}
+        <label>
+          Language
+          <input
+            value={draft.transcription.language}
+            placeholder="Blank to auto-detect"
+            onChange={(event) => update((settings) => ({ ...settings, transcription: { ...settings.transcription, language: event.target.value } }))}
           />
         </label>
       </section>
@@ -173,6 +211,7 @@ function Panel() {
 
       <footer>
         <span className="status">{status}</span>
+        <button className="secondary" onClick={testKeys} disabled={testing}>{testing ? "Testing…" : "Test keys"}</button>
         <button onClick={save}>Save</button>
       </footer>
     </main>

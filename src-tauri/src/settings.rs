@@ -40,11 +40,13 @@ impl Default for ChatSettings {
 pub struct TranscriptionSettings {
     pub base_url: String,
     pub model: String,
+    /// ISO-639-1 code like "en"; empty lets the service guess, which mishears short phrases.
+    pub language: String,
 }
 
 impl Default for TranscriptionSettings {
     fn default() -> Self {
-        Self { base_url: "https://api.openai.com/v1".into(), model: "gpt-4o-mini-transcribe".into() }
+        Self { base_url: "https://api.openai.com/v1".into(), model: "gpt-4o-mini-transcribe".into(), language: "en".into() }
     }
 }
 
@@ -135,7 +137,15 @@ pub fn write_key(kind: KeyKind, key: &str) -> Result<(), String> {
     }
 }
 
-/// The transcription key falls back to the chat key, so one OpenAI key covers both.
-pub fn transcription_key() -> Option<String> {
-    read_key(KeyKind::Transcription).or_else(|| read_key(KeyKind::Chat))
+/// The transcription key falls back to the chat key only when both point at the
+/// same provider, so one OpenAI key covers both but an Anthropic key is never sent to OpenAI.
+pub fn transcription_key(settings: &Settings) -> Option<String> {
+    read_key(KeyKind::Transcription).or_else(|| {
+        let same_host = host_of(&settings.chat.base_url) == host_of(&settings.transcription.base_url);
+        if same_host { read_key(KeyKind::Chat) } else { None }
+    })
+}
+
+pub fn host_of(url: &str) -> String {
+    url.split("://").nth(1).unwrap_or(url).split(['/', ':']).next().unwrap_or("").to_lowercase()
 }

@@ -72,6 +72,9 @@ pub fn on_release(app: &AppHandle) {
     tauri::async_runtime::spawn(async move {
         if let Err(error) = run_turn(&app, turn).await {
             if is_current(&app, turn) {
+                if crate::errors::points_to_settings(&error) {
+                    tray::open_settings(&app);
+                }
                 notify(&app, &error);
             }
         }
@@ -102,10 +105,10 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
                 Err(error) => return Err(format!("recording failed: {error}")),
             };
             overlay::set_voice_state(app, VoiceState::Processing);
-            let key = settings::transcription_key();
+            let key = settings::transcription_key(&settings);
             if key.is_none() && needs_key(&settings.transcription.base_url) {
                 tray::open_settings(app);
-                return Err("add an OpenAI key in settings so I can understand speech".into());
+                return Err(format!("add a {} key under Speech to text so I can understand you", crate::errors::provider_name(&settings.transcription.base_url)));
             }
             let text = transcribe::transcribe(&assistant.http, &settings.transcription, key.as_deref(), recording.wav).await?;
             println!("[flitty] heard ({:.1}s audio) in {:?}: {text}", recording.seconds, started.elapsed());
@@ -121,7 +124,7 @@ async fn run_turn(app: &AppHandle, turn: u64) -> Result<(), String> {
     let chat_key = settings::read_key(KeyKind::Chat);
     if chat_key.is_none() && needs_key(&settings.chat.base_url) {
         tray::open_settings(app);
-        return Err("add your AI provider key in settings first".into());
+        return Err(format!("add your {} key under AI model first", crate::errors::provider_name(&settings.chat.base_url)));
     }
 
     let screen_list = screens::all(app);
@@ -222,7 +225,7 @@ fn match_screen(capture: &ScreenCapture, screen_list: &[Screen]) -> Option<Scree
 }
 
 /// Hosted providers always need a key; self-hosted endpoints (Ollama, LM Studio) usually don't.
-fn needs_key(base_url: &str) -> bool {
+pub fn needs_key(base_url: &str) -> bool {
     ["anthropic.com", "openai.com", "openrouter.ai", "googleapis.com", "groq.com", "x.ai", "mistral.ai"]
         .iter()
         .any(|host| base_url.contains(host))

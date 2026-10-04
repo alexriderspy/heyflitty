@@ -28,3 +28,8 @@ footer { display: flex; justify-content: flex-end; align-items: center; gap: 12p
 .status { color: var(--muted); margin-right: auto; }
 button { font: inherit; font-weight: 600; border: 0; border-radius: 6px; padding: 7px 16px; background: var(--accent); color: white; cursor: pointer; }
 button.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); padding: 5px 12px; }
+.warning, .check { margin: -2px 0 0 120px; font-size: 12px; }
+.warning { color: #b7791f; }
+.check.ok { color: #2f855a; }
+.check.bad { color: #c53030; }
+button:disabled { opacity: 0.6; cursor: default; }

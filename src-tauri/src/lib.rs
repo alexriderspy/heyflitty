@@ -8,6 +8,7 @@ mod capture;
 mod chat;
 mod commands;
 mod cursor;
+mod errors;
 mod overlay;
 mod pipeline;
 mod platform;
@@ -44,7 +45,7 @@ pub fn run() {
                 })
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![commands::get_settings, commands::save_settings])
+        .invoke_handler(tauri::generate_handler![commands::get_settings, commands::save_settings, commands::test_keys])
         .setup(move |app| {
             // Lives in the menu bar: no Dock icon, never takes activation from other apps.
             #[cfg(target_os = "macos")]

@@ -42,11 +42,11 @@ pub async fn stream_reply(
             ChatApi::OpenAiCompatible => http.bearer_auth(key),
         };
     }
-    let response = http.send().await.map_err(|error| format!("model request failed: {error}"))?;
+    let response = http.send().await.map_err(|error| crate::errors::network("AI model", &settings.base_url, &error))?;
     let status = response.status();
     if !status.is_success() {
-        let text = response.text().await.unwrap_or_default();
-        return Err(format!("model error ({status}): {}", text.chars().take(300).collect::<String>()));
+        let body = response.text().await.unwrap_or_default();
+        return Err(crate::errors::http("AI model", &settings.base_url, status, &body));
     }
 
     let mut full_text = String::new();
