@@ -18,3 +18,9 @@ launch-film/.hyperframes/
 launch-film/.thumbnails/
 launch-film/.media/
 marketing-video/voice-samples/
+explainer/node_modules/
+explainer/renders/
+explainer/snapshots/
+explainer/.hyperframes/
+explainer/.thumbnails/
+explainer/.media/

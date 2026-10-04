@@ -1,0 +1,44 @@
+[
+  {
+    "id": "w0",
+    "text": "All",
+    "start": 0.299,
+    "end": 0.427
+  },
+  {
+    "id": "w1",
+    "text": "three",
+    "start": 0.512,
+    "end": 0.683
+  },
+  {
+    "id": "w2",
+    "text": "go",
+    "start": 0.811,
+    "end": 0.939
+  },
+  {
+    "id": "w3",
+    "text": "to",
+    "start": 0.981,
+    "end": 1.024
+  },
+  {
+    "id": "w4",
+    "text": "the",
+    "start": 1.067,
+    "end": 1.152
+  },
+  {
+    "id": "w5",
+    "text": "AI",
+    "start": 1.195,
+    "end": 1.408
+  },
+  {
+    "id": "w6",
+    "text": "model.",
+    "start": 1.451,
+    "end": 1.798
+  }
+]

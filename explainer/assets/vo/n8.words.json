@@ -1,0 +1,50 @@
+[
+  {
+    "id": "w0",
+    "text": "Then",
+    "start": 0.341,
+    "end": 0.469
+  },
+  {
+    "id": "w1",
+    "text": "it",
+    "start": 0.512,
+    "end": 0.597
+  },
+  {
+    "id": "w2",
+    "text": "flies",
+    "start": 0.64,
+    "end": 0.896
+  },
+  {
+    "id": "w3",
+    "text": "there,",
+    "start": 1.067,
+    "end": 1.536
+  },
+  {
+    "id": "w4",
+    "text": "along",
+    "start": 1.835,
+    "end": 1.963
+  },
+  {
+    "id": "w5",
+    "text": "a",
+    "start": 2.005,
+    "end": 2.048
+  },
+  {
+    "id": "w6",
+    "text": "smooth",
+    "start": 2.091,
+    "end": 2.432
+  },
+  {
+    "id": "w7",
+    "text": "curve.",
+    "start": 2.645,
+    "end": 3.094
+  }
+]

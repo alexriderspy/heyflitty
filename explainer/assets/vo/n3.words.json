@@ -1,0 +1,50 @@
+[
+  {
+    "id": "w0",
+    "text": "When",
+    "start": 0.299,
+    "end": 0.4267
+  },
+  {
+    "id": "w1",
+    "text": "you",
+    "start": 0.469,
+    "end": 0.5547
+  },
+  {
+    "id": "w2",
+    "text": "let",
+    "start": 0.597,
+    "end": 0.725
+  },
+  {
+    "id": "w3",
+    "text": "go,",
+    "start": 0.768,
+    "end": 1.173
+  },
+  {
+    "id": "w4",
+    "text": "it",
+    "start": 1.408,
+    "end": 1.664
+  },
+  {
+    "id": "w5",
+    "text": "takes",
+    "start": 1.707,
+    "end": 1.92
+  },
+  {
+    "id": "w6",
+    "text": "a",
+    "start": 2.048,
+    "end": 2.0907
+  },
+  {
+    "id": "w7",
+    "text": "screenshot,",
+    "start": 2.133,
+    "end": 2.745986394557823
+  }
+]

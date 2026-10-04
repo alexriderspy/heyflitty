@@ -1,0 +1,50 @@
+[
+  {
+    "id": "w0",
+    "text": "How",
+    "start": 0.299,
+    "end": 0.469
+  },
+  {
+    "id": "w1",
+    "text": "does",
+    "start": 0.512,
+    "end": 0.64
+  },
+  {
+    "id": "w2",
+    "text": "Flitty",
+    "start": 0.683,
+    "end": 0.9387
+  },
+  {
+    "id": "w3",
+    "text": "know",
+    "start": 1.067,
+    "end": 1.1947
+  },
+  {
+    "id": "w4",
+    "text": "exactly",
+    "start": 1.323,
+    "end": 1.621
+  },
+  {
+    "id": "w5",
+    "text": "where",
+    "start": 1.835,
+    "end": 1.9627
+  },
+  {
+    "id": "w6",
+    "text": "to",
+    "start": 2.005,
+    "end": 2.133
+  },
+  {
+    "id": "w7",
+    "text": "point?",
+    "start": 2.133,
+    "end": 2.4905668934240364
+  }
+]

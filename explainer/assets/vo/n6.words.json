@@ -1,0 +1,92 @@
+[
+  {
+    "id": "w0",
+    "text": "It",
+    "start": 0.299,
+    "end": 0.4267
+  },
+  {
+    "id": "w1",
+    "text": "answers",
+    "start": 0.469,
+    "end": 0.768
+  },
+  {
+    "id": "w2",
+    "text": "in",
+    "start": 0.811,
+    "end": 0.896
+  },
+  {
+    "id": "w3",
+    "text": "plain",
+    "start": 0.939,
+    "end": 1.152
+  },
+  {
+    "id": "w4",
+    "text": "words,",
+    "start": 1.28,
+    "end": 1.707
+  },
+  {
+    "id": "w5",
+    "text": "and",
+    "start": 1.92,
+    "end": 2.176
+  },
+  {
+    "id": "w6",
+    "text": "ends",
+    "start": 2.219,
+    "end": 2.389
+  },
+  {
+    "id": "w7",
+    "text": "with",
+    "start": 2.517,
+    "end": 2.603
+  },
+  {
+    "id": "w8",
+    "text": "a",
+    "start": 2.645,
+    "end": 2.688
+  },
+  {
+    "id": "w9",
+    "text": "short",
+    "start": 2.731,
+    "end": 2.944
+  },
+  {
+    "id": "w10",
+    "text": "tag",
+    "start": 3.029,
+    "end": 3.285
+  },
+  {
+    "id": "w11",
+    "text": "that",
+    "start": 3.413,
+    "end": 3.4987
+  },
+  {
+    "id": "w12",
+    "text": "names",
+    "start": 3.541,
+    "end": 3.712
+  },
+  {
+    "id": "w13",
+    "text": "one",
+    "start": 3.883,
+    "end": 4.096
+  },
+  {
+    "id": "w14",
+    "text": "button.",
+    "start": 4.181,
+    "end": 4.615
+  }
+]
