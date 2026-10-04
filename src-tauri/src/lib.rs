@@ -59,6 +59,10 @@ pub fn run() {
             overlay::start_topmost_guard(handle.clone(), screen_list.clone());
             cursor::start_stream(handle.clone(), screen_list);
             tray::install(&handle)?;
+            // Flitty has no window, so a first launch without a key would look like nothing happened.
+            if settings::read_key().is_none() {
+                tray::open_settings(&handle);
+            }
             handle.global_shortcut().register(push_to_talk)?;
             Ok(())
         })
