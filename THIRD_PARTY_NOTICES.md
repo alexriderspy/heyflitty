@@ -2,7 +2,7 @@
 
 ## Clicky
 
-Flitty's system prompt (`src-tauri/src/prompt.rs`), including its voice style rules and the `[POINT:x,y:label:screenN]` pointing protocol, is adapted from Clicky: https://github.com/farzaa/clicky
+HeyFlitty's system prompt (`src-tauri/src/prompt.rs`), including its voice style rules and the `[POINT:x,y:label:screenN]` pointing protocol, is adapted from Clicky: https://github.com/farzaa/clicky
 
 ```
 MIT License
@@ -30,4 +30,4 @@ SOFTWARE.
 
 ## Bundled dependencies
 
-The licenses of every Rust crate and npm package bundled in Flitty are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt).
+The licenses of every Rust crate and npm package bundled in HeyFlitty are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt).

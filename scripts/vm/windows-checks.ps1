@@ -1,4 +1,4 @@
-# Automated Windows checks for Flitty. Run in the interactive session while Flitty is running.
+# Automated Windows checks for HeyFlitty. Run in the interactive session while HeyFlitty is running.
 # Prints one RESULT line per check and SHOT lines (name + base64 PNG) for visual review.
 Add-Type -AssemblyName System.Windows.Forms, System.Drawing
 Add-Type @'
@@ -42,7 +42,7 @@ function Shot($name) {
   $ms = New-Object IO.MemoryStream; $small.Save($ms, [Drawing.Imaging.ImageFormat]::Png)
   [void]$shots.Add("SHOT $name " + [Convert]::ToBase64String($ms.ToArray()))
 }
-function FlittyWindows {
+function HeyFlittyWindows {
   $ids = @(Get-Process flitty -ErrorAction SilentlyContinue | ForEach-Object Id)
   $found = New-Object System.Collections.ArrayList
   [Win]::EnumWindows({ param($h, $l) $p = 0; [Win]::GetWindowThreadProcessId($h, [ref]$p) | Out-Null
@@ -54,7 +54,7 @@ $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
 # 1. Process and overlay window flags.
 $proc = Get-Process flitty -ErrorAction SilentlyContinue
 Result 'process-running' ($null -ne $proc) "pid=$($proc.Id)"
-$overlay = FlittyWindows | Where-Object { (TitleOf $_) -eq 'Flitty overlay' } | Select-Object -First 1
+$overlay = HeyFlittyWindows | Where-Object { (TitleOf $_) -eq 'HeyFlitty overlay' } | Select-Object -First 1
 if ($overlay) {
   $ex = [Win]::GetWindowLongPtrW($overlay, -20); $r = New-Object Win+RECT; [Win]::GetWindowRect($overlay, [ref]$r) | Out-Null
   $flags = @{ TOPMOST = 0x8; TRANSPARENT = 0x20; TOOLWINDOW = 0x80; LAYERED = 0x80000; NOACTIVATE = 0x08000000 }
@@ -62,7 +62,7 @@ if ($overlay) {
   Result 'overlay-exstyle' ($missing.Count -eq 0) ("exstyle=0x{0:X} missing={1}" -f $ex, ($missing -join ','))
   $covers = $r.L -le $screen.Left -and $r.T -le $screen.Top -and $r.R -ge $screen.Right -and $r.B -ge $screen.Bottom
   Result 'overlay-covers-screen' $covers "rect=($($r.L),$($r.T),$($r.R),$($r.B)) screen=$($screen.Width)x$($screen.Height)"
-} else { Result 'overlay-exists' $false 'no visible window titled Flitty overlay' }
+} else { Result 'overlay-exists' $false 'no visible window titled HeyFlitty overlay' }
 
 # 2. Click-through: hit-testing never lands on the overlay.
 $probePoints = @(@(200, 200), @([int]($screen.Width / 2), [int]($screen.Height / 2)), @([int]($screen.Width - 60), [int]($screen.Height - 20)))
@@ -92,7 +92,7 @@ $after = [Win]::GetForegroundWindow()
 Result 'ptt-keeps-focus' ($before -eq $after) ("before=" + (ClassOf $before) + " after=" + (ClassOf $after))
 [System.Windows.Forms.SendKeys]::SendWait(' still-typing'); Start-Sleep -Milliseconds 300
 
-# 5. Capture timing from Flitty's log.
+# 5. Capture timing from HeyFlitty's log.
 Start-Sleep -Seconds 3
 $captureLines = Get-Content (Join-Path $env:TEMP 'flitty.log') -ErrorAction SilentlyContinue | Select-String 'captured'
 Result 'screen-capture' ($captureLines.Count -gt 0) ("log: " + (($captureLines | Select-Object -Last 2) -join ' || '))
@@ -103,7 +103,7 @@ $np2 = $np.MainWindowHandle
 [Win]::SetForegroundWindow($np2) | Out-Null; Start-Sleep -Seconds 4   # let the buddy finish pointing and fly back
 [Win]::SetCursorPos(650, 450) | Out-Null; Start-Sleep -Milliseconds 400
 Shot 'over-topmost-notepad'
-$overlayNow = FlittyWindows | Where-Object { (TitleOf $_) -eq 'Flitty overlay' } | Select-Object -First 1
+$overlayNow = HeyFlittyWindows | Where-Object { (TitleOf $_) -eq 'HeyFlitty overlay' } | Select-Object -First 1
 Add-Type -Name Z -Namespace Win2 -MemberDefinition '[DllImport("user32.dll")] public static extern System.IntPtr GetWindow(System.IntPtr h, uint cmd);'
 $above = $false; $walker = $np2
 while ($walker -ne [IntPtr]::Zero) { $walker = [Win2.Z]::GetWindow($walker, 3); if ($walker -eq $overlayNow) { $above = $true; break } }
@@ -130,10 +130,10 @@ PushToTalk 800; Start-Sleep -Milliseconds 400
 Result 'ptt-from-edge' ([Win]::GetForegroundWindow() -eq $edgeFg) ("foreground stays " + (ClassOf $edgeFg))
 
 # 9. Not in Alt+Tab / taskbar: overlay must not be an app window.
-$appWindows = (FlittyWindows | Where-Object { ([Win]::GetWindowLongPtrW($_, -20) -band 0x40000) -ne 0 }).Count
+$appWindows = (HeyFlittyWindows | Where-Object { ([Win]::GetWindowLongPtrW($_, -20) -band 0x40000) -ne 0 }).Count
 Result 'not-in-alt-tab' ($appWindows -eq 0) "windows with WS_EX_APPWINDOW: $appWindows"
 
-# 10. Resource use over 10 s idle (Flitty plus its WebView2 children).
+# 10. Resource use over 10 s idle (HeyFlitty plus its WebView2 children).
 $webviewIds = @(Get-CimInstance Win32_Process -Filter "Name='msedgewebview2.exe'" | Where-Object { $_.CommandLine -match 'com.heyflitty.desktop' } | ForEach-Object ProcessId)
 $all = @($proc.Id) + $webviewIds
 $cpu0 = (Get-Process -Id $all -ErrorAction SilentlyContinue | Measure-Object CPU -Sum).Sum; Start-Sleep -Seconds 10
@@ -147,10 +147,10 @@ $exe = (Get-Process -Id $proc.Id).Path
 Start-Process $exe; Start-Sleep -Seconds 3
 $panelFg = TitleOf ([Win]::GetForegroundWindow())
 $count = @(Get-Process flitty -ErrorAction SilentlyContinue).Count
-$panel = FlittyWindows | Where-Object { (TitleOf $_) -eq 'Flitty' }
+$panel = HeyFlittyWindows | Where-Object { (TitleOf $_) -eq 'HeyFlitty' }
 Result 'single-instance' ($count -eq 1) "flitty processes=$count"
 Result 'settings-opens' ($null -ne $panel) "panel windows=$(@($panel).Count)"
-Result 'settings-in-front' ($panelFg -eq 'Flitty') "foreground title='$panelFg'"
+Result 'settings-in-front' ($panelFg -eq 'HeyFlitty') "foreground title='$panelFg'"
 Shot 'settings-panel'
 
 # Cleanup test apps.

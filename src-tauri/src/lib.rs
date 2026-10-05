@@ -1,6 +1,6 @@
-//! Flitty: a screen-aware AI buddy that points at things.
+//! HeyFlitty: a screen-aware AI buddy that points at things.
 //!
-//! Hold the hotkey and ask; Flitty transcribes the question, looks at the
+//! Hold the hotkey and ask; HeyFlitty transcribes the question, looks at the
 //! screens, answers out loud and flies its cursor to what it is talking about.
 
 mod audio;
@@ -59,7 +59,7 @@ pub fn run() {
             overlay::start_topmost_guard(handle.clone(), screen_list.clone());
             cursor::start_stream(handle.clone(), screen_list);
             tray::install(&handle)?;
-            // Flitty has no window, so a first launch without a key would look like nothing happened.
+            // HeyFlitty has no window, so a first launch without a key would look like nothing happened.
             if settings::read_key().is_none() {
                 tray::open_settings(&handle);
             }
@@ -67,7 +67,7 @@ pub fn run() {
             Ok(())
         })
         .build(tauri::generate_context!())
-        .expect("error while building Flitty")
+        .expect("error while building HeyFlitty")
         .run(|_app, event| {
             // Closing the settings panel must not quit a tray app.
             if let tauri::RunEvent::ExitRequested { api, code: None, .. } = event {

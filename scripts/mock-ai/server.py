@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Fake OpenAI API for testing Flitty end to end without a real key.
+"""Fake OpenAI API for testing HeyFlitty end to end without a real key.
 
 Speaks just enough of the chat, transcription and models endpoints:
 streams a canned reply that ends with a point tag, and records each request
-summary to last-request.json so tests can assert what Flitty sent.
+summary to last-request.json so tests can assert what HeyFlitty sent.
 
     python3 scripts/mock-ai/server.py --host 127.0.0.1 --port 8766
 """

@@ -61,7 +61,7 @@ function Panel() {
 
   function previewVoice() {
     speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance("hey, I'm flitty. ask me anything about your screen.");
+    const utterance = new SpeechSynthesisUtterance("hi, I'm HeyFlitty. ask me anything about your screen.");
     const voice = voices.find((candidate) => candidate.name === draft!.voiceName);
     if (voice) utterance.voice = voice;
     speechSynthesis.speak(utterance);
@@ -70,7 +70,7 @@ function Panel() {
   return (
     <main>
       <header>
-        <h1>Flitty</h1>
+        <h1>HeyFlitty</h1>
         <p>Hold <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>, ask out loud, let go.</p>
       </header>
 

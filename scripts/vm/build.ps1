@@ -1,4 +1,4 @@
-# Fetches the latest tree from the host and builds Flitty inside the VM.
+# Fetches the latest tree from the host and builds HeyFlitty inside the VM.
 $ErrorActionPreference = 'Stop'
 # A running copy locks flitty.exe and the link step fails.
 Get-Process flitty -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Milliseconds 500

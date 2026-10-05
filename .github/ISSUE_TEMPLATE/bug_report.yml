@@ -11,7 +11,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Flitty version
+      label: HeyFlitty version
       placeholder: "0.1.0"
   - type: textarea
     id: what
@@ -23,4 +23,4 @@ body:
     id: message
     attributes:
       label: Message shown next to the cursor
-      description: Copy it here if Flitty showed one.
+      description: Copy it here if HeyFlitty showed one.
