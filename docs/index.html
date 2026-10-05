@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>HeyFlitty — the AI screen buddy for Windows that shows you where to click</title>
-<meta name="description" content="Hold a hotkey, ask out loud, and HeyFlitty answers, captions it, and flies a little cursor to the exact button you need. Free and open source, built for Windows." />
+<meta name="description" content="Can't find a setting? Hold a hotkey, ask out loud, and HeyFlitty points at the exact button on your screen while it explains. Free, open-source AI screen buddy for Windows." />
 <meta property="og:title" content="HeyFlitty — the AI screen buddy for Windows that shows you where to click" />
 <meta property="og:description" content="Ask out loud. HeyFlitty answers and points at the exact button. Free, open source, built for Windows." />
 <meta property="og:image" content="https://alexriderspy.github.io/heyflitty/flitty-launch-poster.jpg" />
@@ -92,6 +92,17 @@
   h2.big { font-size: clamp(40px, 5.6vw, 72px); line-height: 1.02; letter-spacing: -0.015em; margin: 0 0 18px; max-width: 860px; }
 
   /* Story cards in the style of a to-do list. */
+  .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 48px; }
+  .vs > div { border-radius: 20px; padding: 30px; }
+  .vs .old { background: var(--card); border: 1px solid var(--line); }
+  .vs .new { background: var(--night); color: #ececf1; }
+  .vs h3 { margin: 0 0 18px; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; }
+  .vs .old h3 { color: var(--muted); } .vs .new h3 { color: #8d8d96; }
+  .vs ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; font-size: 17px; }
+  .vs li { display: flex; gap: 12px; align-items: flex-start; }
+  .vs li::before { flex: none; width: 22px; height: 22px; margin-top: 2px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; }
+  .vs .old li { color: var(--muted); } .vs .old li::before { content: "✕"; background: #efe8db; color: #a39985; }
+  .vs .new li::before { content: "✓"; background: var(--blue); color: #fff; }
   .stories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
   .story { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 16px; }
   .story .who { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
@@ -140,7 +151,7 @@
 
   @media (max-width: 880px) {
     nav .links a:not(.btn) { display: none; }
-    .stories, .steps, .cards, .faq, .note { grid-template-columns: 1fr; }
+    .stories, .steps, .cards, .faq, .note, .vs { grid-template-columns: 1fr; }
     .note .mascot { width: 160px; }
     section { padding: 84px 0; }
     .stage { padding: 12px; border-radius: 20px; }
@@ -164,7 +175,7 @@
 <header class="hero wrap">
   <span class="badge"><b>Free</b> Built for Windows · works on macOS · open source</span>
   <h1 class="serif">Ask out loud.<br />HeyFlitty shows&nbsp;you<br /><em class="marker">exactly where.</em></h1>
-  <p class="lead">A tiny AI buddy that lives next to your cursor. Hold a hotkey, ask anything about what's on your screen, and it answers, captions the answer, and flies straight to the button you need.</p>
+  <p class="lead">Can't find a setting? Don't google it. Hold a hotkey, ask out loud, and HeyFlitty points at the exact button on your screen while it explains, in whatever app you're in.</p>
   <div class="cta">
     <a class="btn dark" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/HeyFlitty_0.1.2_x64-setup.exe">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.4v7.1H3zm0 13 7.5 1.1v-7H3zm8.4 1.2L21 21V12.6h-9.6zm0-15.4v7.2H21V3z"/></svg>
@@ -194,9 +205,36 @@
   </script>
 </header>
 
-<section>
+<section id="why">
   <div class="wrap">
-    <p class="eyebrow">For everyone who's ever hunted for a button</p>
+    <p class="eyebrow">The problem</p>
+    <h2 class="big serif">Help today tells you where to go. <span class="marker">It never shows you.</span></h2>
+    <div class="vs">
+      <div class="old">
+        <h3>The usual way</h3>
+        <ul>
+          <li>Google it, then squint at a blog whose screenshots are from a different version.</li>
+          <li>Sit through a six-minute video to find one checkbox.</li>
+          <li>Ask a chatbot. It says "Settings → System → Display" and leaves you to find it.</li>
+          <li>Call the one person in the family who "knows computers".</li>
+        </ul>
+      </div>
+      <div class="new">
+        <h3>With HeyFlitty</h3>
+        <ul>
+          <li>Ask out loud, without leaving the app you're in.</li>
+          <li>It looks at your actual screen: your version, your layout.</li>
+          <li>A cursor lands on the exact button while it explains what to do.</li>
+          <li>It points, it never clicks. You stay in control, and next time you'll know.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow">Who it's for</p>
     <h2 class="big serif">It's always <span class="marker">one click away.</span> You just can't see it.</h2>
     <div class="stories">
       <div class="story">
@@ -213,6 +251,21 @@
         <div class="who"><b style="background:#dff3d6">J</b>June, learning Figma</div>
         <div class="ask">"How do I turn this into a component?"</div>
         <div class="reply"><img src="logo.svg" alt="" />Talks her through it while pointing at the toolbar button.</div>
+      </div>
+      <div class="story">
+        <div class="who"><b style="background:#f3e1f7">A</b>Asha's mum, on her new laptop</div>
+        <div class="ask">"How do I connect to Wi-Fi?"</div>
+        <div class="reply"><img src="logo.svg" alt="" />Flies down to the Wi-Fi icon in the taskbar and tells her to pick her network.</div>
+      </div>
+      <div class="story">
+        <div class="who"><b style="background:#fff0c2">R</b>Rohan, lost in the AWS console</div>
+        <div class="ask">"Where do I see this month's bill?"</div>
+        <div class="reply"><img src="logo.svg" alt="" />Points at Billing in the account menu instead of sending him to the docs.</div>
+      </div>
+      <div class="story">
+        <div class="who"><b style="background:#d9f1ef">S</b>Sam, plugging in a monitor</div>
+        <div class="ask">"What's this port?"</div>
+        <div class="reply"><img src="logo.svg" alt="" />With the mouse resting on a photo, names it HDMI and points right at it.</div>
       </div>
     </div>
   </div>
@@ -264,6 +317,7 @@
     <div>
       <details><summary>Is it free?</summary><p>HeyFlitty is free and open source. It uses your own OpenAI API key, so you pay OpenAI directly for what you use, usually a fraction of a cent per question.</p></details>
       <details><summary>Is it watching my screen all the time?</summary><p>No. It records only while you hold the hotkey and takes a screenshot only when you let go. Nothing is saved, and there's no HeyFlitty server.</p></details>
+      <details><summary>Does it click things for me?</summary><p>No, on purpose. It points and explains, and you make the click. You stay in control of your computer, and you learn where things are for next time.</p></details>
       <details><summary>Which apps does it work with?</summary><p>Anything on your screen. On Windows it also reads the names and positions of buttons and menus, so pointing is exact in most apps.</p></details>
       <details><summary>Does it work on Mac?</summary><p>Yes, from source for now. Windows is the focus; a signed Mac download is coming.</p></details>
       <details><summary>Windows says "Windows protected your PC"</summary><p>The installer isn't code-signed yet. Click More info, then Run anyway. You can read the source and build it yourself.</p></details>

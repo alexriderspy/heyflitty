@@ -31,6 +31,19 @@
 
 ---
 
+## What problem does it solve?
+
+You know the setting exists, you just can't find it. So you google it and read a blog whose screenshots don't match your screen, sit through a video for one checkbox, or ask a chatbot that says "go to Settings → System → Display" and leaves you to find it yourself.
+
+HeyFlitty looks at your actual screen and points at the exact button, out loud, without you leaving the app you're in. It points, it never clicks, so you stay in control.
+
+**Good for:**
+
+- 👵 **Parents, and anyone who calls "the tech person" in the family:** "how do I connect to Wi-Fi?", "why is there no sound?"
+- 📊 **Learning big apps** like Excel, Photoshop, Figma or DaVinci: "where's conditional formatting?"
+- 🧰 **Work tools with endless menus** like Jira, the AWS console or admin panels: "where do I change who gets notified?"
+- 🔍 **"What's this?":** rest your mouse on a port in a photo, an icon or an error and ask.
+
 ## Why HeyFlitty
 
 HeyFlitty is inspired by HeyClicky, which showed how good an AI buddy on your screen can feel. HeyClicky is Mac-only and closed; HeyFlitty brings the idea to Windows and keeps it open.
