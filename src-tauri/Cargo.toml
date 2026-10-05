@@ -1,6 +1,6 @@
 [package]
 name = "flitty"
-version = "0.1.1"
+version = "0.1.2"
 description = "Your AI screen buddy that shows you exactly where to click"
 authors = ["Sreemanti Dey"]
 license = "MIT"
