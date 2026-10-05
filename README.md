@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="docs/logo.svg" width="88" height="88" alt="Flitty logo" />
+  <img src="docs/logo.svg" width="88" height="88" alt="HeyFlitty logo" />
 </p>
 
-<h1 align="center">Flitty</h1>
+<h1 align="center">HeyFlitty: the AI screen buddy for Windows</h1>
 
 <p align="center">
-  <b>Ask out loud. Flitty shows you exactly where to click.</b><br />
+  <b>Ask out loud. HeyFlitty shows you exactly where to click.</b><br />
   A tiny AI buddy that lives next to your cursor: it answers in a voice, captions the answer,<br />and flies straight to the button you need. Built for Windows, works on macOS.
 </p>
 
@@ -25,29 +25,29 @@
 </p>
 
 <p align="center">
-  <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4"><img src="docs/flitty-launch.gif" width="860" alt="Flitty in Windows Settings: asked how to make the monitor the main display, it captions the answer and its cursor flies to display 2, then to the Make this my main display checkbox" /></a>
+  <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4"><img src="docs/flitty-launch.gif" width="860" alt="HeyFlitty in Windows Settings: asked how to make the monitor the main display, it captions the answer and its cursor flies to display 2, then to the Make this my main display checkbox" /></a>
   <br /><sub>Hold a hotkey, ask, and it points to the exact spot. <a href="https://alexriderspy.github.io/heyflitty/flitty-launch.mp4">Watch the 40-second launch film with sound ▶</a></sub>
 </p>
 
 ---
 
-## Why Flitty
+## Why HeyFlitty
 
-Flitty is inspired by HeyClicky, which showed how good an AI buddy on your screen can feel. HeyClicky is Mac-only and closed; Flitty brings the idea to Windows and keeps it open.
+HeyFlitty is inspired by HeyClicky, which showed how good an AI buddy on your screen can feel. HeyClicky is Mac-only and closed; HeyFlitty brings the idea to Windows and keeps it open.
 
 | | |
 |---|---|
 | 🪟 **Windows first** | Windows 10 and 11, x64 and ARM64. macOS works too. |
 | 🎯 **Points at the real button** | On Windows it reads the names and positions of on-screen controls through UI Automation, so the cursor lands exactly on them. |
 | 💬 **Talks and captions** | Answers out loud with your system voice, with every sentence captioned next to the cursor. |
-| 🔒 **Your key, your data** | No account, no subscription, no Flitty server. It talks to OpenAI directly with your own key. |
+| 🔒 **Your key, your data** | No account, no subscription, no HeyFlitty server. It talks to OpenAI directly with your own key. |
 | 🧩 **Open source** | MIT licensed. Read it, fork it, make it yours. |
 
 ## Install
 
-1. Download `Flitty_<version>_x64-setup.exe` from the [latest release](https://github.com/alexriderspy/heyflitty/releases/latest) (`arm64` for Snapdragon laptops).
+1. Download the `x64-setup.exe` installer from the [latest release](https://github.com/alexriderspy/heyflitty/releases/latest) (`arm64` for Snapdragon laptops).
 2. Run it. It installs for your user only, no admin rights needed.
-3. Click the Flitty icon in the system tray → **Settings** → paste your [OpenAI API key](https://platform.openai.com/api-keys) → **Test key**.
+3. Click the HeyFlitty icon in the system tray → **Settings** → paste your [OpenAI API key](https://platform.openai.com/api-keys) → **Test key**.
 
 > [!NOTE]
 > The installer isn't code-signed yet, so Windows may show "Windows protected your PC". Click **More info → Run anyway**.
@@ -60,24 +60,24 @@ There's no signed Mac download yet, so run it from source (see [Build from sourc
 
 ## How it works
 
-1. **Hold <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>** and ask a question out loud. Flitty records only while you hold the keys.
+1. **Hold <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>** and ask a question out loud. HeyFlitty records only while you hold the keys.
 2. **Let go.** It transcribes your question, takes a screenshot, and on Windows reads the clickable controls in the focused window.
-3. **It answers.** An OpenAI model replies; Flitty speaks and captions it sentence by sentence as it streams in.
-4. **It points.** The model names the control it means, and Flitty's cursor flies to that control's real position. For things that aren't standard controls (a photo, a diagram, a game), it points by screen coordinates instead.
+3. **It answers.** An OpenAI model replies; HeyFlitty speaks and captions it sentence by sentence as it streams in.
+4. **It points.** The model names the control it means, and HeyFlitty's cursor flies to that control's real position. For things that aren't standard controls (a photo, a diagram, a game), it points by screen coordinates instead.
 
-Ask about **"this"** and Flitty looks at whatever your mouse is on: rest the pointer on a port in a photo and ask "what's this?", and it names the port and points at it.
+Ask about **"this"** and HeyFlitty looks at whatever your mouse is on: rest the pointer on a port in a photo and ask "what's this?", and it names the port and points at it.
 
 <details>
 <summary><b>See a real recording</b></summary>
 <br />
-<img src="docs/demo.gif" width="860" alt="Flitty on Windows: asked 'where can I see the open issues?' on a GitHub page, it captions the answer and its cursor flies to the Issues tab" />
+<img src="docs/demo.gif" width="860" alt="HeyFlitty on Windows: asked 'where can I see the open issues?' on a GitHub page, it captions the answer and its cursor flies to the Issues tab" />
 <br /><sub>Windows 11, unedited. Asked: <i>"where can I see the open issues?"</i></sub>
 </details>
 
 ## Privacy
 
-- Flitty only records while you **hold the hotkey**, and takes a screenshot only when you **let go**.
-- Audio, the screenshot and the list of on-screen controls go **straight from your computer to OpenAI** using your key. There is no Flitty server.
+- HeyFlitty only records while you **hold the hotkey**, and takes a screenshot only when you **let go**.
+- Audio, the screenshot and the list of on-screen controls go **straight from your computer to OpenAI** using your key. There is no HeyFlitty server.
 - Recordings and screenshots are never saved to disk. Your API key is stored in Windows Credential Manager (Keychain on macOS).
 
 ## Build from source
@@ -95,7 +95,7 @@ Build the Windows installer with `npm run tauri build -- --bundles nsis`.
 
 ## Report issues and contribute
 
-- **Found a bug?** [Open an issue](https://github.com/alexriderspy/heyflitty/issues/new/choose) with your Windows version and the message Flitty showed next to the cursor.
+- **Found a bug?** [Open an issue](https://github.com/alexriderspy/heyflitty/issues/new/choose) with your Windows version and the message HeyFlitty showed next to the cursor.
 - **Have an idea?** Open a feature request, or send a pull request. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to build and test, including a mock OpenAI server so you don't need a key.
 
 Contributions require agreeing to the [CLA](CLA.md).
@@ -104,4 +104,4 @@ Contributions require agreeing to the [CLA](CLA.md).
 
 MIT. See [LICENSE](LICENSE).
 
-Flitty's system prompt is adapted from [Clicky](https://github.com/farzaa/clicky) (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Licenses of all bundled dependencies are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt), shipped with the installer.
+HeyFlitty's system prompt is adapted from [Clicky](https://github.com/farzaa/clicky) (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Licenses of all bundled dependencies are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt), shipped with the installer.

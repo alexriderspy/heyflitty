@@ -3,11 +3,24 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Flitty — the screen buddy that shows you where to click</title>
-<meta name="description" content="Hold a hotkey, ask out loud, and Flitty answers, captions it, and flies a little cursor to the exact button you need. Free and open source, built for Windows." />
-<meta property="og:title" content="Flitty — the screen buddy that shows you where to click" />
-<meta property="og:description" content="Ask out loud. Flitty answers and points at the exact button. Free, open source, built for Windows." />
+<title>HeyFlitty — the AI screen buddy for Windows that shows you where to click</title>
+<meta name="description" content="Hold a hotkey, ask out loud, and HeyFlitty answers, captions it, and flies a little cursor to the exact button you need. Free and open source, built for Windows." />
+<meta property="og:title" content="HeyFlitty — the AI screen buddy for Windows that shows you where to click" />
+<meta property="og:description" content="Ask out loud. HeyFlitty answers and points at the exact button. Free, open source, built for Windows." />
 <meta property="og:image" content="https://alexriderspy.github.io/heyflitty/flitty-launch-poster.jpg" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://alexriderspy.github.io/heyflitty/" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="https://alexriderspy.github.io/heyflitty/" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"HeyFlitty","alternateName":"Flitty",
+ "description":"Free, open-source AI screen buddy for Windows. Hold a hotkey, ask out loud, and it answers, captions it, and points at the exact button you need.",
+ "applicationCategory":"UtilitiesApplication","operatingSystem":"Windows 10, Windows 11, macOS",
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+ "url":"https://alexriderspy.github.io/heyflitty/","downloadUrl":"https://github.com/alexriderspy/heyflitty/releases/latest",
+ "codeRepository":"https://github.com/alexriderspy/heyflitty","license":"https://opensource.org/licenses/MIT",
+ "author":{"@type":"Person","name":"Sreemanti Dey"}}
+</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -137,7 +150,7 @@
 <body>
 <nav>
   <div class="wrap">
-    <a class="brand serif" href="#"><img src="logo.svg" alt="" />flitty</a>
+    <a class="brand serif" href="#"><img src="logo.svg" alt="" />heyflitty</a>
     <div class="links">
       <a href="#how">How it works</a>
       <a href="#private">Privacy</a>
@@ -150,7 +163,7 @@
 
 <header class="hero wrap">
   <span class="badge"><b>Free</b> Built for Windows · works on macOS · open source</span>
-  <h1 class="serif">Ask out loud.<br />Flitty shows you<br /><em class="marker">exactly where.</em></h1>
+  <h1 class="serif">Ask out loud.<br />HeyFlitty shows&nbsp;you<br /><em class="marker">exactly where.</em></h1>
   <p class="lead">A tiny AI buddy that lives next to your cursor. Hold a hotkey, ask anything about what's on your screen, and it answers, captions the answer, and flies straight to the button you need.</p>
   <div class="cta">
     <a class="btn dark" href="https://github.com/alexriderspy/heyflitty/releases/latest/download/Flitty_0.1.1_x64-setup.exe">
@@ -165,7 +178,7 @@
   </div>
 
   <div class="stage film">
-    <video id="film" src="flitty-launch.mp4" poster="flitty-launch-poster.jpg" autoplay muted loop playsinline aria-label="Flitty launch film: hold Ctrl Alt Space and ask; Flitty answers out loud and its cursor flies to the exact setting in Windows, names a port in a photo, and works on Windows and Mac"></video>
+    <video id="film" src="flitty-launch.mp4" poster="flitty-launch-poster.jpg" autoplay muted loop playsinline aria-label="HeyFlitty launch film: hold Ctrl Alt Space and ask; HeyFlitty answers out loud and its cursor flies to the exact setting in Windows, names a port in a photo, and works on Windows and Mac"></video>
     <button class="sound" id="sound" type="button" aria-pressed="false">Sound on</button>
   </div>
   <script>
@@ -211,7 +224,7 @@
     <h2 class="big serif">Three seconds, no typing.</h2>
     <div class="steps">
       <div class="step"><div class="n">1</div><h3>Hold and ask</h3><p>Hold <kbd class="k">Ctrl</kbd> <kbd class="k">Alt</kbd> <kbd class="k">Space</kbd> anywhere and ask like you'd ask a friend sitting next to you.</p></div>
-      <div class="step"><div class="n">2</div><h3>Let go</h3><p>Flitty looks at your screen and starts answering out loud, with every sentence captioned next to the cursor.</p></div>
+      <div class="step"><div class="n">2</div><h3>Let go</h3><p>HeyFlitty looks at your screen and starts answering out loud, with every sentence captioned next to the cursor.</p></div>
       <div class="step"><div class="n">3</div><h3>Follow the cursor</h3><p>A little blue cursor flies to the exact control. On Windows it reads the real button positions, so it lands right on them.</p></div>
     </div>
   </div>
@@ -221,7 +234,7 @@
   <div class="wrap">
     <p class="eyebrow">Private by design</p>
     <h2 class="big serif">Your key. Your screen.<br />No middleman.</h2>
-    <p class="lead">Flitty has no servers and no accounts. It talks to OpenAI directly with your own key, and only when you ask.</p>
+    <p class="lead">HeyFlitty has no servers and no accounts. It talks to OpenAI directly with your own key, and only when you ask.</p>
     <div class="cards">
       <div class="card"><div class="icon">⌨︎</div><h3>Only when you hold the hotkey</h3><p>It records while you hold the keys and takes one screenshot when you let go. Never in the background.</p></div>
       <div class="card"><div class="icon">⇢</div><h3>Straight to OpenAI</h3><p>Your question, the screenshot and the names of the on-screen buttons go from your PC to OpenAI with your API key. You pay OpenAI directly, usually a fraction of a cent.</p></div>
@@ -233,14 +246,14 @@
 
 <section>
   <div class="wrap note">
-    <div class="mascot"><img src="logo.svg" alt="the Flitty mark" /></div>
+    <div class="mascot"><img src="logo.svg" alt="the HeyFlitty mark" /></div>
     <div>
       <p class="eyebrow">A note from the maker</p>
       <div class="letter">
         <p>Software keeps getting more powerful and harder to find your way around. The answer is usually one button away. You just can't see it.</p>
-        <p>Flitty is the friend who leans over and says <span class="marker">"it's right there."</span> Free, open, and yours to change.</p>
+        <p>HeyFlitty is the friend who leans over and says <span class="marker">"it's right there."</span> Free, open, and yours to change.</p>
       </div>
-      <div class="sign">Sreemanti · maker of Flitty</div>
+      <div class="sign">Sreemanti · maker of HeyFlitty</div>
     </div>
   </div>
 </section>
@@ -249,12 +262,12 @@
   <div class="wrap faq">
     <div><p class="eyebrow">FAQ</p><h2 class="big serif">Good questions.</h2></div>
     <div>
-      <details><summary>Is it free?</summary><p>Flitty is free and open source. It uses your own OpenAI API key, so you pay OpenAI directly for what you use, usually a fraction of a cent per question.</p></details>
-      <details><summary>Is it watching my screen all the time?</summary><p>No. It records only while you hold the hotkey and takes a screenshot only when you let go. Nothing is saved, and there's no Flitty server.</p></details>
+      <details><summary>Is it free?</summary><p>HeyFlitty is free and open source. It uses your own OpenAI API key, so you pay OpenAI directly for what you use, usually a fraction of a cent per question.</p></details>
+      <details><summary>Is it watching my screen all the time?</summary><p>No. It records only while you hold the hotkey and takes a screenshot only when you let go. Nothing is saved, and there's no HeyFlitty server.</p></details>
       <details><summary>Which apps does it work with?</summary><p>Anything on your screen. On Windows it also reads the names and positions of buttons and menus, so pointing is exact in most apps.</p></details>
       <details><summary>Does it work on Mac?</summary><p>Yes, from source for now. Windows is the focus; a signed Mac download is coming.</p></details>
       <details><summary>Windows says "Windows protected your PC"</summary><p>The installer isn't code-signed yet. Click More info, then Run anyway. You can read the source and build it yourself.</p></details>
-      <details><summary>How do I get an OpenAI key?</summary><p>Create one at <a href="https://platform.openai.com/api-keys">platform.openai.com/api-keys</a>, paste it into Flitty's settings (click the tray icon) and press Test key.</p></details>
+      <details><summary>How do I get an OpenAI key?</summary><p>Create one at <a href="https://platform.openai.com/api-keys">platform.openai.com/api-keys</a>, paste it into HeyFlitty's settings (click the tray icon) and press Test key.</p></details>
     </div>
   </div>
 </section>
@@ -271,7 +284,7 @@
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Flitty · MIT license</span>
+    <span>© 2026 HeyFlitty · MIT license</span>
     <span><a href="https://github.com/alexriderspy/heyflitty">GitHub</a> · <a href="https://github.com/alexriderspy/heyflitty/releases/latest">ARM64 build</a> · <a href="https://github.com/alexriderspy/heyflitty/blob/main/CONTRIBUTING.md">Contribute</a></span>
   </div>
 </footer>

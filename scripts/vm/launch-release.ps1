@@ -1,4 +1,4 @@
-# Starts Flitty in the interactive desktop session via a one-shot scheduled task,
+# Starts HeyFlitty in the interactive desktop session via a one-shot scheduled task,
 # so it outlives the prlctl session that launched it.
 $exe = Join-Path $env:USERPROFILE 'heyflitty\src-tauri\target\release\flitty.exe'
 Get-Process flitty -ErrorAction SilentlyContinue | Stop-Process -Force

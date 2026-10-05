@@ -39,7 +39,7 @@ pub fn create_all(app: &AppHandle, screens: &[Screen]) -> tauri::Result<()> {
             label_for(screen.index),
             WebviewUrl::App(format!("overlay.html?screen={}", screen.index).into()),
         )
-        .title("Flitty overlay")
+        .title("HeyFlitty overlay")
         .transparent(true)
         .decorations(false)
         .shadow(false)

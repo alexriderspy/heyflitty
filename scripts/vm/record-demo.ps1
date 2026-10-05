@@ -1,4 +1,4 @@
-# Records a real Flitty answer on the Windows desktop with ffmpeg (for the README and landing page).
+# Records a real HeyFlitty answer on the Windows desktop with ffmpeg (for the README and landing page).
 # Uses the saved OpenAI key and FLITTY_TEST_TRANSCRIPT in place of a spoken question.
 param([string]$Question = 'where can I see the open issues?', [string]$Url = 'https://github.com/tauri-apps/tauri', [int]$Seconds = 20)
 Add-Type @'

@@ -1,4 +1,4 @@
-//! The OpenAI endpoints Flitty uses: transcription and streaming vision chat.
+//! The OpenAI endpoints HeyFlitty uses: transcription and streaming vision chat.
 
 use base64::Engine;
 use futures_util::StreamExt;

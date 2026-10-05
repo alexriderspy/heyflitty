@@ -5,7 +5,7 @@ body:
   - type: textarea
     id: idea
     attributes:
-      label: What would you like Flitty to do?
+      label: What would you like HeyFlitty to do?
     validations: { required: true }
   - type: textarea
     id: why

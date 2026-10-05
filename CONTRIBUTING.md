@@ -1,4 +1,4 @@
-# Contributing to Flitty
+# Contributing to HeyFlitty
 
 Thanks for helping. Bug reports, ideas and pull requests are all welcome, especially from Windows users.
 
@@ -8,7 +8,7 @@ Thanks for helping. Bug reports, ideas and pull requests are all welcome, especi
 
 - your Windows (or macOS) version, and x64 or ARM64
 - what you asked and what happened
-- the message Flitty showed next to the cursor, if any
+- the message HeyFlitty showed next to the cursor, if any
 
 ## Building
 
